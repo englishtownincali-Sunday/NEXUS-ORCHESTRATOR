@@ -21,13 +21,18 @@ const pool = new Pool({
   },
 });
 
-// 1. Registrar @fastify/static para servir el Dashboard HTML desde la carpeta 'public'
+// 1. Registrar @fastify/static para servir archivos desde la carpeta 'public'
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, '../public'),
-  prefix: '/', // Sirve el contenido en la ruta raíz
+  prefix: '/', 
 });
 
-// 2. Endpoint de prueba para verificar la conexión a la base de datos de Neon
+// 2. Ruta raíz principal: Renderiza y sirve tu Dashboard HTML
+fastify.get('/', async (request, reply) => {
+  return reply.sendFile('index.html');
+});
+
+// 3. Endpoint de prueba para verificar la conexión a la base de datos de Neon
 fastify.get('/api/db-test', async (request, reply) => {
   try {
     const client = await pool.connect();
@@ -49,7 +54,7 @@ fastify.get('/api/db-test', async (request, reply) => {
   }
 });
 
-// 3. Endpoint para la Consola de IA / Orquestación
+// 4. Endpoint para la Consola de IA / Orquestación
 fastify.post('/api/orchestrate', async (request, reply) => {
   const body = request.body as { model?: string; prompt?: string };
   const model = body?.model || 'gemini-1.5-pro';
