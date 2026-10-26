@@ -1,37 +1,55 @@
 import Fastify from 'fastify';
-import cors from '@fastify/cors';
-import { Pool } from 'pg';
-import dotenv from 'dotenv';
+import pkg from 'pg';
 
-dotenv.config();
+const { Pool } = pkg;
 
+// Inicializar Fastify con logs habilitados
 const fastify = Fastify({ logger: true });
-fastify.register(cors, { origin: true });
 
-// Conexión a la base de datos de Neon
+// Configurar el pool de conexión para Neon PostgreSQL con SSL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: {
+    rejectUnauthorized: false, // Necesario para conexiones seguras en Neon
+  },
 });
 
-// Ruta de comprobación de estado (Health Check)
-fastify.get('/health', async (request, reply) => {
+// 1. Ruta raíz (Resuelve el 404 y da la bienvenida al servicio)
+fastify.get('/', async (request, reply) => {
+  return {
+    status: 'online',
+    service: 'Nexus Orchestrator API',
+    message: 'Backend operando correctamente en Render con Neon DB',
+  };
+});
+
+// 2. Endpoint de prueba para verificar la conexión a la base de datos de Neon
+fastify.get('/api/db-test', async (request, reply) => {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT NOW()');
+    const result = await client.query('SELECT NOW() as current_time');
     client.release();
-    return { status: 'healthy', database: 'connected', time: result.rows[0].now };
-  } catch (err: any) {
+    
+    return {
+      success: true,
+      message: '¡Conexión exitosa con Neon PostgreSQL!',
+      databaseTime: result.rows[0].current_time,
+    };
+  } catch (error: any) {
     reply.code(500);
-    return { status: 'unhealthy', error: err.message };
+    return {
+      success: false,
+      error: 'Error al conectar con la base de datos',
+      details: error.message,
+    };
   }
 });
 
+// Iniciar el servidor escuchando en el puerto 3000 para Render (0.0.0.0)
 const start = async () => {
   try {
-    const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
-    await fastify.listen({ port, host: '0.0.0.0' });
-    console.log(`Nexus Orchestrator running on port ${port}`);
+    await fastify.listen({ port: 3000, host: '0.0.0.0' });
+    console.log('Servidor de Nexus Orchestrator iniciado con éxito.');
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
