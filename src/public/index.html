@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Orchestrator - Control Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --panel-bg: #111827;
+      --border-color: #1f2937;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-cyan: #06b6d4;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(to right, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      color: var(--success);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
+
+    /* Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      flex: 1;
+    }
+
+    /* Sidebar */
+    aside {
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 1.5rem 1rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .nav-btn.active {
+      color: #fff;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), transparent);
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    /* Main Content */
+    main {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    /* Cards & Grid */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Forms & Controls */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    button.primary-btn {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      transition: opacity 0.2s;
+    }
+
+    button.primary-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Console Output */
+    .console-box {
+      background: #050811;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      min-height: 200px;
+      max-height: 350px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    td {
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo-icon"></div>
+      <h1>NEXUS ORCHESTRATOR</h1>
+    </div>
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      <span>Sistema En Línea</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside>
+      <ul class="nav-list">
+        <li><button class="nav-btn active" onclick="switchTab('dashboard')"> Dashboard</button></li>
+        <li><button class="nav-btn" onclick="switchTab('workflows')"> Workflows</button></li>
+        <li><button class="nav-btn" onclick="switchTab('ai')"> Consola IA</button></li>
+        <li><button class="nav-btn" onclick="switchTab('monitor')"> Monitor de Logs</button></li>
+      </ul>
+    </aside>
+
+    <main>
+      <!-- TAB 1: DASHBOARD -->
+      <section id="dashboard" class="tab-content active">
+        <h2 class="section-title">Resumen de Orquestación</h2>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">Workflows Activos</div>
+            <div class="card-value">12</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Peticiones / Minuto</div>
+            <div class="card-value">148</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Estado Neon DB</div>
+            <div class="card-value" style="color: var(--success); font-size: 1.2rem; margin-top: 0.5rem;"> Conectado</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Verificación de Conexión a Base de Datos</div>
+          <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">Prueba la respuesta en tiempo real de tu clúster de Neon PostgreSQL.</p>
+          <button class="primary-btn" onclick="testDB()">Probar Conexión Neon DB</button>
+          <div id="db-result" class="console-box" style="margin-top: 1rem; min-height: 80px;">Presiona el botón para ejecutar SELECT NOW()...</div>
+        </div>
+      </section>
+
+      <!-- TAB 2: WORKFLOWS -->
+      <section id="workflows" class="tab-content">
+        <h2 class="section-title">Gestión de Workflows</h2>
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre del Flujo</th>
+                <th>Disparador</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>WF-001</td>
+                <td>Procesamiento de Documentos Mining</td>
+                <td>Webhook API</td>
+                <td><span style="color: var(--success);">Activo</span></td>
+                <td><button class="primary-btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Ejecutar</button></td>
+              </tr>
+              <tr>
+                <td>WF-002</td>
+                <td>Sincronización ESG & Regtech</td>
+                <td>Cron Job (Diario)</td>
+                <td><span style="color: var(--success);">Activo</span></td>
+                <td><button class="primary-btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Ejecutar</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: CONSOLA IA -->
+      <section id="ai" class="tab-content">
+        <h2 class="section-title">Orquestación de Modelos de IA</h2>
+        <div class="card">
+          <div class="form-group">
+            <label>Modelo Seleccionado</label>
+            <select id="ai-model">
+              <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
+              <option value="gpt-4o">GPT-4o (OpenAI)</option>
+              <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Instrucción / Prompt de Orquestación</label>
+            <textarea id="ai-prompt" rows="4" placeholder="Escribe el prompt o tarea a orquestar..."></textarea>
+          </div>
+          <button class="primary-btn" onclick="runOrchestration()">Enviar Petición Orquestada</button>
+          
+          <div style="margin-top: 1.5rem;">
+            <div class="card-title">Respuesta de la API</div>
+            <div id="ai-response" class="console-box">Esperando entrada...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: MONITOR -->
+      <section id="monitor" class="tab-content">
+        <h2 class="section-title">Monitor de Eventos en Vivo</h2>
+        <div class="card">
+          <div id="live-logs" class="console-box" style="min-height: 300px;">
+[SYSTEM LOG] Nexus Orchestrator iniciado correctamente.
+[SYSTEM LOG] Conectado a Render Web Service puerto 3000.
+[SYSTEM LOG] Esperando eventos de entrada...
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Navegación por pestañas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Test de Base de Datos Neon
+    async function testDB() {
+      const resultBox = document.getElementById('db-result');
+      resultBox.innerText = 'Enviando consulta a Neon PostgreSQL...';
+
+      try {
+        const response = await fetch('/api/db-test');
+        const data = await response.json();
+        resultBox.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultBox.innerText = 'Error al conectar con la API: ' + err.message;
+      }
+    }
+
+    // Simulación de Orquestación con IA
+    async function runOrchestration() {
+      const model = document.getElementById('ai-model').value;
+      const prompt = document.getElementById('ai-prompt').value;
+      const responseBox = document.getElementById('ai-response');
+
+      if (!prompt.trim()) {
+        alert('Por favor escribe un prompt antes de enviar.');
+        return;
+      }
+
+      responseBox.innerText = `[PROCESANDO] Enviando tarea a ${model}...`;
+
+      try {
+        const response = await fetch('/api/orchestrate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, prompt })
+        });
+        const data = await response.json();
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        // Muestra respuesta local si la ruta aún no procesa POST
+        responseBox.innerText = JSON.stringify({
+          status: 'simulated_success',
+          orchestrator: 'Nexus Engine',
+          modelUsed: model,
+          promptReceived: prompt,
+          timestamp: new Date().toISOString()
+        }, null, 2);
+      }
+    }
+  </script>
+</body>
+</html>
