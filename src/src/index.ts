@@ -1,14 +1,9 @@
 import Fastify from 'fastify';
 import pkg from 'pg';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import fastifyStatic from '@fastify/static';
 
 const { Pool } = pkg;
-
-// Configuración de rutas para ES Modules en Node.js
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Inicializar Fastify
 const fastify = Fastify({ logger: true });
@@ -21,9 +16,9 @@ const pool = new Pool({
   },
 });
 
-// 1. Registrar @fastify/static para servir archivos desde la carpeta 'public'
+// 1. Registrar @fastify/static para servir el Dashboard HTML desde la carpeta 'public'
 fastify.register(fastifyStatic, {
-  root: path.join(__dirname, '../public'),
+  root: path.join(process.cwd(), 'public'),
   prefix: '/', 
 });
 
