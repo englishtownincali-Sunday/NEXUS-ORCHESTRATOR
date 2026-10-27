@@ -7,22 +7,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #03050c;
-      --panel-bg: rgba(10, 15, 30, 0.85);
-      --card-bg: rgba(15, 23, 42, 0.75);
-      --border-color: rgba(6, 182, 212, 0.35);
-      --accent-primary: #06b6d4;
-      --accent-secondary: #8b5cf6;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --theme-glow: rgba(6, 182, 212, 0.3);
-      --env-bg-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
+      --bg-dark: #f0f4f8;
+      --panel-bg: rgba(255, 255, 255, 0.82);
+      --card-bg: rgba(240, 244, 248, 0.9);
+      --border-color: rgba(14, 165, 233, 0.35);
+      --accent-primary: #0284c7;
+      --accent-secondary: #7c3aed;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --theme-glow: rgba(2, 132, 199, 0.25);
+      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: #020307; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
       border-radius: 9999px;
@@ -30,7 +30,7 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: linear-gradient(rgba(3, 5, 12, 0.82), rgba(3, 5, 12, 0.88)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(240, 244, 248, 0.85), rgba(240, 244, 248, 0.92)), var(--env-bg-image);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -49,42 +49,42 @@
       margin-bottom: 1.25rem; padding: 0.9rem 1.5rem;
       background: var(--panel-bg); backdrop-filter: blur(20px);
       border: 1px solid var(--border-color); border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--theme-glow);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 20px var(--theme-glow);
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.85rem; }
     .brand-logo {
-      width: 42px; height: 42px; background: rgba(255,255,255,0.05);
+      width: 42px; height: 42px; background: rgba(255,255,255,0.6);
       border: 1px solid var(--border-color); border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       color: var(--accent-primary); font-size: 1.3rem;
       box-shadow: 0 0 15px var(--theme-glow);
     }
-    .brand-title h1 { font-size: 1.2rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
-    .brand-title p { font-size: 0.68rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; }
+    .brand-title h1 { font-size: 1.2rem; font-weight: 700; color: #0f172a; letter-spacing: 0.5px; }
+    .brand-title p { font-size: 0.68rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
     .select-custom {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.7); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.45rem 0.85rem; border-radius: 10px;
       font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
     }
-    .select-custom option { background: #0b0f1d; color: #fff; }
+    .select-custom option { background: #ffffff; color: #0f172a; }
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 10px;
       font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.25s;
+      box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s;
     }
     .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.6); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.45rem 1rem; border-radius: 10px;
       font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
     }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.9); }
 
     /* LAYOUT PRINCIPAL */
     .main-layout {
@@ -94,35 +94,36 @@
     .glass-panel {
       background: var(--panel-bg); border: 1px solid var(--border-color);
       border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(20px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.06); display: flex; flex-direction: column;
     }
 
     .panel-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-color);
     }
-    .panel-title { font-size: 0.95rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+    .panel-title { font-size: 0.95rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; }
 
     /* WIDGETS DE ENTORNO DINÁMICO */
     .env-badge-box {
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.5); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 1rem; margin-bottom: 1.2rem; text-align: center;
     }
-    .env-badge-box h3 { font-size: 0.9rem; color: var(--accent-primary); margin-bottom: 0.3rem; }
+    .env-badge-box h3 { font-size: 0.9rem; color: var(--accent-primary); margin-bottom: 0.3rem; font-weight: 700; }
     .env-badge-box p { font-size: 0.75rem; color: var(--text-muted); }
 
     .tool-list { display: flex; flex-direction: column; gap: 0.75rem; }
     .tool-card {
-      background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.5); border: 1px solid var(--border-color);
       border-radius: 12px; padding: 0.85rem; display: flex; align-items: center; gap: 0.75rem;
       cursor: pointer; transition: all 0.2s;
     }
-    .tool-card:hover { background: rgba(255,255,255,0.06); border-color: var(--accent-primary); transform: translateX(3px); }
+    .tool-card:hover { background: rgba(255,255,255,0.9); border-color: var(--accent-primary); transform: translateX(3px); }
     .tool-icon {
-      width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.05);
+      width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.8);
       display: flex; align-items: center; justify-content: center; color: var(--accent-primary); font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-    .tool-info h4 { font-size: 0.82rem; font-weight: 600; color: #fff; }
+    .tool-info h4 { font-size: 0.82rem; font-weight: 600; color: #0f172a; }
     .tool-info p { font-size: 0.7rem; color: var(--text-muted); }
 
     /* WORKSPACE DERECHO */
@@ -136,32 +137,34 @@
     .message {
       padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%;
     }
-    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
-    .message.bot { align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 4px 12px var(--theme-glow); }
+    .message.bot { align-self: flex-start; background: #ffffff; border: 1px solid var(--border-color); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 
     .chat-input-area {
-      display: flex; gap: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+      display: flex; gap: 0.6rem; background: rgba(255,255,255,0.7); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
     }
     .chat-input-area input {
-      flex: 1; background: transparent; border: none; color: #fff; font-size: 0.9rem; outline: none;
+      flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none;
     }
+    .chat-input-area input::placeholder { color: #94a3b8; }
 
     .canvas-output {
-      background: rgba(2, 4, 8, 0.85); border: 1px solid var(--border-color); border-radius: 14px;
-      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #d1d5db;
+      background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #334155;
       flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 460px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
 
-    /* MODAL DE AUTENTICACIÓN */
+    /* MODAL DE AUTENTICACIÓN CLARO Y MODERNO */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); display: none;
       align-items: center; justify-content: center; z-index: 100;
     }
     .modal-card {
-      background: #080c18; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2.2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); position: relative;
+      background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
+      padding: 2.2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
     .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.2rem; padding-bottom: 0.5rem; }
@@ -169,7 +172,7 @@
     .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
 
     #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
-    .toast { background: #080c18; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
@@ -194,7 +197,7 @@
         <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
-      <div id="user-profile-badge" style="display:none; font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary);"></div>
+      <div id="user-profile-badge" style="display:none; font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></div>
     </div>
   </header>
 
@@ -212,7 +215,7 @@
       </div>
 
       <div style="margin-bottom: 1rem;">
-        <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace;">SELECCIÓN DE ENTORNO ACTIVO</label>
+        <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
         <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
           <option value="general">✨ General / Corporativo</option>
           <option value="mining">⛏️ Minería & Activos Globales</option>
@@ -247,11 +250,11 @@
         <div class="chat-box">
           <div class="panel-header">
             <div class="panel-title">💬 Chat Inteligente</div>
-            <span style="font-size:0.7rem; color:var(--accent-primary);" id="chat-env-tag">GENERAL</span>
+            <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
           <div class="chat-messages" id="chat-stream">
             <div class="message bot" id="welcome-msg">
-              👋 Hola. Nexus OS está en línea. Selecciona tu entorno o inicia sesión para cargar tu perfil automáticamente.
+              👋 Hola. Nexus OS está en línea con IA conectada. Inicia sesión para cargar tu perfil profesional o escribe una tarea.
             </div>
           </div>
           <div class="chat-input-area">
@@ -267,14 +270,14 @@
           </div>
           <div class="canvas-output" id="canvas-view" contenteditable="true">
 // NEXUS OS - ENTORNO DE TRABAJO ACTIVO
-// Los entregables, códigos y documentos generados aparecerán aquí en tiempo real.
+// Los entregables avanzados de Gemini aparecerán aquí en tiempo real.
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL AUTENTICACIÓN SIN AUTOCOMPLETADO PREDETERMINADO -->
+  <!-- MODAL DE AUTENTICACIÓN CON "OJITO" PARA PASSWORD -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -285,12 +288,12 @@
       <p id="auth-sub" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Accede con tus credenciales.</p>
       <form onsubmit="handleAuthSubmit(event)" autocomplete="off">
         <div style="margin-bottom:0.9rem;">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CORREO</label>
-          <input type="email" id="auth-email" name="user_nexus_email" required autocomplete="new-password" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CORREO</label>
+          <input type="email" id="auth-email" required autocomplete="off" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
         </div>
         <div style="margin-bottom:0.9rem; display:none;" id="reg-prof-group">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">PROFESIÓN PREDETERMINADA</label>
-          <select id="auth-profession" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">PROFESIÓN PREDETERMINADA</label>
+          <select id="auth-profession" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
             <option value="general">✨ General</option>
             <option value="mining">⛏️ Minería</option>
             <option value="doctor">🩺 Medicina</option>
@@ -299,9 +302,12 @@
             <option value="teaching">📚 Academia</option>
           </select>
         </div>
-        <div style="margin-bottom:1.2rem;">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CONTRASEÑA</label>
-          <input type="password" id="auth-password" name="user_nexus_pass" required autocomplete="new-password" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+        <div style="margin-bottom:1.2rem; position:relative;">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CONTRASEÑA</label>
+          <div style="display:flex; align-items:center; position:relative;">
+            <input type="password" id="auth-password" required autocomplete="new-password" style="width:100%; padding:0.65rem 2.5rem 0.65rem 0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
+            <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:10px; background:transparent; border:none; cursor:pointer; font-size:1rem;" id="eye-btn">👁️</button>
+          </div>
         </div>
         <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar</button>
       </form>
@@ -360,7 +366,19 @@
       }
     }
 
-    /* CAMBIO TOTAL DE ENTORNO Y FONDO FOTOGRÁFICO TEMÁTICO */
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('auth-password');
+      const eyeBtn = document.getElementById('eye-btn');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeBtn.innerText = '🙈';
+      } else {
+        passInput.type = 'password';
+        eyeBtn.innerText = '👁️';
+      }
+    }
+
+    /* CAMBIO TOTAL DE ENTORNO Y FONDO FOTOGRÁFICO CLARO */
     function switchSystemEnvironment(env) {
       activeEnvironment = env;
       const root = document.documentElement;
@@ -375,9 +393,9 @@
       document.getElementById('global-env-switcher').value = env;
 
       if (env === 'mining') {
-        root.style.setProperty('--accent-primary', '#f59e0b');
-        root.style.setProperty('--accent-secondary', '#d97706');
-        root.style.setProperty('--theme-glow', 'rgba(245, 158, 11, 0.4)');
+        root.style.setProperty('--accent-primary', '#d97706');
+        root.style.setProperty('--accent-secondary', '#b45309');
+        root.style.setProperty('--theme-glow', 'rgba(217, 119, 6, 0.3)');
         root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⛏️ Minería & Activos Globales";
         descEl.innerText = "Entorno especializado en carbón, oro, metales y ESG";
@@ -391,9 +409,9 @@
           <div class="tool-card" onclick="runToolAction('Emisión de LOI / SCO')"><div class="tool-icon">📋</div><div class="tool-info"><h4>Generador de SCO / LOI</h4><p>Incoterms 2020</p></div></div>
         `;
       } else if (env === 'doctor') {
-        root.style.setProperty('--accent-primary', '#10b981');
-        root.style.setProperty('--accent-secondary', '#059669');
-        root.style.setProperty('--theme-glow', 'rgba(16, 185, 129, 0.4)');
+        root.style.setProperty('--accent-primary', '#059669');
+        root.style.setProperty('--accent-secondary', '#047857');
+        root.style.setProperty('--theme-glow', 'rgba(5, 150, 105, 0.3)');
         root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🩺 Consultorio Médico & Salud";
         descEl.innerText = "Entorno clínico, triaje y protocolos sanitarios";
@@ -406,9 +424,9 @@
           <div class="tool-card" onclick="runToolAction('Guías Farmacológicas')"><div class="tool-icon">💊</div><div class="tool-info"><h4>Vademécum & Posología</h4><p>Cruce de interacciones</p></div></div>
         `;
       } else if (env === 'music') {
-        root.style.setProperty('--accent-primary', '#ec4899');
+        root.style.setProperty('--accent-primary', '#db2777');
         root.style.setProperty('--accent-secondary', '#be185d');
-        root.style.setProperty('--theme-glow', 'rgba(236, 72, 153, 0.4)');
+        root.style.setProperty('--theme-glow', 'rgba(219, 39, 119, 0.3)');
         root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🎵 Estudio Musical & Producción";
         descEl.innerText = "Composición, arreglos, mezcla y frecuencias";
@@ -421,9 +439,9 @@
           <div class="tool-card" onclick="runToolAction('Masterización y Metadatos')"><div class="tool-icon">🎧</div><div class="tool-info"><h4>Mastering / Distribución</h4><p>Loudness y licencias</p></div></div>
         `;
       } else if (env === 'lawyer') {
-        root.style.setProperty('--accent-primary', '#3b82f6');
+        root.style.setProperty('--accent-primary', '#2563eb');
         root.style.setProperty('--accent-secondary', '#1d4ed8');
-        root.style.setProperty('--theme-glow', 'rgba(59, 130, 246, 0.4)');
+        root.style.setProperty('--theme-glow', 'rgba(37, 99, 235, 0.3)');
         root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⚖️ Bufete Jurídico & Normativa";
         descEl.innerText = "Revisión contractual, contratos y jurisprudencia";
@@ -435,9 +453,9 @@
           <div class="tool-card" onclick="runToolAction('Revisión Contractual y Cláusulas')"><div class="tool-icon">📜</div><div class="tool-info"><h4>Revisión de Contratos</h4><p>Análisis de riesgos</p></div></div>
         `;
       } else if (env === 'teaching') {
-        root.style.setProperty('--accent-primary', '#8b5cf6');
+        root.style.setProperty('--accent-primary', '#7c3aed');
         root.style.setProperty('--accent-secondary', '#6d28d9');
-        root.style.setProperty('--theme-glow', 'rgba(139, 92, 246, 0.4)');
+        root.style.setProperty('--theme-glow', 'rgba(124, 58, 237, 0.3)');
         root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "📚 Academia & Lenguas Extranjeras";
         descEl.innerText = "Diseño curricular PBL, gramática B1 y evaluación";
@@ -450,10 +468,10 @@
           <div class="tool-card" onclick="runToolAction('Fonética y Fonología IPA')"><div class="tool-icon">🗣️</div><div class="tool-info"><h4>Fonética IPA & Diphthongs</h4><p>Acústica vocal</p></div></div>
         `;
       } else {
-        root.style.setProperty('--accent-primary', '#06b6d4');
-        root.style.setProperty('--accent-secondary', '#8b5cf6');
-        root.style.setProperty('--theme-glow', 'rgba(6, 182, 212, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop')");
+        root.style.setProperty('--accent-primary', '#0284c7');
+        root.style.setProperty('--accent-secondary', '#7c3aed');
+        root.style.setProperty('--theme-glow', 'rgba(2, 132, 199, 0.25)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "✨ Entorno General";
         descEl.innerText = "Workspace corporativo multipropósito";
         tagEl.innerText = "GENERAL";
@@ -468,7 +486,6 @@
       showToast(`Entorno activado: ${nameEl.innerText}`);
     }
 
-    /* AUTENTICACIÓN AUTOMÁTICA Y AUTOCAMBIO DE ENTORNO */
     async function handleAuthSubmit(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
@@ -494,19 +511,18 @@
           badge.innerText = `👤 ${email}`;
           badge.style.display = 'block';
 
-          // Asignar y activar entorno según el perfil del usuario
           const targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
           switchSystemEnvironment(targetProf);
 
           const welcome = document.getElementById('welcome-msg');
           const displayName = email.split('@')[0];
           const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Se ha activado tu entorno profesional predeterminado: <b>${targetProf.toUpperCase()}</b>.`;
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Tu perfil ha sido autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
         } else {
-          showToast(data.error || 'Credenciales inválidas');
+          showToast(data.error || 'Error en las credenciales o usuario no registrado.');
         }
       } catch (err) {
-        showToast('Error al conectar con el servidor backend.');
+        showToast('Error de red al conectar con el servidor.');
       }
     }
 
@@ -525,7 +541,7 @@
 
       const loading = document.createElement('div');
       loading.className = 'message bot';
-      loading.innerText = `⚙️ Procesando consulta en el entorno [${activeEnvironment.toUpperCase()}]...`;
+      loading.innerText = `⚙️ Gemini analizando en entorno [${activeEnvironment.toUpperCase()}]: procesando solicitud profunda...`;
       stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
@@ -537,11 +553,11 @@
         });
         const data = await res.json();
 
-        loading.innerText = `✨ Entregable compilado correctamente para el entorno ${activeEnvironment.toUpperCase()}.`;
-        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
+        loading.innerText = `✨ Tarea ejecutada con éxito en ${activeEnvironment.toUpperCase()}. Revisa el resultado detallado en el Canvas.`;
+        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE PROFESIONAL OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
       } catch (err) {
-        loading.innerText = "✨ Tarea procesada.";
-        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado estructurado en Canvas.`;
+        loading.innerText = "✨ Procesamiento completado.";
+        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico estructurado con éxito.`;
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
