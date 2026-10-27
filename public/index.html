@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexus Orchestrator - Control Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --panel-bg: #111827;
+      --bg-dark: #070913;
+      --panel-bg: #0e1322;
+      --card-bg: #111827;
       --border-color: #1f2937;
       --accent-blue: #3b82f6;
       --accent-purple: #8b5cf6;
@@ -31,20 +32,15 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      padding: 1.5rem 2rem;
     }
 
-    /* Header */
+    /* Header Superior */
     header {
-      background: rgba(17, 24, 39, 0.8);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      margin-bottom: 1.5rem;
     }
 
     .brand {
@@ -54,82 +50,89 @@
     }
 
     .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
     }
 
     .brand h1 {
       font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      background: linear-gradient(to right, #ffffff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #fff;
     }
 
-    .status-badge {
+    .brand span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Top Badges / Status */
+    .top-badges {
       display: flex;
+      gap: 0.75rem;
       align-items: center;
-      gap: 0.5rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 0.35rem 0.85rem;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.9rem;
       border-radius: 9999px;
       font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge.success {
       color: var(--success);
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.08);
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background-color: var(--success);
       border-radius: 50%;
       box-shadow: 0 0 8px var(--success);
-      animation: pulse 2s infinite;
     }
 
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.4; }
-      100% { opacity: 1; }
-    }
-
-    /* Layout */
-    .container {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      flex: 1;
-    }
-
-    /* Sidebar */
-    aside {
+    /* Navbar Horizontal Principal */
+    nav.main-nav {
       background: var(--panel-bg);
-      border-right: 1px solid var(--border-color);
-      padding: 1.5rem 1rem;
-    }
-
-    .nav-list {
-      list-style: none;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 0.5rem;
       display: flex;
-      flex-direction: column;
       gap: 0.5rem;
+      margin-bottom: 2rem;
+      overflow-x: auto;
     }
 
     .nav-btn {
-      width: 100%;
-      text-align: left;
-      padding: 0.75rem 1rem;
       background: transparent;
-      border: 1px solid transparent;
-      border-radius: 8px;
+      border: none;
       color: var(--text-muted);
-      font-size: 0.95rem;
-      font-weight: 600;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 0.9rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-btn:hover {
@@ -139,14 +142,14 @@
 
     .nav-btn.active {
       color: #fff;
-      background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), transparent);
-      border-left: 3px solid var(--accent-blue);
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
     }
 
-    /* Main Content */
+    /* Main Content Area */
     main {
-      padding: 2rem;
-      overflow-y: auto;
+      flex: 1;
     }
 
     .tab-content {
@@ -157,52 +160,211 @@
       display: block;
     }
 
-    .section-title {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
-    }
-
-    /* Cards & Grid */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
-      background: var(--panel-bg);
+    /* Hero Banner Principal */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(11, 15, 25, 0.95));
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    .card-title {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .card-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    /* Forms & Controls */
-    .form-group {
+    .hero-tag {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
       margin-bottom: 1.25rem;
     }
 
-    label {
-      display: block;
-      font-size: 0.875rem;
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
       color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+      transition: opacity 0.2s;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Orbital Graphic Simulation */
+    .orbital-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      height: 260px;
+    }
+
+    .core-node {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+      z-index: 2;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 1px dashed rgba(139, 92, 246, 0.3);
+      border-radius: 50%;
+      animation: spin 20s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Purpose Grid */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .auto-detect {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .purpose-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .purpose-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .purpose-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .purpose-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
       margin-bottom: 0.5rem;
+    }
+
+    .purpose-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Console & Generics */
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .console-box {
+      background: #050811;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      min-height: 220px;
+      max-height: 350px;
+      overflow-y: auto;
+      white-space: pre-wrap;
     }
 
     input, select, textarea {
@@ -214,232 +376,204 @@
       color: var(--text-main);
       font-family: inherit;
       font-size: 0.95rem;
-      transition: border-color 0.2s;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--accent-blue);
     }
-
-    button.primary-btn {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      transition: opacity 0.2s;
-    }
-
-    button.primary-btn:hover {
-      opacity: 0.9;
-    }
-
-    /* Console Output */
-    .console-box {
-      background: #050811;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      color: #38bdf8;
-      min-height: 200px;
-      max-height: 350px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    /* Table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    th, td {
-      padding: 0.75rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    th {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-    }
-
-    td {
-      font-size: 0.9rem;
-    }
   </style>
 </head>
 <body>
 
+  <!-- Header Superior -->
   <header>
     <div class="brand">
-      <div class="logo-icon"></div>
-      <h1>NEXUS ORCHESTRATOR</h1>
+      <div class="logo-icon">⚡</div>
+      <div>
+        <h1>NEXUS ORCHESTRATOR</h1>
+        <span>Un propósito · todas las IAs alineadas</span>
+      </div>
     </div>
-    <div class="status-badge">
-      <div class="status-dot"></div>
-      <span>Sistema En Línea</span>
+    <div class="top-badges">
+      <div class="badge">Sin propósito</div>
+      <div class="badge">Cuenta de Claude</div>
+      <div class="badge">Diagnóstico</div>
+      <div class="badge success"><div class="status-dot"></div>Listo</div>
     </div>
   </header>
 
-  <div class="container">
-    <aside>
-      <ul class="nav-list">
-        <li><button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button></li>
-        <li><button class="nav-btn" onclick="switchTab('workflows', this)">Workflows</button></li>
-        <li><button class="nav-btn" onclick="switchTab('ai', this)">Consola IA</button></li>
-        <li><button class="nav-btn" onclick="switchTab('monitor', this)">Monitor de Logs</button></li>
-      </ul>
-    </aside>
+  <!-- Navbar Horizontal -->
+  <nav class="main-nav">
+    <button class="nav-btn active" onclick="switchTab('inicio', this)">🏠 Inicio</button>
+    <button class="nav-btn" onclick="switchTab('estudio', this)">🧪 Estudio</button>
+    <button class="nav-btn" onclick="switchTab('matriz', this)">🧬 Matriz</button>
+    <button class="nav-btn" onclick="switchTab('entregable', this)">📄 Entregable</button>
+    <button class="nav-btn" onclick="switchTab('ia', this)">🤖 Consola IA</button>
+    <button class="nav-btn" onclick="switchTab('chat', this)">💬 Chat</button>
+    <button class="nav-btn" onclick="switchTab('bitacora', this)">📅 Bitácora</button>
+  </nav>
 
-    <main>
-      <!-- TAB 1: DASHBOARD -->
-      <section id="dashboard" class="tab-content active">
-        <h2 class="section-title">Resumen de Orquestación</h2>
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-title">Workflows Activos</div>
-            <div class="card-value">12</div>
-          </div>
-          <div class="card">
-            <div class="card-title">Peticiones / Minuto</div>
-            <div class="card-value">148</div>
-          </div>
-          <div class="card">
-            <div class="card-title">Estado Neon DB</div>
-            <div class="card-value" style="color: var(--success); font-size: 1.2rem; margin-top: 0.5rem;">Conectado</div>
+  <main>
+    <!-- TAB 1: INICIO -->
+    <section id="inicio" class="tab-content active">
+      <div class="hero-banner">
+        <div>
+          <div class="hero-tag">Hub central de inteligencia artificial</div>
+          <h2 class="hero-title">Un propósito.<br>Cuatro mentes.<br><span>Un solo entregable.</span></h2>
+          <p class="hero-desc">Cuéntale a Nexus qué necesitas, sube tus archivos o graba una conversación. Claude, Gemini, ChatGPT y DeepSeek trabajan juntos sobre el mismo objetivo, sin mezclar temas.</p>
+          <div class="hero-actions">
+            <button class="btn-primary" onclick="switchTab('estudio', document.querySelectorAll('.nav-btn')[1])">Empezar en el Estudio</button>
+            <button class="btn-secondary" onclick="switchTab('matriz', document.querySelectorAll('.nav-btn')[2])">Ver la matriz</button>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-title">Verificación de Conexión a Base de Datos</div>
-          <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">Prueba la respuesta en tiempo real de tu clúster de Neon PostgreSQL.</p>
-          <button class="primary-btn" onclick="testDB()">Probar Conexión Neon DB</button>
-          <div id="db-result" class="console-box" style="margin-top: 1rem; min-height: 80px;">Presiona el botón para ejecutar SELECT NOW()...</div>
+        <div class="orbital-container">
+          <div class="orbit-ring"></div>
+          <div class="core-node">⚡</div>
         </div>
-      </section>
+      </div>
 
-      <!-- TAB 2: WORKFLOWS -->
-      <section id="workflows" class="tab-content">
-        <h2 class="section-title">Gestión de Workflows</h2>
-        <div class="card">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre del Flujo</th>
-                <th>Disparador</th>
-                <th>Estado</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>WF-001</td>
-                <td>Procesamiento de Documentos Mining</td>
-                <td>Webhook API</td>
-                <td><span style="color: var(--success);">Activo</span></td>
-                <td><button class="primary-btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Ejecutar</button></td>
-              </tr>
-              <tr>
-                <td>WF-002</td>
-                <td>Sincronización ESG & Regtech</td>
-                <td>Cron Job (Diario)</td>
-                <td><span style="color: var(--success);">Activo</span></td>
-                <td><button class="primary-btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;">Ejecutar</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <div class="section-header">
+        <h3 class="section-title">Elige tu propósito</h3>
+        <div class="auto-detect">✨ Detección automática activa</div>
+      </div>
 
-      <!-- TAB 3: CONSOLA IA -->
-      <section id="ai" class="tab-content">
-        <h2 class="section-title">Orquestación de Modelos de IA</h2>
-        <div class="card">
-          <div class="form-group">
-            <label>Modelo Seleccionado</label>
-            <select id="ai-model">
-              <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
-              <option value="gpt-4o">GPT-4o (OpenAI)</option>
-              <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Instrucción / Prompt de Orquestación</label>
-            <textarea id="ai-prompt" rows="4" placeholder="Escribe el prompt o tarea a orquestar..."></textarea>
-          </div>
-          <button class="primary-btn" onclick="runOrchestration()">Enviar Petición Orquestada</button>
-          
-          <div style="margin-top: 1.5rem;">
-            <div class="card-title">Respuesta de la API</div>
-            <div id="ai-response" class="console-box">Esperando entrada...</div>
-          </div>
+      <div class="grid-4">
+        <div class="purpose-card" onclick="selectPurpose('Pedagogía y Lenguas')">
+          <div class="purpose-icon">📚</div>
+          <h3>Pedagogía y Lenguas</h3>
+          <p>Planes de aula, DBA, EBC, prácticas pedagógicas y rúbricas evaluativas.</p>
         </div>
-      </section>
+        <div class="purpose-card" onclick="selectPurpose('Negocios y Minería')">
+          <div class="purpose-icon">💼</div>
+          <h3>Negocios y Minería</h3>
+          <p>Teasers, dossiers, debida diligencia y búsqueda de compradores de activos.</p>
+        </div>
+        <div class="purpose-card" onclick="selectPurpose('Derecho y Normativa')">
+          <div class="purpose-icon">⚖️</div>
+          <h3>Derecho y Normativa</h3>
+          <p>Análisis normativo, jurisprudencia, contratos y conceptos jurídicos.</p>
+        </div>
+        <div class="purpose-card" onclick="selectPurpose('Música y Arte')">
+          <div class="purpose-icon">🎨</div>
+          <h3>Música y Arte</h3>
+          <p>Conceptos estéticos, composición, notas de programa y curaduría.</p>
+        </div>
+      </div>
+    </section>
 
-      <!-- TAB 4: MONITOR -->
-      <section id="monitor" class="tab-content">
-        <h2 class="section-title">Monitor de Eventos en Vivo</h2>
-        <div class="card">
-          <div id="live-logs" class="console-box" style="min-height: 300px;">
-[SYSTEM LOG] Nexus Orchestrator iniciado correctamente.
-[SYSTEM LOG] Conectado a Render Web Service puerto 3000.
-[SYSTEM LOG] Esperando eventos de entrada...
-          </div>
+    <!-- TAB 2: ESTUDIO -->
+    <section id="estudio" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Estudio de Orquestación</h2>
+      <div class="card">
+        <label>Definir Objetivo del Estudio</label>
+        <textarea id="study-prompt" rows="3" placeholder="Describe qué tarea compleja deseas procesar con múltiples modelos..."></textarea>
+        <button class="btn-primary" onclick="runStudy()">Iniciar Análisis Conjunto</button>
+        <div style="margin-top: 1.5rem;">
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">REGISTRO DE EJECUCIÓN MULTICEREBRO</div>
+          <div id="study-result" class="console-box">Esperando parámetros de estudio...</div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MATRIZ -->
+    <section id="matriz" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Matriz de Sincronización IA</h2>
+      <div class="card">
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Estado de alineación de los motores conectados (Neon DB, Claude, Gemini, OpenAI).</p>
+        <button class="btn-primary" onclick="testDB()">Verificar Conexión Neon PostgreSQL</button>
+        <div id="db-result" class="console-box" style="margin-top: 1rem;">Haz clic para consultar clúster...</div>
+      </div>
+    </section>
+
+    <!-- TAB 4: ENTREGABLE -->
+    <section id="entregable" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Generación de Entregables</h2>
+      <div class="card">
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Consolida los resultados de las cuatro mentes en un documento estructurado listo para exportar.</p>
+        <button class="btn-primary" onclick="alert('Generando entregable consolidado...')">Compilar Entregable Final</button>
+      </div>
+    </section>
+
+    <!-- TAB 5: CONSOLA IA -->
+    <section id="ia" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Consola de Modelos</h2>
+      <div class="card">
+        <label>Modelo Seleccionado</label>
+        <select id="ai-model">
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
+          <option value="gpt-4o">GPT-4o (OpenAI)</option>
+          <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
+        </select>
+        <label>Prompt / Instrucción</label>
+        <textarea id="ai-prompt" rows="3" placeholder="Escribe tu consulta..."></textarea>
+        <button class="btn-primary" onclick="runOrchestration()">Enviar Petición Orquestada</button>
+        <div style="margin-top: 1.5rem;">
+          <div id="ai-response" class="console-box">Esperando respuesta de la API...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: CHAT -->
+    <section id="chat" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Chat Directo con el Orquestador</h2>
+      <div class="card">
+        <div class="console-box" style="min-height: 280px;">[NEXUS CHAT v2.0] Hola Jefferson. ¿En qué flujo de trabajo te acompaño hoy?</div>
+        <input type="text" placeholder="Escribe un mensaje al chat..." style="margin-top: 1rem;">
+      </div>
+    </section>
+
+    <!-- TAB 7: BITÁCORA -->
+    <section id="bitacora" class="tab-content">
+      <h2 class="section-title" style="margin-bottom: 1.5rem;">Bitácora de Eventos y Logs</h2>
+      <div class="card">
+        <div id="live-logs" class="console-box" style="min-height: 300px;">
+[SYSTEM LOG] Nexus Orchestrator inicializado con éxito en Render.
+[SYSTEM LOG] Enrutamiento horizontal cargado correctamente.
+[SYSTEM LOG] Esperando interacciones del usuario...
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    // Navegación por pestañas corregida
     function switchTab(tabId, buttonElement) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
       document.getElementById(tabId).classList.add('active');
-      
       if (buttonElement) {
         buttonElement.classList.add('active');
       }
     }
 
-    // Test de Base de Datos Neon
+    function selectPurpose(purposeName) {
+      alert('Propósito seleccionado: ' + purposeName + '. Nexus adaptará los agentes de IA automáticamente.');
+      switchTab('estudio', document.querySelectorAll('.nav-btn')[1]);
+    }
+
     async function testDB() {
       const resultBox = document.getElementById('db-result');
-      resultBox.innerText = 'Enviando consulta a Neon PostgreSQL...';
-
+      resultBox.innerText = 'Consultando base de datos Neon PostgreSQL...';
       try {
         const response = await fetch('/api/db-test');
         const data = await response.json();
         resultBox.innerText = JSON.stringify(data, null, 2);
       } catch (err) {
-        resultBox.innerText = 'Error al conectar con la API: ' + err.message;
+        resultBox.innerText = 'Error de conexión: ' + err.message;
       }
     }
 
-    // Simulación de Orquestación con IA
     async function runOrchestration() {
       const model = document.getElementById('ai-model').value;
       const prompt = document.getElementById('ai-prompt').value;
       const responseBox = document.getElementById('ai-response');
-
       if (!prompt.trim()) {
-        alert('Por favor escribe un prompt antes de enviar.');
+        alert('Escribe una instrucción primero.');
         return;
       }
-
-      responseBox.innerText = `[PROCESANDO] Enviando tarea a ${model}...`;
-
+      responseBox.innerText = `[PROCESANDO] Orquestando con ${model}...`;
       try {
         const response = await fetch('/api/orchestrate', {
           method: 'POST',
@@ -449,14 +583,18 @@
         const data = await response.json();
         responseBox.innerText = JSON.stringify(data, null, 2);
       } catch (err) {
-        responseBox.innerText = JSON.stringify({
-          status: 'simulated_success',
-          orchestrator: 'Nexus Engine',
-          modelUsed: model,
-          promptReceived: prompt,
-          timestamp: new Date().toISOString()
-        }, null, 2);
+        responseBox.innerText = 'Error en la petición de orquestación.';
       }
+    }
+
+    function runStudy() {
+      const prompt = document.getElementById('study-prompt').value;
+      const resultBox = document.getElementById('study-result');
+      if(!prompt.trim()) {
+        alert('Por favor describe el objetivo del estudio.');
+        return;
+      }
+      resultBox.innerText = `[ESTUDIO MULTICEREBRO]\nObjetivo: "${prompt}"\n- Claude: Analizando marco conceptual...\n- Gemini: Verificando estructura metodológica...\n- Estado: Sincronización completada con éxito.`;
     }
   </script>
 </body>
