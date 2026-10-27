@@ -1,20 +1,19 @@
+# Usar imagen ligera de Node.js
 FROM node:20-alpine
 
+# Definir el directorio de trabajo
 WORKDIR /app
 
-# Copiar dependencias e instalarlas
+# Copiar manifiestos e instalar dependencias de producción
 COPY package*.json ./
-RUN npm install
+RUN npm install --only=production
 
-# Copiar configuración, código fuente y la carpeta pública del frontend
-COPY tsconfig.json ./
-COPY src ./src
+# Copiar el servidor y la carpeta pública del frontend
+COPY server.js ./
 COPY public ./public
 
-# Compilar TypeScript a JavaScript
-RUN npm run build
-
+# Exponer el puerto
 EXPOSE 3000
 
-# Iniciar la aplicación
-CMD ["node", "dist/index.js"]
+# Comando de inicio del servidor
+CMD ["node", "server.js"]
