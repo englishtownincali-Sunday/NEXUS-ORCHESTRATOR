@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Orchestrator - Control Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <title>NEXUS ORCHESTRATOR - Autonomous Control Layer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #070913;
-      --panel-bg: #0e1322;
-      --card-bg: #111827;
-      --border-color: #1f2937;
+      --bg-dark: #060913;
+      --panel-bg: rgba(13, 18, 32, 0.75);
+      --card-bg: #0b101d;
+      --border-color: rgba(30, 41, 69, 0.8);
+      --accent-cyan: #06b6d4;
       --accent-blue: #3b82f6;
       --accent-purple: #8b5cf6;
-      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
       --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-muted: #6b7280;
       --success: #10b981;
     }
 
@@ -25,795 +26,445 @@
       padding: 0;
     }
 
+    /* ESTILO DE SCROLLBAR NEÓN PERSONALIZADA */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #04060d;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--accent-purple), var(--accent-cyan));
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--accent-cyan), var(--accent-pink));
+    }
+
     body {
       background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
+      padding: 1.25rem 2rem;
       display: flex;
       flex-direction: column;
-      padding: 1.5rem 2rem;
     }
 
+    /* HEADER SUPERIOR */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .brand {
+    .brand-container {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
     }
 
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      border-radius: 10px;
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+      color: var(--accent-cyan);
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
     }
 
-    .brand h1 {
-      font-size: 1.25rem;
+    .brand-title h1 {
+      font-size: 1.15rem;
       font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #fff;
+    }
+
+    .brand-title p {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.5px;
-      color: #fff;
     }
 
-    .brand span {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    .top-badges {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .badge {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      padding: 0.4rem 0.9rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      gap: 1rem;
     }
 
-    .badge:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .badge.action-btn {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      color: #fff;
-      border: none;
-      font-weight: 600;
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
-    }
-
-    .badge.user-active {
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.4);
-      color: #c4b5fd;
-      font-weight: 600;
-      cursor: default;
-    }
-
-    .badge.success {
-      color: var(--success);
-      border-color: rgba(16, 185, 129, 0.3);
-      background: rgba(16, 185, 129, 0.08);
-      cursor: default;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background-color: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--success);
-    }
-
-    nav.main-nav {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 0.5rem;
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-      overflow-x: auto;
-    }
-
-    .nav-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.65rem 1.25rem;
-      border-radius: 10px;
-      font-weight: 500;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .nav-btn:hover {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .nav-btn.active {
-      color: #fff;
-      background: rgba(59, 130, 246, 0.2);
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .hero-banner {
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(11, 15, 25, 0.95));
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 3rem;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 2rem;
-      align-items: center;
-      margin-bottom: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .hero-tag {
-      display: inline-block;
+    .status-badge {
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.3);
       color: var(--success);
       padding: 0.35rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-title {
-      font-size: 2.75rem;
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-      letter-spacing: -0.5px;
-    }
-
-    .hero-title span {
-      background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-desc {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      max-width: 540px;
-    }
-
-    .hero-actions {
+      font-family: 'JetBrains Mono', monospace;
       display: flex;
-      gap: 1rem;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-      color: #fff;
-      border: none;
-      padding: 0.85rem 1.75rem;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-      transition: opacity 0.2s;
+    .status-dot-green {
+      width: 7px;
+      height: 7px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
     }
 
-    .btn-secondary {
+    /* SELECTOR DE IDIOMA */
+    .lang-select {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 0.85rem 1.75rem;
-      border-radius: 10px;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      outline: none;
+    }
+    .lang-select option {
+      background: #0d1220;
+      color: #fff;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-neon-small {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.2s;
     }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .btn-neon-small:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
     }
 
-    .orbital-container {
+    .btn-neon-primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.95rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-neon-primary:hover {
+      opacity: 0.9;
+      box-shadow: 0 0 18px rgba(139, 92, 246, 0.6);
+    }
+
+    /* METRICAS KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
       display: flex;
-      justify-content: center;
       align-items: center;
-      position: relative;
-      height: 260px;
+      gap: 1rem;
+      backdrop-filter: blur(10px);
     }
 
-    .core-node {
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-      border-radius: 50%;
+    .kpi-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
-      z-index: 2;
+      font-size: 1.2rem;
     }
 
-    .orbit-ring {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      border: 1px dashed rgba(139, 92, 246, 0.3);
-      border-radius: 50%;
-      animation: spin 20s linear infinite;
+    .kpi-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-cyan); border: 1px solid rgba(59, 130, 246, 0.3); }
+    .kpi-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+    .kpi-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .kpi-icon.pink { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); border: 1px solid rgba(236, 72, 153, 0.3); }
+
+    .kpi-info label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .kpi-info .val {
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
     }
 
-    .section-header {
+    /* GRID PRINCIPAL */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-box {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.25rem;
     }
 
-    .section-title {
-      font-size: 1.25rem;
+    .panel-title {
+      font-size: 1rem;
       font-weight: 600;
-    }
-
-    .auto-detect {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #93c5fd;
-      padding: 0.35rem 0.85rem;
-      border-radius: 9999px;
-      font-size: 0.8rem;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .purpose-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .purpose-card:hover {
-      border-color: var(--accent-blue);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    }
-
-    .purpose-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
+      gap: 0.5rem;
+      color: #fff;
+    }
+
+    .panel-badge-count {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .form-group {
       margin-bottom: 1rem;
     }
 
-    .purpose-card h3 {
-      font-size: 1rem;
+    .form-group label {
+      display: block;
+      font-size: 0.72rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .purpose-card p {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       color: var(--text-muted);
-      font-size: 0.85rem;
-      line-height: 1.5;
+      margin-bottom: 0.4rem;
     }
 
-    .card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .console-box {
-      background: #050811;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--accent-cyan);
-      min-height: 220px;
-      max-height: 350px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    input, select, textarea {
+    input[type="text"], input[type="email"], input[type="password"], select, textarea {
       width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--bg-dark);
+      padding: 0.65rem 0.85rem;
+      background: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.95rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      transition: border-color 0.2s;
     }
 
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--accent-blue);
+      border-color: var(--accent-cyan);
     }
 
-    /* Modal de Registro con Toggle de Contraseña */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 2rem;
+    .btn-gradient-submit {
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-      position: relative;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: transparent;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      color: #fff;
       border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+      margin-top: 0.5rem;
+      transition: opacity 0.2s;
     }
 
-    .password-input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .btn-gradient-submit:hover {
+      opacity: 0.9;
     }
 
-    .password-input-wrapper input {
-      padding-right: 2.5rem;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 0.75rem;
-      top: 38%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      user-select: none;
-    }
-
-    .toggle-password:hover {
-      color: var(--text-main);
-    }
-
-    /* Sistema de Notificaciones Toast Neón */
-    #toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
+    /* WORKFLOW CARDS */
+    .workflows-list {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
-    .toast {
-      background: var(--panel-bg);
-      border: 1px solid var(--accent-blue);
-      color: var(--text-main);
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.3);
-      font-size: 0.9rem;
+    .workflow-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.1rem;
+    }
+
+    .workflow-card-header {
       display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.4rem;
+    }
+
+    .workflow-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .badge-priority {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-priority.high { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-priority.medium { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .workflow-card-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .workflow-card-prompt {
+      background: rgba(6, 9, 19, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      color: #d1d5db;
+      font-style: italic;
+      margin-bottom: 0.85rem;
+    }
+
+    .workflow-card-actions {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.75rem;
-      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      max-width: 360px;
     }
 
-    .toast.success {
-      border-color: var(--success);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.3);
+    .status-tag {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--success);
     }
 
-    .toast.error {
-      border-color: #ef4444;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(239, 68, 68, 0.3);
+    .workflow-btns {
+      display: flex;
+      gap: 0.5rem;
     }
 
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Contenedor de Toasts -->
-  <div id="toast-container"></div>
-
-  <!-- Header Superior -->
-  <header>
-    <div class="brand">
-      <div class="logo-icon">⚡</div>
-      <div>
-        <h1>NEXUS ORCHESTRATOR</h1>
-        <span>Un propósito · todas las IAs alineadas</span>
-      </div>
-    </div>
-    <div class="top-badges">
-      <div id="auth-btn-badge" class="badge action-btn" onclick="openRegisterModal()">👤 Crear cuenta</div>
-      <div id="user-info-badge" class="badge user-active" style="display: none;">Propietario Activo</div>
-      <div class="badge">Sin propósito</div>
-      <div class="badge">Diagnóstico</div>
-      <div class="badge success"><div class="status-dot"></div>Listo</div>
-    </div>
-  </header>
-
-  <!-- Navbar Horizontal -->
-  <nav class="main-nav">
-    <button class="nav-btn active" onclick="switchTab('inicio', this)">🏠 Inicio</button>
-    <button class="nav-btn" onclick="switchTab('estudio', this)">🧪 Estudio</button>
-    <button class="nav-btn" onclick="switchTab('matriz', this)">🧬 Matriz</button>
-    <button class="nav-btn" onclick="switchTab('entregable', this)">📄 Entregable</button>
-    <button class="nav-btn" onclick="switchTab('ia', this)">🤖 Consola IA</button>
-    <button class="nav-btn" onclick="switchTab('chat', this)">💬 Chat</button>
-    <button class="nav-btn" onclick="switchTab('bitacora', this)">📅 Bitácora</button>
-  </nav>
-
-  <main>
-    <!-- TAB 1: INICIO -->
-    <section id="inicio" class="tab-content active">
-      <div class="hero-banner">
-        <div>
-          <div class="hero-tag">Hub central de inteligencia artificial</div>
-          <h2 class="hero-title">Un propósito.<br>Cuatro mentes.<br><span>Un solo entregable.</span></h2>
-          <p class="hero-desc">Cuéntale a Nexus qué necesitas, sube tus archivos o graba una conversación. Claude, Gemini, ChatGPT y DeepSeek trabajan juntos sobre el mismo objetivo, sin mezclar temas.</p>
-          <div class="hero-actions">
-            <button class="btn-primary" onclick="switchTab('estudio', document.querySelectorAll('.nav-btn')[1])">Empezar en el Estudio</button>
-            <button class="btn-secondary" onclick="switchTab('matriz', document.querySelectorAll('.nav-btn')[2])">Ver la matriz</button>
-          </div>
-        </div>
-        <div class="orbital-container">
-          <div class="orbit-ring"></div>
-          <div class="core-node">⚡</div>
-        </div>
-      </div>
-
-      <div class="section-header">
-        <h3 class="section-title">Elige tu propósito</h3>
-        <div class="auto-detect">✨ Detección automática activa</div>
-      </div>
-
-      <div class="grid-4">
-        <div class="purpose-card" onclick="selectPurpose('Pedagogía y Lenguas')">
-          <div class="purpose-icon">📚</div>
-          <h3>Pedagogía y Lenguas</h3>
-          <p>Planes de aula, DBA, EBC, prácticas pedagógicas y rúbricas evaluativas.</p>
-        </div>
-        <div class="purpose-card" onclick="selectPurpose('Negocios y Minería')">
-          <div class="purpose-icon">💼</div>
-          <h3>Negocios y Minería</h3>
-          <p>Teasers, dossiers, debida diligencia y búsqueda de compradores de activos.</p>
-        </div>
-        <div class="purpose-card" onclick="selectPurpose('Derecho y Normativa')">
-          <div class="purpose-icon">⚖️</div>
-          <h3>Derecho y Normativa</h3>
-          <p>Análisis normativo, jurisprudencia, contratos y conceptos jurídicos.</p>
-        </div>
-        <div class="purpose-card" onclick="selectPurpose('Música y Arte')">
-          <div class="purpose-icon">🎨</div>
-          <h3>Música y Arte</h3>
-          <p>Conceptos estéticos, composición, notas de programa y curaduría.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: ESTUDIO -->
-    <section id="estudio" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Estudio de Orquestación</h2>
-      <div class="card">
-        <label>Definir Objetivo del Estudio</label>
-        <textarea id="study-prompt" rows="3" placeholder="Describe qué tarea compleja deseas procesar con múltiples modelos..."></textarea>
-        <button class="btn-primary" onclick="runStudy()">Iniciar Análisis Conjunto</button>
-        <div style="margin-top: 1.5rem;">
-          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">REGISTRO DE EJECUCIÓN MULTICEREBRO</div>
-          <div id="study-result" class="console-box">Esperando parámetros de estudio...</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 3: MATRIZ -->
-    <section id="matriz" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Matriz de Sincronización IA</h2>
-      <div class="card">
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">Estado de alineación de los motores conectados (Neon DB, Claude, Gemini, OpenAI).</p>
-        <button class="btn-primary" onclick="testDB()">Verificar Conexión Neon PostgreSQL</button>
-        <div id="db-result" class="console-box" style="margin-top: 1rem;">Haz clic para consultar clúster...</div>
-      </div>
-    </section>
-
-    <!-- TAB 4: ENTREGABLE -->
-    <section id="entregable" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Generación de Entregables</h2>
-      <div class="card">
-        <p style="color: var(--text-muted); margin-bottom: 1rem;">Consolida los resultados de las cuatro mentes en un documento estructurado listo para exportar.</p>
-        <button class="btn-primary" onclick="showToast('Compilando entregable final...', 'info')">Compilar Entregable Final</button>
-      </div>
-    </section>
-
-    <!-- TAB 5: CONSOLA IA -->
-    <section id="ia" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Consola de Modelos</h2>
-      <div class="card">
-        <label>Modelo Seleccionado</label>
-        <select id="ai-model">
-          <option value="gemini-1.5-pro">Gemini 1.5 Pro (Google)</option>
-          <option value="gpt-4o">GPT-4o (OpenAI)</option>
-          <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
-        </select>
-        <label>Prompt / Instrucción</label>
-        <textarea id="ai-prompt" rows="3" placeholder="Escribe tu consulta..."></textarea>
-        <button class="btn-primary" onclick="runOrchestration()">Enviar Petición Orquestada</button>
-        <div style="margin-top: 1.5rem;">
-          <div id="ai-response" class="console-box">Esperando respuesta de la API...</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 6: CHAT -->
-    <section id="chat" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Chat Directo con el Orquestador</h2>
-      <div class="card">
-        <div class="console-box" style="min-height: 280px;">[NEXUS CHAT v2.0] Hola Jefferson. ¿En qué flujo de trabajo te acompaño hoy?</div>
-        <input type="text" placeholder="Escribe un mensaje al chat..." style="margin-top: 1rem;">
-      </div>
-    </section>
-
-    <!-- TAB 7: BITÁCORA -->
-    <section id="bitacora" class="tab-content">
-      <h2 class="section-title" style="margin-bottom: 1.5rem;">Bitácora de Eventos y Logs</h2>
-      <div class="card">
-        <div id="live-logs" class="console-box" style="min-height: 300px;">
-[SYSTEM LOG] Nexus Orchestrator inicializado con éxito en Render.
-[SYSTEM LOG] Enrutamiento horizontal cargado correctamente.
-[SYSTEM LOG] Esperando interacciones del usuario...
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- MODAL DE REGISTRO CON VISUALIZACIÓN DE CONTRASEÑA -->
-  <div id="registerModal" class="modal-overlay">
-    <div class="modal-card">
-      <button class="modal-close" onclick="closeRegisterModal()">✕</button>
-      <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: #fff;">Crear Cuenta en Nexus</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">La primera cuenta registrada se asignará automáticamente como <b>Propietaria</b> del servidor.</p>
-      
-      <form onsubmit="handleRegister(event)">
-        <label>Correo Electrónico</label>
-        <input type="email" id="reg-email" placeholder="tu@correo.com" required>
-        
-        <label>Contraseña</label>
-        <div class="password-input-wrapper">
-          <input type="password" id="reg-password" placeholder="••••••••" required>
-          <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
-        </div>
-        
-        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem;">Registrar Cuenta Propietaria</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    /* Sistema de Toasts Elegantes */
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      const icon = type === 'success' ? '✨' : type === 'error' ? '⚠️' : 'ℹ️';
-      toast.innerHTML = `<span>${icon}</span> <div>${message}</div>`;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
-        toast.style.transition = 'all 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+    .btn-action-small {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
     }
 
-    /* Mostrar / Ocultar Contraseña */
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById('reg-password');
-      const toggleBtn = document.querySelector('.toggle-password');
-      if (passInput.type === 'password') {
-        passInput.type = 'text';
-        toggleBtn.innerText = '🙈';
-      } else {
-        passInput.type = 'password';
-        toggleBtn.innerText = '👁️';
-      }
+    .btn-action-small.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
     }
 
-    function switchTab(tabId, buttonElement) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      if (buttonElement) {
-        buttonElement.classList.add('active');
-      }
+    /* CONSOLA Y TERMINAL */
+    .orchestration-section {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    function openRegisterModal() {
-      document.getElementById('registerModal').style.display = 'flex';
+    .terminal-box {
+      background: #03060d;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 220px;
     }
 
-    function closeRegisterModal() {
-      document.getElementById('registerModal').style.display = 'none';
+    .terminal-topbar {
+      background: #080d1a;
+      padding: 0.5rem 0.85rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Lógica de Registro con Cierre Automático e Ingreso Directo */
-    async function handleRegister(event) {
-      event.preventDefault();
-      const email = document.getElementById('reg-email').value;
-      const password = document.getElementById('reg-password').value;
-
-      try {
-        const response = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          showToast(data.message || 'Cuenta de Propietario activa', 'success');
-          closeRegisterModal();
-          
-          // Actualizar UI para el estado autenticado de Propietario
-          document.getElementById('auth-btn-badge').style.display = 'none';
-          const userBadge = document.getElementById('user-info-badge');
-          userBadge.innerText = `👑 ${email}`;
-          userBadge.style.display = 'flex';
-        } else {
-          showToast(data.error || 'Error al registrar', 'error');
-        }
-      } catch (err) {
-        showToast('Error de red al conectar con el servidor', 'error');
-      }
+    .terminal-dots {
+      display: flex;
+      gap: 0.4rem;
     }
 
-    async function selectPurpose(purposeName) {
-      showToast(`Propósito activo: ${purposeName}`);
-      switchTab('estudio', document.querySelectorAll('.nav-btn')[1]);
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+
+    .terminal-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
     }
 
-    async function testDB() {
-      const resultBox = document.getElementById('db-result');
-      resultBox.innerText = 'Consultando base de datos Neon PostgreSQL...';
-      try {
-        const response = await fetch('/api/db-test');
-        const data = await response.json();
-        resultBox.innerText = JSON.stringify(data, null, 2);
-        showToast('Conexión con PostgreSQL Neon verificada', 'success');
-      } catch (err) {
-        resultBox.innerText = 'Error de conexión: ' + err.message;
-        showToast('Fallo al conectar con la base de datos', 'error');
-      }
-    }
-
-    async function runOrchestration() {
-      const model = document.getElementById('ai-model').value;
-      const prompt = document.getElementById('ai-prompt').value;
-      const responseBox = document.getElementById('ai-response');
-      if (!prompt.trim()) {
-        showToast('Ingresa un prompt de prueba primero', 'error');
-        return;
-      }
-      responseBox.innerText = `[PROCESANDO] Orquestando con ${model}...`;
-      try {
-        const response = await fetch('/api/orchestrate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model, prompt })
-        });
-        const data = await response.json();
-        responseBox.innerText = JSON.stringify(data, null, 2);
-        showToast('Orquestación finalizada con éxito', 'success');
-      } catch (err) {
-        responseBox.innerText = 'Error en la petición de orquestación.';
-        showToast('Error de procesamiento', 'error');
-      }
-    }
-
-    function runStudy() {
-      const prompt = document.getElementById('study-prompt').value;
-      const resultBox = document.getElementById('study-result');
-      if(!prompt.trim()) {
-        showToast('Describe el objetivo del estudio', 'error');
-        return;
-      }
-      resultBox.innerText = `[ESTUDIO MULTICEREBRO]\nObjetivo: "${prompt}"\n- Claude: Analizando marco conceptual...\n- Gemini: Verificando estructura metodológica...\n- Estado: Sincronización completada con éxito.`;
-      showToast('Estudio iniciado correctamente', 'success');
-    }
-  </script>
-</body>
-</html>
+    .terminal-content {
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      flex: 1;
+      white-space: pre-wrap;
