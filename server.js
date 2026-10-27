@@ -3,6 +3,7 @@ import postgres from 'postgres';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
 
@@ -11,11 +12,11 @@ const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 
-// Conexión a la Base de Datos Neon PostgreSQL
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 const connectionString = process.env.DATABASE_URL || '';
 const sql = postgres(connectionString, { ssl: 'require' });
 
-// Inicializar tabla de usuarios si no existe
 async function initDB() {
   try {
     await sql`
@@ -34,14 +35,12 @@ async function initDB() {
 }
 initDB();
 
-// Servir archivos estáticos de la carpeta public
 import fastifyStatic from '@fastify/static';
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, 'public'),
   prefix: '/',
 });
 
-// Ruta de Registro
 fastify.post('/api/auth/register', async (request, reply) => {
   const { email, password, profession } = request.body;
   try {
@@ -50,19 +49,18 @@ fastify.post('/api/auth/register', async (request, reply) => {
       return reply.code(400).send({ error: 'El usuario ya está registrado en el sistema.' });
     }
     await sql`INSERT INTO users (email, password, profession) VALUES (${email}, ${password}, ${profession || 'general'})`;
-    return { success: true, message: 'Usuario registrado correctamente en Neon DB.' };
+    return { success: true, message: 'Usuario registrado correctamente en Neon DB.', profession: profession || 'general' };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
 });
 
-// Ruta de Inicio de Sesión
 fastify.post('/api/auth/login', async (request, reply) => {
   const { email, password } = request.body;
   try {
     const users = await sql`SELECT * FROM users WHERE email = ${email} AND password = ${password}`;
     if (users.length === 0) {
-      return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado.' });
+      return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado en el sistema.' });
     }
     const user = users[0];
     return { success: true, message: `Bienvenido de nuevo, ${email}`, profession: user.profession || 'general' };
@@ -71,26 +69,42 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Endpoint de Orquestación e IA Real
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
-  let responseText = "";
-  if (profession === 'mining') {
-    responseText = `[AURA-X MINING CORE]\nAnálisis de activos minerales para "${prompt}":\n- Estandarización de ley de mineral y parámetros SGS/Bureau Veritas verificados.\n- Cumplimiento de normativas ESG y trazabilidad de cadena de suministro.\n- Marco contractual Incoterms 2020 listo para emisión de LOI / SCO.`;
-  } else if (profession === 'doctor') {
-    responseText = `[MED-CONSULT CORE]\nEvaluación clínica para "${prompt}":\n- Protocolo de triaje y anamnesis estructurado.\n- Cruce con guías de práctica médica y farmacología.\n- Registro en historial de paciente con seguridad HIPAA.`;
-  } else if (profession === 'music') {
-    responseText = `[STUDIO AUDIO CORE]\nGestión de producción para "${prompt}":\n- Arreglos armónicos, frecuencias y mezcla multicanal optimizada.\n- Estructura de metadatos y distribución editorial lista.`;
-  } else if (profession === 'lawyer') {
-    responseText = `[LEGAL BUFET CORE]\nRevisión normativa para "${prompt}":\n- Análisis jurisprudencial y redacción de cláusulas preventivas.\n- Validación de cumplimiento contractual corporativo.`;
-  } else if (profession === 'teaching') {
-    responseText = `[ACADEMY PBL CORE]\nDiseño pedagógico para "${prompt}":\n- Secuencia didáctica basada en Aprendizaje Basado en Proyectos (PBL).\n- Rúbrica de evaluación de 5 pilares (Gramática B1, Contenido, Diseño, Colaboración, Presentación Oral).`;
-  } else {
-    responseText = `[NEXUS GENERAL CORE]\nResultado optimizado para "${prompt}":\n- Investigación cruzada completada sin alucinaciones.\n- Estructura ejecutiva lista para exportar al Canvas.`;
-  }
+  try {
+    let systemInstruction = "Eres Nexus Orchestrator, un asistente ejecutivo de nivel experto, riguroso, analítico y profundo.";
+    if (profession === 'mining') {
+      systemInstruction = "Eres el núcleo de inteligencia experto en minería global, activos de carbón, oro, metales, normativas ESG, estándares SGS/Bureau Veritas e Incoterms 2020. Proporciona respuestas técnicas y detalladas.";
+    } else if (profession === 'doctor') {
+      systemInstruction = "Eres un consultor médico y clínico experto en protocolos de triaje, farmacología y guías de salud con rigor científico.";
+    } else if (profession === 'music') {
+      systemInstruction = "Eres un productor musical y arreglista experto en acústica, mezcla, frecuencias, licencias y distribución editorial.";
+    } else if (profession === 'lawyer') {
+      systemInstruction = "Eres un asesor jurídico experto en revisión contractual, análisis jurisprudencial y derecho corporativo preventivo.";
+    } else if (profession === 'teaching') {
+      systemInstruction = "Eres un experto en pedagogía, diseño curricular basado en Aprendizaje Basado en Proyectos (PBL), fonética IPA y enseñanza de lenguas extranjeras.";
+    }
 
-  return { success: true, result: responseText };
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.4,
+      }
+    });
+
+    const aiOutput = response.text || "Consulta procesada con éxito por el clúster de IA.";
+    return { success: true, result: aiOutput };
+
+  } catch (err) {
+    request.log.error(err);
+    return reply.code(500).send({ 
+      success: false, 
+      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud con Gemini API: ${err.message}` 
+    });
+  }
 });
 
 const start = async () => {
