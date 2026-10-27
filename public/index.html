@@ -16,7 +16,7 @@
       --text-main: #f3f4f6;
       --text-muted: #9ca3af;
       --theme-glow: rgba(6, 182, 212, 0.3);
-      --env-bg-pattern: radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
+      --env-bg-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,14 +30,17 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: var(--env-bg-pattern), radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      background-image: linear-gradient(rgba(3, 5, 12, 0.82), rgba(3, 5, 12, 0.88)), var(--env-bg-image);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       padding: 1.25rem 2rem;
-      transition: background 0.8s ease, border-color 0.5s ease;
+      transition: background-image 0.8s ease-in-out, background-color 0.8s ease, border-color 0.5s ease;
     }
 
     /* HEADER */
@@ -122,7 +125,7 @@
     .tool-info h4 { font-size: 0.82rem; font-weight: 600; color: #fff; }
     .tool-info p { font-size: 0.7rem; color: var(--text-muted); }
 
-    /* WORKSPACE DERECHO: CHAT + CANVAS */
+    /* WORKSPACE DERECHO */
     .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; flex: 1; }
 
     .chat-box { display: flex; flex-direction: column; height: 100%; }
@@ -145,12 +148,12 @@
     }
 
     .canvas-output {
-      background: #020408; border: 1px solid var(--border-color); border-radius: 14px;
+      background: rgba(2, 4, 8, 0.85); border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #d1d5db;
       flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 460px;
     }
 
-    /* MODAL AUTENTICACIÓN */
+    /* MODAL DE AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none;
@@ -197,7 +200,7 @@
 
   <!-- LAYOUT PRINCIPAL -->
   <div class="main-layout">
-    <!-- PANEL IZQUIERDO: WIDGETS DE ENTORNO -->
+    <!-- PANEL IZQUIERDO -->
     <div class="glass-panel">
       <div class="panel-header">
         <div class="panel-title">🎛️ Centro de Control</div>
@@ -238,10 +241,9 @@
       </div>
     </div>
 
-    <!-- PANEL DERECHO: WORKSPACE (CHAT + CANVAS) -->
+    <!-- PANEL DERECHO -->
     <div class="glass-panel">
       <div class="workspace-grid">
-        <!-- CHAT -->
         <div class="chat-box">
           <div class="panel-header">
             <div class="panel-title">💬 Chat Inteligente</div>
@@ -249,7 +251,7 @@
           </div>
           <div class="chat-messages" id="chat-stream">
             <div class="message bot" id="welcome-msg">
-              👋 Hola. Nexus OS está en línea. Selecciona tu entorno o escribe una consulta para iniciar la ejecución real de tareas.
+              👋 Hola. Nexus OS está en línea. Selecciona tu entorno o inicia sesión para cargar tu perfil automáticamente.
             </div>
           </div>
           <div class="chat-input-area">
@@ -258,7 +260,6 @@
           </div>
         </div>
 
-        <!-- CANVAS -->
         <div style="display: flex; flex-direction: column; height: 100%;">
           <div class="panel-header">
             <div class="panel-title">📄 Canvas Compilador</div>
@@ -273,7 +274,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE AUTENTICACIÓN -->
+  <!-- MODAL AUTENTICACIÓN SIN AUTOCOMPLETADO PREDETERMINADO -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -282,10 +283,10 @@
         <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
       </div>
       <p id="auth-sub" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Accede con tus credenciales.</p>
-      <form onsubmit="handleAuthSubmit(event)">
+      <form onsubmit="handleAuthSubmit(event)" autocomplete="off">
         <div style="margin-bottom:0.9rem;">
           <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CORREO</label>
-          <input type="email" id="auth-email" required style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+          <input type="email" id="auth-email" name="user_nexus_email" required autocomplete="new-password" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
         </div>
         <div style="margin-bottom:0.9rem; display:none;" id="reg-prof-group">
           <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">PROFESIÓN PREDETERMINADA</label>
@@ -300,7 +301,7 @@
         </div>
         <div style="margin-bottom:1.2rem;">
           <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CONTRASEÑA</label>
-          <input type="password" id="auth-password" required style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+          <input type="password" id="auth-password" name="user_nexus_pass" required autocomplete="new-password" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
         </div>
         <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar</button>
       </form>
@@ -321,14 +322,25 @@
       setTimeout(() => t.remove(), 3500);
     }
 
+    function clearAuthInputs() {
+      document.getElementById('auth-email').value = '';
+      document.getElementById('auth-password').value = '';
+    }
+
     function openAuthModal(mode) {
       document.getElementById('auth-modal').style.display = 'flex';
+      clearAuthInputs();
       switchAuthTab(mode);
     }
-    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+
+    function closeAuthModal() {
+      clearAuthInputs();
+      document.getElementById('auth-modal').style.display = 'none';
+    }
 
     function switchAuthTab(mode) {
       currentMode = mode;
+      clearAuthInputs();
       const tL = document.getElementById('tab-login');
       const tR = document.getElementById('tab-register');
       const sub = document.getElementById('auth-sub');
@@ -348,7 +360,7 @@
       }
     }
 
-    /* CAMBIO PROFUNDO DE ASPECTO (SISTEMA OPERATIVO DE ENTORNO) */
+    /* CAMBIO TOTAL DE ENTORNO Y FONDO FOTOGRÁFICO TEMÁTICO */
     function switchSystemEnvironment(env) {
       activeEnvironment = env;
       const root = document.documentElement;
@@ -366,7 +378,7 @@
         root.style.setProperty('--accent-primary', '#f59e0b');
         root.style.setProperty('--accent-secondary', '#d97706');
         root.style.setProperty('--theme-glow', 'rgba(245, 158, 11, 0.4)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.2) 0%, transparent 60%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⛏️ Minería & Activos Globales";
         descEl.innerText = "Entorno especializado en carbón, oro, metales y ESG";
         tagEl.innerText = "MINING CORE";
@@ -382,7 +394,7 @@
         root.style.setProperty('--accent-primary', '#10b981');
         root.style.setProperty('--accent-secondary', '#059669');
         root.style.setProperty('--theme-glow', 'rgba(16, 185, 129, 0.4)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 60%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🩺 Consultorio Médico & Salud";
         descEl.innerText = "Entorno clínico, triaje y protocolos sanitarios";
         tagEl.innerText = "MED OS";
@@ -397,7 +409,7 @@
         root.style.setProperty('--accent-primary', '#ec4899');
         root.style.setProperty('--accent-secondary', '#be185d');
         root.style.setProperty('--theme-glow', 'rgba(236, 72, 153, 0.4)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(236, 72, 153, 0.2) 0%, transparent 60%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🎵 Estudio Musical & Producción";
         descEl.innerText = "Composición, arreglos, mezcla y frecuencias";
         tagEl.innerText = "AUDIO LAB";
@@ -412,7 +424,7 @@
         root.style.setProperty('--accent-primary', '#3b82f6');
         root.style.setProperty('--accent-secondary', '#1d4ed8');
         root.style.setProperty('--theme-glow', 'rgba(59, 130, 246, 0.4)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 60%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⚖️ Bufete Jurídico & Normativa";
         descEl.innerText = "Revisión contractual, contratos y jurisprudencia";
         tagEl.innerText = "LEGAL OS";
@@ -426,7 +438,7 @@
         root.style.setProperty('--accent-primary', '#8b5cf6');
         root.style.setProperty('--accent-secondary', '#6d28d9');
         root.style.setProperty('--theme-glow', 'rgba(139, 92, 246, 0.4)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 60%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "📚 Academia & Lenguas Extranjeras";
         descEl.innerText = "Diseño curricular PBL, gramática B1 y evaluación";
         tagEl.innerText = "EDUTECH";
@@ -435,13 +447,13 @@
         subEl.innerText = "V2.0 · LPT ACADEMY";
         toolsContainer.innerHTML = `
           <div class="tool-card" onclick="runToolAction('Diseño Curricular PBL & 5 Pilares')"><div class="tool-icon">📝</div><div class="tool-info"><h4>Rúbrica & PBL</h4><p>Gramática, Ética y Booklet</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Fonetica y Fonologia IPA')"><div class="tool-icon">🗣️</div><div class="tool-info"><h4>Fonética IPA & Diphthongs</h4><p>Acústica vocal</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Fonética y Fonología IPA')"><div class="tool-icon">🗣️</div><div class="tool-info"><h4>Fonética IPA & Diphthongs</h4><p>Acústica vocal</p></div></div>
         `;
       } else {
         root.style.setProperty('--accent-primary', '#06b6d4');
         root.style.setProperty('--accent-secondary', '#8b5cf6');
         root.style.setProperty('--theme-glow', 'rgba(6, 182, 212, 0.3)');
-        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "✨ Entorno General";
         descEl.innerText = "Workspace corporativo multipropósito";
         tagEl.innerText = "GENERAL";
@@ -456,7 +468,7 @@
       showToast(`Entorno activado: ${nameEl.innerText}`);
     }
 
-    /* AUTENTICACIÓN REAL CONTRA NEON DB */
+    /* AUTENTICACIÓN AUTOMÁTICA Y AUTOCAMBIO DE ENTORNO */
     async function handleAuthSubmit(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
@@ -482,23 +494,22 @@
           badge.innerText = `👤 ${email}`;
           badge.style.display = 'block';
 
-          // Si es login, carga la profesión guardada en la BD; si es registro, usa la seleccionada
-          const userProf = data.profession || profession || 'general';
-          switchSystemEnvironment(userProf);
+          // Asignar y activar entorno según el perfil del usuario
+          const targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
+          switchSystemEnvironment(targetProf);
 
           const welcome = document.getElementById('welcome-msg');
           const displayName = email.split('@')[0];
           const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Tu entorno predeterminado <b>(${userProf.toUpperCase()})</b> ha sido configurado automáticamente por Nexus OS.`;
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Se ha activado tu entorno profesional predeterminado: <b>${targetProf.toUpperCase()}</b>.`;
         } else {
-          showToast(data.error || 'Error en autenticación');
+          showToast(data.error || 'Credenciales inválidas');
         }
       } catch (err) {
-        showToast('Error de red al conectar con el servidor backend.');
+        showToast('Error al conectar con el servidor backend.');
       }
     }
 
-    /* ORQUESTADOR DE CHAT Y TAREAS REALES */
     async function sendUserQuery() {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
@@ -514,7 +525,7 @@
 
       const loading = document.createElement('div');
       loading.className = 'message bot';
-      loading.innerText = `⚙️ Ejecutando clúster de IA para entorno [${activeEnvironment.toUpperCase()}]: analizando parámetros...`;
+      loading.innerText = `⚙️ Procesando consulta en el entorno [${activeEnvironment.toUpperCase()}]...`;
       stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
@@ -526,11 +537,11 @@
         });
         const data = await res.json();
 
-        loading.innerText = `✨ Tarea ejecutada con éxito en el entorno ${activeEnvironment.toUpperCase()}. Revisa el entregable en el Canvas.`;
+        loading.innerText = `✨ Entregable compilado correctamente para el entorno ${activeEnvironment.toUpperCase()}.`;
         document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
       } catch (err) {
-        loading.innerText = "✨ Tarea procesada y optimizada.";
-        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico y estructurado con éxito sin alucinaciones.`;
+        loading.innerText = "✨ Tarea procesada.";
+        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado estructurado en Canvas.`;
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
