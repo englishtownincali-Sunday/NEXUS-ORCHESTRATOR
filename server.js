@@ -17,12 +17,11 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const connectionString = process.env.DATABASE_URL || '';
 const sql = postgres(connectionString, { ssl: 'require' });
 
-// Inicialización limpia de la base de datos para asegurar el campo password
+// Inicialización de base de datos
 async function initDB() {
   try {
-    await sql`DROP TABLE IF EXISTS users CASCADE`;
     await sql`
-      CREATE TABLE users (
+      CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -30,7 +29,7 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database connected & 'users' table recreated successfully.");
+    console.log("Database initialized successfully.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -51,7 +50,7 @@ fastify.post('/api/auth/register', async (request, reply) => {
       return reply.code(400).send({ error: 'El usuario ya está registrado en el sistema.' });
     }
     await sql`INSERT INTO users (email, password, profession) VALUES (${email}, ${password}, ${profession || 'general'})`;
-    return { success: true, message: 'Usuario registrado correctamente en Neon DB.', profession: profession || 'general' };
+    return { success: true, message: 'Usuario registrado correctamente.', profession: profession || 'general' };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
@@ -65,7 +64,14 @@ fastify.post('/api/auth/login', async (request, reply) => {
       return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado.' });
     }
     const user = users[0];
-    return { success: true, message: `Bienvenido de nuevo, ${email}`, profession: user.profession || 'general' };
+    
+    // Si inicia sesión tu correo administrativo, asignar automáticamente 'admin'
+    let assignedProfession = user.profession || 'general';
+    if (email.toLowerCase() === 'englishtownincali@gmail.com') {
+      assignedProfession = 'admin';
+    }
+
+    return { success: true, message: `Bienvenido de nuevo, ${email}`, profession: assignedProfession };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
@@ -75,10 +81,10 @@ fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
   try {
-    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial de nivel ejecutivo. Debes generar informes, análisis y soluciones con máxima profundidad, exhaustividad técnica, estructura formal y desarrollo analítico impecable. Nunca entregues respuestas breves o genéricas.";
+    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial ejecutivo. Debes generar informes y análisis exhaustivos, detallados y técnicos. Estructura el entregable de forma profesional e impecable en el Canvas.";
 
     if (profession === 'mining') {
-      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista de nivel máster en minería internacional, activo de carbón térmico/metalúrgico, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020, cumplimiento ESG, análisis DART y especificaciones técnicas de laboratorio (SGS / Bureau Veritas). Proporciona desgloses exhaustivos y rigurosos.";
+      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activos de carbón térmico/metalúrgico, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020, cumplimiento ESG, análisis DART y especificaciones técnicas de laboratorio (SGS / Bureau Veritas). Proporciona desgloses exhaustivos.";
     } else if (profession === 'doctor') {
       systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado, farmacología detallada, diagnóstico diferencial y protocolos de salud integral.";
     } else if (profession === 'music') {
@@ -88,10 +94,10 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     } else if (profession === 'teaching') {
       systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en diseño curricular de Aprendizaje Basado en Proyectos (PBL), didáctica de lenguas extranjeras (Inglés/Francés), análisis fonético IPA, gramática B1 y diseño de rúbricas de evaluación de 5 pilares.";
     } else if (profession === 'admin') {
-      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas, gestión de clústeres, auditoría de seguridad y optimización de flujos de trabajo B2B.";
+      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas, gestión de clústeres, auditoría de seguridad y supervisión total de flujos B2B.";
     }
 
-    // Modelo estable y actualizado para respuestas de alta calidad
+    // Nombre del modelo exacto para la librería oficial
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
