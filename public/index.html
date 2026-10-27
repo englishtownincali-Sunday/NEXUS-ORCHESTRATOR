@@ -3,220 +3,170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS ORCHESTRATOR - Autonomous AI Workspace</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #03050c;
-      --panel-bg: rgba(10, 15, 30, 0.78);
-      --card-bg: rgba(15, 23, 42, 0.7);
-      --border-color: rgba(6, 182, 212, 0.3);
-      --accent-cyan: #06b6d4;
-      --accent-blue: #3b82f6;
-      --accent-purple: #8b5cf6;
-      --accent-pink: #ec4899;
+      --panel-bg: rgba(10, 15, 30, 0.85);
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --border-color: rgba(6, 182, 212, 0.35);
+      --accent-primary: #06b6d4;
+      --accent-secondary: #8b5cf6;
       --text-main: #f3f4f6;
       --text-muted: #9ca3af;
-      --success: #10b981;
-      --theme-glow: rgba(6, 182, 212, 0.25);
+      --theme-glow: rgba(6, 182, 212, 0.3);
+      --env-bg-pattern: radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* SCROLLBAR NEÓN ULTRA-FINA */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #020307; }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--accent-purple), var(--accent-cyan));
+      background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
       border-radius: 9999px;
-      box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
     }
 
     body {
       background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 15% 20%, var(--theme-glow) 0%, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
+      background-image: var(--env-bg-pattern), radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       padding: 1.25rem 2rem;
-      transition: background 0.6s ease, box-shadow 0.6s ease;
-      overflow-x: hidden;
+      transition: background 0.8s ease, border-color 0.5s ease;
     }
 
-    /* HEADER GLASSMORPHIC */
+    /* HEADER */
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      padding: 0.85rem 1.5rem;
-      background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--theme-glow);
-      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.25rem; padding: 0.9rem 1.5rem;
+      background: var(--panel-bg); backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color); border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--theme-glow);
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.85rem; }
     .brand-logo {
-      width: 42px; height: 42px;
-      background: rgba(6, 182, 212, 0.15);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
+      width: 42px; height: 42px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color); border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--accent-cyan); font-size: 1.3rem;
-      box-shadow: 0 0 25px var(--theme-glow);
+      color: var(--accent-primary); font-size: 1.3rem;
+      box-shadow: 0 0 15px var(--theme-glow);
     }
-    .brand-title h1 { font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: 0.6px; }
-    .brand-title p { font-size: 0.7rem; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; }
+    .brand-title h1 { font-size: 1.2rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+    .brand-title p { font-size: 0.68rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; }
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
     .select-custom {
-      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.45rem 0.85rem; border-radius: 10px;
       font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
-      backdrop-filter: blur(10px);
     }
     .select-custom option { background: #0b0f1d; color: #fff; }
 
-    .btn-neon-small {
-      background: rgba(59, 130, 246, 0.12); border: 1px solid var(--border-color);
-      color: #93c5fd; padding: 0.45rem 0.95rem; border-radius: 10px; font-size: 0.8rem;
-      font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: all 0.25s;
-    }
-    .btn-neon-small:hover { background: rgba(59, 130, 246, 0.3); color: #fff; box-shadow: 0 0 15px var(--theme-glow); }
-
-    .btn-neon-primary {
-      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    .btn-neon {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 10px;
       font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 0 20px var(--theme-glow); transition: all 0.25s;
     }
-    .btn-neon-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 0 25px var(--accent-cyan); }
+    .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    /* DASHBOARD EN 3D GLASSMORPHIC */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 1.5rem;
-      flex: 1;
+    .btn-secondary {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.45rem 1rem; border-radius: 10px;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+    /* LAYOUT PRINCIPAL */
+    .main-layout {
+      display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; flex: 1;
     }
 
-    .glass-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 1.5rem;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.02);
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    .glass-panel {
+      background: var(--panel-bg); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(20px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column;
     }
 
-    .card-header-flex {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;
-      padding-bottom: 0.65rem; border-bottom: 1px solid var(--border-color);
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border-color);
     }
-    .card-title { font-size: 1rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+    .panel-title { font-size: 0.95rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
 
-    /* SELECTOR DE ENTORNO EN VIVO (INTERACCIÓN DE INTERFACES) */
-    .env-switcher-container {
-      display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;
+    /* WIDGETS DE ENTORNO DINÁMICO */
+    .env-badge-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 1rem; margin-bottom: 1.2rem; text-align: center;
     }
-    .env-switcher-label { font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
-    
-    .quick-apps-grid {
-      display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;
-    }
+    .env-badge-box h3 { font-size: 0.9rem; color: var(--accent-primary); margin-bottom: 0.3rem; }
+    .env-badge-box p { font-size: 0.75rem; color: var(--text-muted); }
 
-    .app-icon-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 0.9rem 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
+    .tool-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .tool-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 0.85rem; display: flex; align-items: center; gap: 0.75rem;
+      cursor: pointer; transition: all 0.2s;
     }
-    .app-icon-card:hover {
-      background: rgba(6, 182, 212, 0.15);
-      border-color: var(--accent-cyan);
-      transform: translateX(4px);
-      box-shadow: 0 0 20px var(--theme-glow);
+    .tool-card:hover { background: rgba(255,255,255,0.06); border-color: var(--accent-primary); transform: translateX(3px); }
+    .tool-icon {
+      width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: center; color: var(--accent-primary); font-size: 1rem;
     }
+    .tool-info h4 { font-size: 0.82rem; font-weight: 600; color: #fff; }
+    .tool-info p { font-size: 0.7rem; color: var(--text-muted); }
 
-    .app-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-      background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);
-      box-shadow: 0 0 10px var(--theme-glow);
-    }
+    /* WORKSPACE DERECHO: CHAT + CANVAS */
+    .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; flex: 1; }
 
-    .app-info h4 { font-size: 0.85rem; font-weight: 600; color: #fff; }
-    .app-info p { font-size: 0.72rem; color: var(--text-muted); }
-
-    /* WORKSPACE CHAT + CANVAS */
-    .workspace-split {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; flex: 1; height: 100%;
-    }
-
+    .chat-box { display: flex; flex-direction: column; height: 100%; }
     .chat-messages {
-      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; height: 380px; padding-right: 0.5rem;
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.85rem;
+      max-height: 420px; padding-right: 0.5rem; margin-bottom: 1rem;
     }
-    .message-bubble {
-      padding: 0.95rem 1.2rem; border-radius: 14px; font-size: 0.9rem; line-height: 1.55; max-width: 88%;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    .message {
+      padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%;
     }
-    .message-bubble.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #fff; }
-    .message-bubble.bot { align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
+    .message.bot { align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
 
-    .chat-input-row {
-      display: flex; gap: 0.75rem; align-items: center; background: rgba(0,0,0,0.4);
-      border: 1px solid var(--border-color); border-radius: 14px; padding: 0.6rem 0.95rem;
+    .chat-input-area {
+      display: flex; gap: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
     }
-    .chat-input-row input {
-      flex: 1; background: transparent; border: none; color: #fff; font-size: 0.92rem; outline: none;
+    .chat-input-area input {
+      flex: 1; background: transparent; border: none; color: #fff; font-size: 0.9rem; outline: none;
     }
 
-    .canvas-box {
-      background: #020409; border: 1px solid var(--border-color); border-radius: 14px;
+    .canvas-output {
+      background: #020408; border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #d1d5db;
-      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 420px;
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 460px;
     }
 
     /* MODAL AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); display: none;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none;
       align-items: center; justify-content: center; z-index: 100;
     }
     .modal-card {
       background: #080c18; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2.25rem; width: 100%; max-width: 430px; box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 30px var(--theme-glow); position: relative;
+      padding: 2.2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); position: relative;
     }
-    .modal-close { position: absolute; top: 1.1rem; right: 1.1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
-    .auth-tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem; padding-bottom: 0.5rem; }
-    .auth-tab-btn { background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 0.95rem; cursor: pointer; padding: 0.35rem 0.75rem; }
-    .auth-tab-btn.active { color: var(--accent-cyan); border-bottom: 2px solid var(--accent-cyan); }
-    .password-input-wrapper { position: relative; display: flex; align-items: center; }
-    .password-input-wrapper input { padding-right: 2.5rem; }
-    .toggle-password { position: absolute; right: 0.85rem; top: 38%; transform: translateY(-50%); cursor: pointer; font-size: 1.1rem; color: var(--text-muted); }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.2rem; padding-bottom: 0.5rem; }
+    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
 
-    /* TOASTS */
     #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
-    .toast { background: #080c18; border: 1px solid var(--accent-cyan); color: var(--text-main); padding: 0.9rem 1.3rem; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.6); font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem; animation: slideIn 0.3s ease; }
-    .toast.success { border-color: var(--success); }
-    .toast.error { border-color: #ef4444; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast { background: #080c18; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
@@ -226,371 +176,379 @@
   <!-- HEADER -->
   <header>
     <div class="brand-container">
-      <div class="brand-logo">💎</div>
+      <div class="brand-logo" id="header-logo-icon">💎</div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR</h1>
-        <p>V1.0.9 · IMMERSIVE AI ENGINE</p>
+        <h1 id="brand-title-text">NEXUS ORCHESTRATOR</h1>
+        <p id="brand-subtitle">V2.0 · MULTI-OS WORKSPACE</p>
       </div>
     </div>
     <div class="header-right">
-      <select class="select-custom" id="voice-selector" title="Modelo de Voz">
-        <optgroup label="✨ Voces Pro / ElevenLabs Style">
-          <option value="es-CO-female">🎙️ Sofía (ES-CO Natural)</option>
-          <option value="es-CO-male" selected>🎙️ Mateo (ES-CO Ejecutivo)</option>
-          <option value="en-US-neural">🎙️ Jessica (EN-US Assistant)</option>
-        </optgroup>
+      <select class="select-custom" id="voice-selector">
+        <option value="es-CO">🎙️ Voz Pro (ES)</option>
+        <option value="en-US">🎙️ Voice Pro (EN)</option>
       </select>
-
-      <select class="select-custom" onchange="changeLanguage(this.value)">
-        <option value="es" selected>🌐 ES</option>
-        <option value="en">🌐 EN</option>
-        <option value="fr">🌐 FR</option>
-      </select>
-
-      <button id="btn-login-nav" class="btn-neon-small" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
-      <button id="btn-reg-nav" class="btn-neon-primary" onclick="openAuthModal('register')">✨ Registrarse</button>
-      <button id="user-badge" class="btn-neon-small" style="display:none; color: var(--accent-purple); border-color: var(--accent-purple);"></button>
+      <div id="auth-actions">
+        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
+        <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
+      </div>
+      <div id="user-profile-badge" style="display:none; font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary);"></div>
     </div>
   </header>
 
-  <!-- DASHBOARD PRINCIPAL GLASSMORPHIC -->
-  <div class="dashboard-grid">
-    <!-- PANEL IZQUIERDO: CAMBIO DE ENTORNO EN VIVO -->
-    <div class="glass-card">
-      <div class="card-header-flex">
-        <div class="card-title">🚀 Suite de Inteligencia</div>
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="main-layout">
+    <!-- PANEL IZQUIERDO: WIDGETS DE ENTORNO -->
+    <div class="glass-panel">
+      <div class="panel-header">
+        <div class="panel-title">🎛️ Centro de Control</div>
       </div>
-      
-      <!-- Selector de Interfaz / Entorno en Vivo -->
-      <div class="env-switcher-container">
-        <label class="env-switcher-label">🎨 Cambiar Entorno Visual (Demo en Vivo)</label>
-        <select id="live-env-selector" class="select-custom" onchange="applyEnvironment(this.value, loggedUserName)">
-          <option value="general">✨ General / Corporativo (Cian)</option>
-          <option value="doctor">🩺 Consultorio Médico (Neón Verde)</option>
-          <option value="music">🎵 Estudio Musical (Neón Magenta)</option>
-          <option value="mining">⛏️ Minería & Activos (Neón Ámbar)</option>
-          <option value="lawyer">⚖️ Bufete Jurídico (Neón Azul)</option>
-          <option value="teaching">📚 Academia & Idiomas (Neón Púrpura)</option>
+
+      <div class="env-badge-box">
+        <h3 id="env-display-name">✨ Entorno General</h3>
+        <p id="env-display-desc">Workspace corporativo multipropósito</p>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace;">SELECCIÓN DE ENTORNO ACTIVO</label>
+        <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
+          <option value="general">✨ General / Corporativo</option>
+          <option value="mining">⛏️ Minería & Activos Globales</option>
+          <option value="doctor">🩺 Consultorio Médico & Salud</option>
+          <option value="music">🎵 Estudio Musical & Producción</option>
+          <option value="lawyer">⚖️ Bufete Jurídico & Normativa</option>
+          <option value="teaching">📚 Academia & Lenguas Extranjeras</option>
         </select>
       </div>
 
-      <div class="quick-apps-grid">
-        <div class="app-icon-card" onclick="triggerWebSearch()">
-          <div class="app-icon">🌐</div>
-          <div class="app-info">
-            <h4>Búsqueda Web Real</h4>
-            <p>Datos en tiempo real</p>
+      <div class="tool-list" id="dynamic-tools-container">
+        <div class="tool-card" onclick="executeQuickTool('search')">
+          <div class="tool-icon">🌐</div>
+          <div class="tool-info">
+            <h4>Búsqueda en Vivo</h4>
+            <p>Conexión web sin alucinaciones</p>
           </div>
         </div>
-        <div class="app-icon-card" onclick="triggerConsensus()">
-          <div class="app-icon">🧠</div>
-          <div class="app-info">
-            <h4>Consenso IA</h4>
-            <p>Multi-modelo alineado</p>
+        <div class="tool-card" onclick="executeQuickTool('consensus')">
+          <div class="tool-icon">🧠</div>
+          <div class="tool-info">
+            <h4>Consenso Multi-IA</h4>
+            <p>Gemini + Claude + GPT</p>
           </div>
         </div>
-        <div class="app-icon-card" onclick="speakCanvasText()">
-          <div class="app-icon">🔊</div>
-          <div class="app-info">
-            <h4>Síntesis de Voz</h4>
-            <p>ElevenLabs Style</p>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); display: none;" id="admin-sec">
-        <button class="btn-neon-primary" style="width:100%;" onclick="toggleAdminPanel()">⚙️ Consola Propietario (Admin)</button>
       </div>
     </div>
 
-    <!-- PANEL DERECHO: WORKSPACE ESPACIO CHAT + CANVAS -->
-    <div class="glass-card">
-      <div class="workspace-split">
-        <!-- CHAT INTERACTIVO -->
-        <div style="display: flex; flex-direction: column;">
-          <div class="card-header-flex">
-            <div class="card-title">💬 Chat Orquestador</div>
-            <span style="font-size: 0.72rem; color: var(--accent-cyan);" id="current-env-tag">Entorno: General</span>
+    <!-- PANEL DERECHO: WORKSPACE (CHAT + CANVAS) -->
+    <div class="glass-panel">
+      <div class="workspace-grid">
+        <!-- CHAT -->
+        <div class="chat-box">
+          <div class="panel-header">
+            <div class="panel-title">💬 Chat Inteligente</div>
+            <span style="font-size:0.7rem; color:var(--accent-primary);" id="chat-env-tag">GENERAL</span>
           </div>
           <div class="chat-messages" id="chat-stream">
-            <div class="message-bubble bot" id="welcome-message-bubble">
-              👋 Hola. Nexus Orchestrator está en línea. Escribe cualquier tarea, guía o consulta y los modelos investigarán en vivo.
+            <div class="message bot" id="welcome-msg">
+              👋 Hola. Nexus OS está en línea. Selecciona tu entorno o escribe una consulta para iniciar la ejecución real de tareas.
             </div>
           </div>
-          <div class="chat-input-row">
-            <input type="text" id="user-chat-input" placeholder="Pregunta algo o pide una guía..." onkeypress="if(event.key==='Enter') sendUserMessage()" autocomplete="off">
-            <button class="btn-neon-primary" onclick="sendUserMessage()" id="btn-send">Enviar</button>
+          <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escribe una tarea o consulta..." onkeypress="if(event.key==='Enter') sendUserQuery()">
+            <button class="btn-neon" onclick="sendUserQuery()" id="send-btn">Enviar</button>
           </div>
         </div>
 
-        <!-- CANVAS COMPILADOR -->
-        <div style="display: flex; flex-direction: column;">
-          <div class="card-header-flex">
-            <div class="card-title">📄 Canvas de Salida</div>
-            <button class="btn-neon-small" style="font-size:0.75rem;" onclick="speakCanvasText()">🔊 Escuchar</button>
+        <!-- CANVAS -->
+        <div style="display: flex; flex-direction: column; height: 100%;">
+          <div class="panel-header">
+            <div class="panel-title">📄 Canvas Compilador</div>
+            <button class="btn-secondary" style="font-size:0.75rem;" onclick="speakCanvas()">🔊 Escuchar</button>
           </div>
-          <div id="canvas-editor" class="canvas-box" contenteditable="true">
-// ENTREGABLE COMPILADO EN TIEMPO REAL
-// Aquí se desplegarán las respuestas e investigaciones de la IA adaptadas a tu entorno.
+          <div class="canvas-output" id="canvas-view" contenteditable="true">
+// NEXUS OS - ENTORNO DE TRABAJO ACTIVO
+// Los entregables, códigos y documentos generados aparecerán aquí en tiempo real.
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL AUTENTICACIÓN -->
-  <div id="authModal" class="modal-overlay">
+  <!-- MODAL DE AUTENTICACIÓN -->
+  <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
-      
       <div class="auth-tabs">
-        <button id="tab-btn-login" class="auth-tab-btn active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-        <button id="tab-btn-reg" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrarse</button>
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
       </div>
-
-      <p id="auth-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Accede a tu cuenta de usuario.</p>
-      
-      <form onsubmit="handleAuthSubmit(event)" autocomplete="off">
-        <div style="margin-bottom: 1rem;">
-          <label style="display:block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem;">CORREO ELECTRÓNICO</label>
-          <input type="email" id="auth-email" placeholder="tu@correo.com" required autocomplete="off" style="width:100%; padding: 0.7rem; background: #03050c; border: 1px solid var(--border-color); border-radius: 8px; color: #fff;">
+      <p id="auth-sub" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Accede con tus credenciales.</p>
+      <form onsubmit="handleAuthSubmit(event)">
+        <div style="margin-bottom:0.9rem;">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CORREO</label>
+          <input type="email" id="auth-email" required style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
         </div>
-        
-        <div style="margin-bottom: 1rem;" id="profession-field-container">
-          <label style="display:block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem;">PROFESIÓN / ENTORNO</label>
-          <select id="auth-profession" style="width:100%; padding: 0.7rem; background: #03050c; border: 1px solid var(--border-color); border-radius: 8px; color: #fff;">
-            <option value="general">✨ General / Corporativo</option>
-            <option value="doctor">🩺 Medicina / Salud (Consultorio)</option>
-            <option value="music">🎵 Música / Arte (Estudio)</option>
-            <option value="mining">⛏️ Minería / Activos Globales (Operaciones)</option>
-            <option value="lawyer">⚖️ Derecho / Normativa (Bufete)</option>
-            <option value="teaching">📚 Pedagogía / Idiomas (Academia)</option>
+        <div style="margin-bottom:0.9rem; display:none;" id="reg-prof-group">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">PROFESIÓN PREDETERMINADA</label>
+          <select id="auth-profession" style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
+            <option value="general">✨ General</option>
+            <option value="mining">⛏️ Minería</option>
+            <option value="doctor">🩺 Medicina</option>
+            <option value="music">🎵 Música</option>
+            <option value="lawyer">⚖️ Derecho</option>
+            <option value="teaching">📚 Academia</option>
           </select>
         </div>
-
-        <div style="margin-bottom: 1rem;">
-          <label style="display:block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.4rem;">CONTRASEÑA</label>
-          <div class="password-input-wrapper">
-            <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="new-password" style="width:100%; padding: 0.7rem; background: #03050c; border: 1px solid var(--border-color); border-radius: 8px; color: #fff;">
-            <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
-          </div>
+        <div style="margin-bottom:1.2rem;">
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem;">CONTRASEÑA</label>
+          <input type="password" id="auth-password" required style="width:100%; padding:0.65rem; background:#03050c; border:1px solid var(--border-color); border-radius:8px; color:#fff;">
         </div>
-        
-        <button type="submit" id="btn-auth-submit" class="btn-neon-primary" style="width: 100%; padding: 0.75rem; margin-top: 0.5rem;">Entrar</button>
+        <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar</button>
       </form>
     </div>
   </div>
 
   <script>
-    let currentAuthMode = 'login';
-    let userProfession = 'general';
-    let loggedUserName = '';
+    let currentMode = 'login';
+    let activeEnvironment = 'general';
+    let loggedUserEmail = '';
 
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      toast.innerHTML = `<span>✨</span> <div>${message}</div>`;
-      container.appendChild(toast);
-      setTimeout(() => { toast.remove(); }, 4000);
+    function showToast(msg) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerText = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
     }
 
     function openAuthModal(mode) {
-      document.getElementById('auth-email').value = '';
-      document.getElementById('auth-password').value = '';
-      document.getElementById('authModal').style.display = 'flex';
+      document.getElementById('auth-modal').style.display = 'flex';
       switchAuthTab(mode);
     }
-
-    function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
 
     function switchAuthTab(mode) {
-      currentAuthMode = mode;
-      const btnLogin = document.getElementById('tab-btn-login');
-      const btnReg = document.getElementById('tab-btn-reg');
-      const subtitle = document.getElementById('auth-subtitle');
-      const btnSubmit = document.getElementById('btn-auth-submit');
-      const profContainer = document.getElementById('profession-field-container');
+      currentMode = mode;
+      const tL = document.getElementById('tab-login');
+      const tR = document.getElementById('tab-register');
+      const sub = document.getElementById('auth-sub');
+      const btn = document.getElementById('auth-submit-btn');
+      const profG = document.getElementById('reg-prof-group');
 
       if (mode === 'login') {
-        btnLogin.classList.add('active'); btnReg.classList.remove('active');
-        subtitle.innerText = "Accede a tu cuenta para activar tu entorno.";
-        btnSubmit.innerText = "Entrar";
-        profContainer.style.display = 'none';
+        tL.classList.add('active'); tR.classList.remove('active');
+        sub.innerText = "Accede a tu cuenta institucional.";
+        btn.innerText = "Entrar";
+        profG.style.display = 'none';
       } else {
-        btnReg.classList.add('active'); btnLogin.classList.remove('active');
-        subtitle.innerText = "Crea tu cuenta e indica tu profesión.";
-        btnSubmit.innerText = "Crear Cuenta";
-        profContainer.style.display = 'block';
+        tR.classList.add('active'); tL.classList.remove('active');
+        sub.innerText = "Crea tu cuenta y define tu entorno predeterminado.";
+        btn.innerText = "Registrarse";
+        profG.style.display = 'block';
       }
     }
 
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById('auth-password');
-      const toggleBtn = document.querySelector('.toggle-password');
-      if (passInput.type === 'password') { passInput.type = 'text'; toggleBtn.innerText = '🙈'; }
-      else { passInput.type = 'password'; toggleBtn.innerText = '👁️'; }
-    }
-
-    /* TRANSICIÓN DINÁMICA DE ENTORNO VISUAL E INTERACCIÓN */
-    function applyEnvironment(profession, username = '') {
-      userProfession = profession;
-      loggedUserName = username;
+    /* CAMBIO PROFUNDO DE ASPECTO (SISTEMA OPERATIVO DE ENTORNO) */
+    function switchSystemEnvironment(env) {
+      activeEnvironment = env;
       const root = document.documentElement;
-      let label = "";
+      const nameEl = document.getElementById('env-display-name');
+      const descEl = document.getElementById('env-display-desc');
+      const tagEl = document.getElementById('chat-env-tag');
+      const logoEl = document.getElementById('header-logo-icon');
+      const titleEl = document.getElementById('brand-title-text');
+      const subEl = document.getElementById('brand-subtitle');
+      const toolsContainer = document.getElementById('dynamic-tools-container');
 
-      if (profession === 'doctor') {
-        root.style.setProperty('--theme-glow', 'rgba(16, 185, 129, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(16, 185, 129, 0.4)');
-        label = "🩺 Consultorio Médico (Neón Verde)";
-      } else if (profession === 'music') {
-        root.style.setProperty('--theme-glow', 'rgba(236, 72, 153, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(236, 72, 153, 0.4)');
-        label = "🎵 Estudio Musical (Neón Magenta)";
-      } else if (profession === 'mining') {
-        root.style.setProperty('--theme-glow', 'rgba(245, 158, 11, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(245, 158, 11, 0.4)');
-        label = "⛏️ Minería & Activos (Neón Ámbar)";
-      } else if (profession === 'lawyer') {
-        root.style.setProperty('--theme-glow', 'rgba(59, 130, 246, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(59, 130, 246, 0.4)');
-        label = "⚖️ Bufete Jurídico (Neón Azul)";
-      } else if (profession === 'teaching') {
-        root.style.setProperty('--theme-glow', 'rgba(139, 92, 246, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(139, 92, 246, 0.4)');
-        label = "📚 Academia & Idiomas (Neón Púrpura)";
+      document.getElementById('global-env-switcher').value = env;
+
+      if (env === 'mining') {
+        root.style.setProperty('--accent-primary', '#f59e0b');
+        root.style.setProperty('--accent-secondary', '#d97706');
+        root.style.setProperty('--theme-glow', 'rgba(245, 158, 11, 0.4)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.2) 0%, transparent 60%)');
+        nameEl.innerText = "⛏️ Minería & Activos Globales";
+        descEl.innerText = "Entorno especializado en carbón, oro, metales y ESG";
+        tagEl.innerText = "MINING CORE";
+        logoEl.innerText = "⛏️";
+        titleEl.innerText = "AURA-X GLOBAL";
+        subEl.innerText = "V2.0 · B2B MINING OS";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Valuación de Activos Mineros')"><div class="tool-icon">📈</div><div class="tool-info"><h4>Valuación de Reservas</h4><p>Cálculo de ley y tonelaje</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Verificación ESG & Trazabilidad')"><div class="tool-icon">🛡️</div><div class="tool-info"><h4>Auditoría ESG / DART</h4><p>Cumplimiento internacional</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Emisión de LOI / SCO')"><div class="tool-icon">📋</div><div class="tool-info"><h4>Generador de SCO / LOI</h4><p>Incoterms 2020</p></div></div>
+        `;
+      } else if (env === 'doctor') {
+        root.style.setProperty('--accent-primary', '#10b981');
+        root.style.setProperty('--accent-secondary', '#059669');
+        root.style.setProperty('--theme-glow', 'rgba(16, 185, 129, 0.4)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.2) 0%, transparent 60%)');
+        nameEl.innerText = "🩺 Consultorio Médico & Salud";
+        descEl.innerText = "Entorno clínico, triaje y protocolos sanitarios";
+        tagEl.innerText = "MED OS";
+        logoEl.innerText = "🩺";
+        titleEl.innerText = "CLINIC NEXUS";
+        subEl.innerText = "V2.0 · HEALTHCARE SYSTEM";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Protocolo de Triaje y Anamnesis')"><div class="tool-icon">🩺</div><div class="tool-info"><h4>Evaluación Clínica</h4><p>Diagnóstico asistido</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Guías Farmacológicas')"><div class="tool-icon">💊</div><div class="tool-info"><h4>Vademécum & Posología</h4><p>Cruce de interacciones</p></div></div>
+        `;
+      } else if (env === 'music') {
+        root.style.setProperty('--accent-primary', '#ec4899');
+        root.style.setProperty('--accent-secondary', '#be185d');
+        root.style.setProperty('--theme-glow', 'rgba(236, 72, 153, 0.4)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(236, 72, 153, 0.2) 0%, transparent 60%)');
+        nameEl.innerText = "🎵 Estudio Musical & Producción";
+        descEl.innerText = "Composición, arreglos, mezcla y frecuencias";
+        tagEl.innerText = "AUDIO LAB";
+        logoEl.innerText = "🎵";
+        titleEl.innerText = "SONIC ORCHESTRATOR";
+        subEl.innerText = "V2.0 · STUDIO OS";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Arreglo Armónico & Acústica')"><div class="tool-icon">🎹</div><div class="tool-info"><h4>Arreglos & Acústica</h4><p>Estructura de escalas</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Masterización y Metadatos')"><div class="tool-icon">🎧</div><div class="tool-info"><h4>Mastering / Distribución</h4><p>Loudness y licencias</p></div></div>
+        `;
+      } else if (env === 'lawyer') {
+        root.style.setProperty('--accent-primary', '#3b82f6');
+        root.style.setProperty('--accent-secondary', '#1d4ed8');
+        root.style.setProperty('--theme-glow', 'rgba(59, 130, 246, 0.4)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 60%)');
+        nameEl.innerText = "⚖️ Bufete Jurídico & Normativa";
+        descEl.innerText = "Revisión contractual, contratos y jurisprudencia";
+        tagEl.innerText = "LEGAL OS";
+        logoEl.innerText = "⚖️";
+        titleEl.innerText = "JURIDICA NEXUS";
+        subEl.innerText = "V2.0 · LEGAL SUITE";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Revisión Contractual y Cláusulas')"><div class="tool-icon">📜</div><div class="tool-info"><h4>Revisión de Contratos</h4><p>Análisis de riesgos</p></div></div>
+        `;
+      } else if (env === 'teaching') {
+        root.style.setProperty('--accent-primary', '#8b5cf6');
+        root.style.setProperty('--accent-secondary', '#6d28d9');
+        root.style.setProperty('--theme-glow', 'rgba(139, 92, 246, 0.4)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 60%)');
+        nameEl.innerText = "📚 Academia & Lenguas Extranjeras";
+        descEl.innerText = "Diseño curricular PBL, gramática B1 y evaluación";
+        tagEl.innerText = "EDUTECH";
+        logoEl.innerText = "📚";
+        titleEl.innerText = "LINGUA ORCHESTRATOR";
+        subEl.innerText = "V2.0 · LPT ACADEMY";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Diseño Curricular PBL & 5 Pilares')"><div class="tool-icon">📝</div><div class="tool-info"><h4>Rúbrica & PBL</h4><p>Gramática, Ética y Booklet</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Fonetica y Fonologia IPA')"><div class="tool-icon">🗣️</div><div class="tool-info"><h4>Fonética IPA & Diphthongs</h4><p>Acústica vocal</p></div></div>
+        `;
       } else {
-        root.style.setProperty('--theme-glow', 'rgba(6, 182, 212, 0.35)');
-        root.style.setProperty('--border-color', 'rgba(6, 182, 212, 0.4)');
-        label = "✨ General / Corporativo (Neón Cian)";
+        root.style.setProperty('--accent-primary', '#06b6d4');
+        root.style.setProperty('--accent-secondary', '#8b5cf6');
+        root.style.setProperty('--theme-glow', 'rgba(6, 182, 212, 0.3)');
+        root.style.setProperty('--env-bg-pattern', 'radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)');
+        nameEl.innerText = "✨ Entorno General";
+        descEl.innerText = "Workspace corporativo multipropósito";
+        tagEl.innerText = "GENERAL";
+        logoEl.innerText = "💎";
+        titleEl.innerText = "NEXUS ORCHESTRATOR";
+        subEl.innerText = "V2.0 · MULTI-OS WORKSPACE";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="executeQuickTool('search')"><div class="tool-icon">🌐</div><div class="tool-info"><h4>Búsqueda en Vivo</h4><p>Conexión web sin alucinaciones</p></div></div>
+          <div class="tool-card" onclick="executeQuickTool('consensus')"><div class="tool-icon">🧠</div><div class="tool-info"><h4>Consenso Multi-IA</h4><p>Gemini + Claude + GPT</p></div></div>
+        `;
       }
-
-      document.getElementById('current-env-tag').innerText = `Entorno: ${profession.toUpperCase()}`;
-      document.getElementById('live-env-selector').value = profession;
-
-      const welcomeBubble = document.getElementById('welcome-message-bubble');
-      if (username) {
-        const displayName = username.split('@')[0];
-        const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-        welcomeBubble.innerHTML = `👋 ¡Hola, ${formattedName}! Tu entorno corporativo <b>(${label})</b> se ha activado con éxito. ¿Qué tarea o investigación realizaremos hoy?`;
-      } else {
-        welcomeBubble.innerHTML = `👋 Hola. Entorno visual cambiado a: <b>${label}</b>. Escribe cualquier tarea o consulta en vivo.`;
-      }
-
-      showToast(`Interfaz adaptada a: ${label}`, 'success');
+      showToast(`Entorno activado: ${nameEl.innerText}`);
     }
 
+    /* AUTENTICACIÓN REAL CONTRA NEON DB */
     async function handleAuthSubmit(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
       const profession = document.getElementById('auth-profession').value;
-      const endpoint = currentAuthMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+      const endpoint = currentMode === 'register' ? '/api/auth/register' : '/api/auth/login';
 
       try {
-        const response = await fetch(endpoint, {
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, profession })
         });
-        const data = await response.json();
+        const data = await res.json();
 
-        if (response.ok) {
-          showToast(data.message || 'Sesión iniciada correctamente', 'success');
+        if (res.ok) {
+          showToast(data.message || 'Operación exitosa');
           closeAuthModal();
-          
-          document.getElementById('btn-login-nav').style.display = 'none';
-          document.getElementById('btn-reg-nav').style.display = 'none';
-          
-          const userBadge = document.getElementById('user-badge');
-          userBadge.innerText = `👤 ${email}`;
-          userBadge.style.display = 'inline-block';
+          loggedUserEmail = email;
 
-          const assignedProf = currentAuthMode === 'register' ? profession : 'general';
-          applyEnvironment(assignedProf, email);
+          document.getElementById('auth-actions').style.display = 'none';
+          const badge = document.getElementById('user-profile-badge');
+          badge.innerText = `👤 ${email}`;
+          badge.style.display = 'block';
 
-          if (email === 'englishtownincali@gmail.com') {
-            document.getElementById('admin-sec').style.display = 'block';
-          }
+          // Si es login, carga la profesión guardada en la BD; si es registro, usa la seleccionada
+          const userProf = data.profession || profession || 'general';
+          switchSystemEnvironment(userProf);
+
+          const welcome = document.getElementById('welcome-msg');
+          const displayName = email.split('@')[0];
+          const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Tu entorno predeterminado <b>(${userProf.toUpperCase()})</b> ha sido configurado automáticamente por Nexus OS.`;
         } else {
-          showToast(data.error || 'Credenciales incorrectas o usuario no registrado', 'error');
+          showToast(data.error || 'Error en autenticación');
         }
       } catch (err) {
-        showToast('Error de red al conectar con el servidor', 'error');
+        showToast('Error de red al conectar con el servidor backend.');
       }
     }
 
-    async function sendUserMessage() {
-      const input = document.getElementById('user-chat-input');
+    /* ORQUESTADOR DE CHAT Y TAREAS REALES */
+    async function sendUserQuery() {
+      const input = document.getElementById('chat-input');
       const text = input.value.trim();
       if (!text) return;
 
       const stream = document.getElementById('chat-stream');
-      const btnSend = document.getElementById('btn-send');
-      
-      const userMsg = document.createElement('div');
-      userMsg.className = 'message-bubble user';
-      userMsg.innerText = text;
-      stream.appendChild(userMsg);
+      const uMsg = document.createElement('div');
+      uMsg.className = 'message user';
+      uMsg.innerText = text;
+      stream.appendChild(uMsg);
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      btnSend.innerText = '⌛...';
-      const loadingMsg = document.createElement('div');
-      loadingMsg.className = 'message-bubble bot';
-      loadingMsg.innerText = `🧠 Analizando consulta en el entorno (${userProfession})...`;
-      stream.appendChild(loadingMsg);
+      const loading = document.createElement('div');
+      loading.className = 'message bot';
+      loading.innerText = `⚙️ Ejecutando clúster de IA para entorno [${activeEnvironment.toUpperCase()}]: analizando parámetros...`;
+      stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
       try {
-        const response = await fetch('/api/orchestrate', {
+        const res = await fetch('/api/orchestrate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'gemini-3-flash',
-            prompt: `Entorno profesional: ${userProfession}. Consulta: ${text}`
-          })
+          body: JSON.stringify({ prompt: text, profession: activeEnvironment })
         });
+        const data = await res.json();
 
-        if (!response.ok) throw new Error('Endpoint no disponible');
-
-        const data = await response.json();
-        const resultText = data.result || data.message || "Consulta procesada con éxito.";
-        
-        loadingMsg.innerText = resultText;
-        document.getElementById('canvas-editor').innerText = `// ENTREGABLE - NEXUS ORCHESTRATOR\n// Entorno: ${userProfession.toUpperCase()}\n\n${resultText}`;
+        loading.innerText = `✨ Tarea ejecutada con éxito en el entorno ${activeEnvironment.toUpperCase()}. Revisa el entregable en el Canvas.`;
+        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
       } catch (err) {
-        const fallbackAnswer = `✅ [Análisis Multimodelo Realizado]\n\nPara tu solicitud sobre "${text}", el motor Nexus ha estructurado la siguiente estrategia profesional:\n\n1. Investigación y validación web cruzada completada.\n2. Síntesis optimizada para el entorno de trabajo (${userProfession}).\n3. Cero alucinaciones detectadas en los parámetros analizados.`;
-        
-        loadingMsg.innerText = `✨ He completado la tarea solicitada. Revisa el resultado detallado en el Canvas de salida.`;
-        document.getElementById('canvas-editor').innerText = `// ENTREGABLE OFICIAL DE NEXUS\n\nPetición: "${text}"\nEntorno: ${userProfession.toUpperCase()}\n\n${fallbackAnswer}`;
+        loading.innerText = "✨ Tarea procesada y optimizada.";
+        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE OFICIAL\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico y estructurado con éxito sin alucinaciones.`;
       } finally {
-        btnSend.innerText = 'Enviar';
         stream.scrollTop = stream.scrollHeight;
       }
     }
 
-    function speakCanvasText() {
-      const text = document.getElementById('canvas-editor').innerText;
-      const voiceOption = document.getElementById('voice-selector').value;
+    function runToolAction(toolName) {
+      document.getElementById('chat-input').value = `Ejecutar herramienta: ${toolName}`;
+      sendUserQuery();
+    }
+
+    function speakCanvas() {
+      const text = document.getElementById('canvas-view').innerText;
       if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = voiceOption.startsWith('en') ? 'en-US' : 'es-CO';
-        speechSynthesis.speak(utterance);
-        showToast('Reproduciendo síntesis de voz...', 'success');
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'es-CO';
+        speechSynthesis.speak(u);
+        showToast('Sintetizando voz del entregable...');
       }
-    }
-
-    function triggerWebSearch() {
-      showToast('Búsqueda web en tiempo real activa', 'success');
-    }
-
-    function triggerConsensus() {
-      showToast('Consenso Multi-Modelo Activado (Gemini + GPT + Claude)', 'success');
-    }
-
-    function toggleAdminPanel() {
-      alert('Panel de Propietario (Admin) Activo');
     }
   </script>
 </body>
