@@ -539,62 +539,25 @@
   </main>
 
   <script>
-    function switchTab(tabId, buttonElement) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      if (buttonElement) {
-        buttonElement.classList.add('active');
-      }
-    }
-
-    function selectPurpose(purposeName) {
-      alert('Propósito seleccionado: ' + purposeName + '. Nexus adaptará los agentes de IA automáticamente.');
-      switchTab('estudio', document.querySelectorAll('.nav-btn')[1]);
-    }
-
-    async function testDB() {
-      const resultBox = document.getElementById('db-result');
-      resultBox.innerText = 'Consultando base de datos Neon PostgreSQL...';
+    // Función para registrar la cuenta de propietario / usuario
+    async function registerUser(email, password) {
       try {
-        const response = await fetch('/api/db-test');
-        const data = await response.json();
-        resultBox.innerText = JSON.stringify(data, null, 2);
-      } catch (err) {
-        resultBox.innerText = 'Error de conexión: ' + err.message;
-      }
-    }
-
-    async function runOrchestration() {
-      const model = document.getElementById('ai-model').value;
-      const prompt = document.getElementById('ai-prompt').value;
-      const responseBox = document.getElementById('ai-response');
-      if (!prompt.trim()) {
-        alert('Escribe una instrucción primero.');
-        return;
-      }
-      responseBox.innerText = `[PROCESANDO] Orquestando con ${model}...`;
-      try {
-        const response = await fetch('/api/orchestrate', {
+        const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model, prompt })
+          body: JSON.stringify({ email, password })
         });
         const data = await response.json();
-        responseBox.innerText = JSON.stringify(data, null, 2);
+        
+        if (response.ok) {
+          alert('¡Éxito! ' + data.message);
+          console.log('Usuario registrado:', data);
+        } else {
+          alert('Error: ' + data.error);
+        }
       } catch (err) {
-        responseBox.innerText = 'Error en la petición de orquestación.';
+        alert('Error de red al intentar registrarse: ' + err.message);
       }
-    }
-
-    function runStudy() {
-      const prompt = document.getElementById('study-prompt').value;
-      const resultBox = document.getElementById('study-result');
-      if(!prompt.trim()) {
-        alert('Por favor describe el objetivo del estudio.');
-        return;
-      }
-      resultBox.innerText = `[ESTUDIO MULTICEREBRO]\nObjetivo: "${prompt}"\n- Claude: Analizando marco conceptual...\n- Gemini: Verificando estructura metodológica...\n- Estado: Sincronización completada con éxito.`;
     }
   </script>
 </body>
