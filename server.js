@@ -17,13 +17,10 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const connectionString = process.env.DATABASE_URL || '';
 const sql = postgres(connectionString, { ssl: 'require' });
 
-// Inicialización y corrección automática de la base de datos
+// Inicialización limpia de la base de datos para asegurar el campo password
 async function initDB() {
   try {
-    // Eliminar la tabla antigua para asegurar la estructura exacta y limpia
-    await sql`DROP TABLE IF EXISTS users`;
-    
-    // Crear la tabla completa con persistencia real en Neon PostgreSQL
+    await sql`DROP TABLE IF EXISTS users CASCADE`;
     await sql`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
@@ -33,9 +30,9 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("✅ Base de datos Neon conectada y tabla 'users' creada correctamente con persistencia.");
+    console.log("Database connected & 'users' table recreated successfully.");
   } catch (err) {
-    console.error("❌ Error inicializando la base de datos:", err);
+    console.error("Database initialization error:", err);
   }
 }
 initDB();
@@ -78,25 +75,29 @@ fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
   try {
-    let systemInstruction = "Eres Nexus Orchestrator, un asistente ejecutivo de nivel experto, riguroso, analítico y profundo.";
+    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial de nivel ejecutivo. Debes generar informes, análisis y soluciones con máxima profundidad, exhaustividad técnica, estructura formal y desarrollo analítico impecable. Nunca entregues respuestas breves o genéricas.";
+
     if (profession === 'mining') {
-      systemInstruction = "Eres el núcleo de inteligencia experto en minería global, activos de carbón, oro, metales, normativas ESG, estándares SGS/Bureau Veritas e Incoterms 2020. Proporciona respuestas técnicas y detalladas.";
+      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista de nivel máster en minería internacional, activo de carbón térmico/metalúrgico, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020, cumplimiento ESG, análisis DART y especificaciones técnicas de laboratorio (SGS / Bureau Veritas). Proporciona desgloses exhaustivos y rigurosos.";
     } else if (profession === 'doctor') {
-      systemInstruction = "Eres un consultor médico y clínico experto en protocolos de triaje, farmacología y guías de salud con rigor científico.";
+      systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado, farmacología detallada, diagnóstico diferencial y protocolos de salud integral.";
     } else if (profession === 'music') {
-      systemInstruction = "Eres un productor musical y arreglista experto en acústica, mezcla, frecuencias, licencias y distribución editorial.";
+      systemInstruction = "Eres la IA de producción de Sonic Orchestrator. Experta en acústica, arreglos de armonía contemporánea, mezcla, masterización, análisis de espectro de frecuencias y gestión de derechos editoriales.";
     } else if (profession === 'lawyer') {
-      systemInstruction = "Eres un asesor jurídico experto en revisión contractual, análisis jurisprudencial y derecho corporativo preventivo.";
+      systemInstruction = "Eres la IA jurídica de Jurídica Nexus. Experta en revisión contractual, cláusulas de responsabilidad, derecho corporativo preventivo, análisis jurisprudencial y mitigación de riesgos legales.";
     } else if (profession === 'teaching') {
-      systemInstruction = "Eres un experto en pedagogía, diseño curricular basado en Aprendizaje Basado en Proyectos (PBL), fonética IPA y enseñanza de lenguas extranjeras.";
+      systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en diseño curricular de Aprendizaje Basado en Proyectos (PBL), didáctica de lenguas extranjeras (Inglés/Francés), análisis fonético IPA, gramática B1 y diseño de rúbricas de evaluación de 5 pilares.";
+    } else if (profession === 'admin') {
+      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas, gestión de clústeres, auditoría de seguridad y optimización de flujos de trabajo B2B.";
     }
 
+    // Usamos el modelo estable gemini-2.5-flash
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.4,
+        temperature: 0.3,
       }
     });
 
