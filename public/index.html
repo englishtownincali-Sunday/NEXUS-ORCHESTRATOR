@@ -292,13 +292,13 @@
 
   <div class="container">
     <aside>
-  <ul class="nav-list">
-    <li><button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button></li>
-    <li><button class="nav-btn" onclick="switchTab('workflows', this)">Workflows</button></li>
-    <li><button class="nav-btn" onclick="switchTab('ai', this)">Consola IA</button></li>
-    <li><button class="nav-btn" onclick="switchTab('monitor', this)">Monitor de Logs</button></li>
-  </ul>
-</aside>
+      <ul class="nav-list">
+        <li><button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button></li>
+        <li><button class="nav-btn" onclick="switchTab('workflows', this)">Workflows</button></li>
+        <li><button class="nav-btn" onclick="switchTab('ai', this)">Consola IA</button></li>
+        <li><button class="nav-btn" onclick="switchTab('monitor', this)">Monitor de Logs</button></li>
+      </ul>
+    </aside>
 
     <main>
       <!-- TAB 1: DASHBOARD -->
@@ -400,7 +400,7 @@
     </main>
   </div>
 
- <script>
+  <script>
     // Navegación por pestañas corregida
     function switchTab(tabId, buttonElement) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -412,9 +412,6 @@
         buttonElement.classList.add('active');
       }
     }
-
-    // ... el resto de tus funciones (testDB, runOrchestration) siguen abajo ...
-  </script>
 
     // Test de Base de Datos Neon
     async function testDB() {
@@ -430,4 +427,37 @@
       }
     }
 
-    // Simulación de Orquestación
+    // Simulación de Orquestación con IA
+    async function runOrchestration() {
+      const model = document.getElementById('ai-model').value;
+      const prompt = document.getElementById('ai-prompt').value;
+      const responseBox = document.getElementById('ai-response');
+
+      if (!prompt.trim()) {
+        alert('Por favor escribe un prompt antes de enviar.');
+        return;
+      }
+
+      responseBox.innerText = `[PROCESANDO] Enviando tarea a ${model}...`;
+
+      try {
+        const response = await fetch('/api/orchestrate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, prompt })
+        });
+        const data = await response.json();
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        responseBox.innerText = JSON.stringify({
+          status: 'simulated_success',
+          orchestrator: 'Nexus Engine',
+          modelUsed: model,
+          promptReceived: prompt,
+          timestamp: new Date().toISOString()
+        }, null, 2);
+      }
+    }
+  </script>
+</body>
+</html>
