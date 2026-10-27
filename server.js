@@ -19,8 +19,10 @@ const sql = postgres(connectionString, { ssl: 'require' });
 
 async function initDB() {
   try {
+    // Forzar actualización de la estructura de la tabla de usuarios
+    await sql`DROP TABLE IF EXISTS users`;
     await sql`
-      CREATE TABLE IF NOT EXISTS users (
+      CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -28,7 +30,7 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database connected & 'users' table verified successfully.");
+    console.log("Database connected & 'users' table recreated successfully with password column.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -60,7 +62,7 @@ fastify.post('/api/auth/login', async (request, reply) => {
   try {
     const users = await sql`SELECT * FROM users WHERE email = ${email} AND password = ${password}`;
     if (users.length === 0) {
-      return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado en el sistema.' });
+      return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado.' });
     }
     const user = users[0];
     return { success: true, message: `Bienvenido de nuevo, ${email}`, profession: user.profession || 'general' };
