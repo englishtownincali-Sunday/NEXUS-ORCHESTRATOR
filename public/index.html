@@ -156,7 +156,7 @@
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
 
-    /* MODAL DE AUTENTICACIÓN CLARO Y MODERNO */
+    /* MODAL DE AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); display: none;
@@ -217,12 +217,7 @@
       <div style="margin-bottom: 1rem;">
         <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
         <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
-          <option value="general">✨ General / Corporativo</option>
-          <option value="mining">⛏️ Minería & Activos Globales</option>
-          <option value="doctor">🩺 Consultorio Médico & Salud</option>
-          <option value="music">🎵 Estudio Musical & Producción</option>
-          <option value="lawyer">⚖️ Bufete Jurídico & Normativa</option>
-          <option value="teaching">📚 Academia & Lenguas Extranjeras</option>
+          <!-- Las opciones se cargarán dinámicamente según si eres el administrador o usuario general -->
         </select>
       </div>
 
@@ -277,7 +272,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE AUTENTICACIÓN CON "OJITO" PARA PASSWORD -->
+  <!-- MODAL DE AUTENTICACIÓN -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -318,6 +313,42 @@
     let currentMode = 'login';
     let activeEnvironment = 'general';
     let loggedUserEmail = '';
+    
+    // CORREO DEL ADMINISTRADOR EXCLUSIVO (TÚ)
+    const ADMIN_EMAIL = 'englishtownincali@gmail.com';
+
+    function updateEnvironmentOptions() {
+      const switcher = document.getElementById('global-env-switcher');
+      switcher.innerHTML = '';
+
+      // Si es el administrador, se le otorga la opción de Admin Corporativo además del resto
+      if (loggedUserEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        const optAdmin = document.createElement('option');
+        optAdmin.value = 'admin';
+        optAdmin.innerText = '🛡️ Admin Corporativo (Supervisión Total)';
+        switcher.appendChild(optAdmin);
+      }
+
+      // Opciones estándar para todos (General para abajo)
+      const standardOptions = [
+        { value: 'general', label: '✨ General / Corporativo' },
+        { value: 'mining', label: '⛏️ Minería & Activos Globales' },
+        { value: 'doctor', label: '🩺 Consultorio Médico & Salud' },
+        { value: 'music', label: '🎵 Estudio Musical & Producción' },
+        { value: 'lawyer', label: '⚖️ Bufete Jurídico & Normativa' },
+        { value: 'teaching', label: '📚 Academia & Lenguas Extranjeras' }
+      ];
+
+      standardOptions.forEach(opt => {
+        const el = document.createElement('option');
+        el.value = opt.value;
+        el.innerText = opt.label;
+        switcher.appendChild(el);
+      });
+    }
+
+    // Inicializar opciones por defecto (sin admin si no ha iniciado sesión)
+    updateEnvironmentOptions();
 
     function showToast(msg) {
       const c = document.getElementById('toast-container');
@@ -392,7 +423,22 @@
 
       document.getElementById('global-env-switcher').value = env;
 
-      if (env === 'mining') {
+      if (env === 'admin') {
+        root.style.setProperty('--accent-primary', '#4f46e5');
+        root.style.setProperty('--accent-secondary', '#3730a3');
+        root.style.setProperty('--theme-glow', 'rgba(79, 70, 229, 0.35)');
+        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1920&auto=format&fit=crop')");
+        nameEl.innerText = "🛡️ Admin Corporativo";
+        descEl.innerText = "Panel de supervisión general del sistema operativo";
+        tagEl.innerText = "ADMIN CORE";
+        logoEl.innerText = "🛡️";
+        titleEl.innerText = "NEXUS COMMAND";
+        subEl.innerText = "V2.0 · EXECUTIVE SUPERVISOR";
+        toolsContainer.innerHTML = `
+          <div class="tool-card" onclick="runToolAction('Auditoría General de Usuarios y Logs')"><div class="tool-icon">📊</div><div class="tool-info"><h4>Auditoría del Sistema</h4><p>Estado de nodos y BD</p></div></div>
+          <div class="tool-card" onclick="runToolAction('Configuración Global de Políticas AI')"><div class="tool-icon">⚙️</div><div class="tool-info"><h4>Políticas de IA</h4><p>Control de parámetros</p></div></div>
+        `;
+      } else if (env === 'mining') {
         root.style.setProperty('--accent-primary', '#d97706');
         root.style.setProperty('--accent-secondary', '#b45309');
         root.style.setProperty('--theme-glow', 'rgba(217, 119, 6, 0.3)');
@@ -406,7 +452,6 @@
         toolsContainer.innerHTML = `
           <div class="tool-card" onclick="runToolAction('Valuación de Activos Mineros')"><div class="tool-icon">📈</div><div class="tool-info"><h4>Valuación de Reservas</h4><p>Cálculo de ley y tonelaje</p></div></div>
           <div class="tool-card" onclick="runToolAction('Verificación ESG & Trazabilidad')"><div class="tool-icon">🛡️</div><div class="tool-info"><h4>Auditoría ESG / DART</h4><p>Cumplimiento internacional</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Emisión de LOI / SCO')"><div class="tool-icon">📋</div><div class="tool-info"><h4>Generador de SCO / LOI</h4><p>Incoterms 2020</p></div></div>
         `;
       } else if (env === 'doctor') {
         root.style.setProperty('--accent-primary', '#059669');
@@ -421,7 +466,6 @@
         subEl.innerText = "V2.0 · HEALTHCARE SYSTEM";
         toolsContainer.innerHTML = `
           <div class="tool-card" onclick="runToolAction('Protocolo de Triaje y Anamnesis')"><div class="tool-icon">🩺</div><div class="tool-info"><h4>Evaluación Clínica</h4><p>Diagnóstico asistido</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Guías Farmacológicas')"><div class="tool-icon">💊</div><div class="tool-info"><h4>Vademécum & Posología</h4><p>Cruce de interacciones</p></div></div>
         `;
       } else if (env === 'music') {
         root.style.setProperty('--accent-primary', '#db2777');
@@ -436,7 +480,6 @@
         subEl.innerText = "V2.0 · STUDIO OS";
         toolsContainer.innerHTML = `
           <div class="tool-card" onclick="runToolAction('Arreglo Armónico & Acústica')"><div class="tool-icon">🎹</div><div class="tool-info"><h4>Arreglos & Acústica</h4><p>Estructura de escalas</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Masterización y Metadatos')"><div class="tool-icon">🎧</div><div class="tool-info"><h4>Mastering / Distribución</h4><p>Loudness y licencias</p></div></div>
         `;
       } else if (env === 'lawyer') {
         root.style.setProperty('--accent-primary', '#2563eb');
@@ -465,7 +508,6 @@
         subEl.innerText = "V2.0 · LPT ACADEMY";
         toolsContainer.innerHTML = `
           <div class="tool-card" onclick="runToolAction('Diseño Curricular PBL & 5 Pilares')"><div class="tool-icon">📝</div><div class="tool-info"><h4>Rúbrica & PBL</h4><p>Gramática, Ética y Booklet</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Fonética y Fonología IPA')"><div class="tool-icon">🗣️</div><div class="tool-info"><h4>Fonética IPA & Diphthongs</h4><p>Acústica vocal</p></div></div>
         `;
       } else {
         root.style.setProperty('--accent-primary', '#0284c7');
@@ -506,12 +548,19 @@
           closeAuthModal();
           loggedUserEmail = email;
 
+          // Actualizar menú de entornos según si es el admin o usuario normal
+          updateEnvironmentOptions();
+
           document.getElementById('auth-actions').style.display = 'none';
           const badge = document.getElementById('user-profile-badge');
           badge.innerText = `👤 ${email}`;
           badge.style.display = 'block';
 
-          const targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
+          let targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
+          // Si el admin entra, por defecto puede iniciar en admin si lo prefiere, o respetar su profesión
+          if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && currentMode === 'login') {
+            targetProf = 'admin';
+          }
           switchSystemEnvironment(targetProf);
 
           const welcome = document.getElementById('welcome-msg');
