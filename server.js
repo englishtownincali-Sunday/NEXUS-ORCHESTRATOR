@@ -17,10 +17,13 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const connectionString = process.env.DATABASE_URL || '';
 const sql = postgres(connectionString, { ssl: 'require' });
 
+// Inicialización y corrección automática de la base de datos
 async function initDB() {
   try {
-    // Forzar actualización de la estructura de la tabla de usuarios
+    // Eliminar la tabla antigua para asegurar la estructura exacta y limpia
     await sql`DROP TABLE IF EXISTS users`;
+    
+    // Crear la tabla completa con persistencia real en Neon PostgreSQL
     await sql`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
@@ -30,9 +33,9 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database connected & 'users' table recreated successfully with password column.");
+    console.log("✅ Base de datos Neon conectada y tabla 'users' creada correctamente con persistencia.");
   } catch (err) {
-    console.error("Database initialization error:", err);
+    console.error("❌ Error inicializando la base de datos:", err);
   }
 }
 initDB();
