@@ -1,82 +1,62 @@
 import Fastify from 'fastify';
-import pkg from 'pg';
-import path from 'path';
 import fastifyStatic from '@fastify/static';
+import path from 'path';
+import { Pool } from 'pg';
 
-const { Pool } = pkg;
+const server = Fastify({ logger: true });
 
-const fastify = Fastify({ logger: true });
-
+// Configuración de la base de datos Neon (usando tu variable de entorno DATABASE_URL)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false }
 });
 
-// Servir archivos estáticos de la carpeta public
-fastify.register(fastifyStatic, {
-  root: path.join(process.cwd(), 'public'),
-  prefix: '/', 
+// Servir archivos estáticos del frontend
+server.register(fastifyStatic, {
+  root: path.join(__dirname, '../public'),
 });
 
-// Ruta raíz que entrega el Dashboard HTML
-fastify.get('/', async (request, reply) => {
-  return reply.sendFile('index.html');
-});
-
-// Endpoint de prueba de la base de datos
-fastify.get('/api/db-test', async (request, reply) => {
+// Ruta de prueba de conexión a Neon DB
+server.get('/api/db-test', async (request, reply) => {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT NOW() as current_time');
+    const result = await client.query('SELECT NOW()');
     client.release();
-    
-    return {
-      success: true,
-      message: '¡Conexión exitosa con Neon PostgreSQL!',
-      databaseTime: result.rows[0].current_time,
-    };
-  } catch (error: any) {
-    reply.code(500);
-    return {
-      success: false,
-      error: 'Error al conectar con la base de datos',
-      details: error.message,
-    };
-  }
-});
-
-// Endpoint de orquestación
-fastify.post('/api/orchestrate', async (request, reply) => {
-  const body = request.body as { model?: string; prompt?: string };
-  const model = body?.model || 'gemini-1.5-pro';
-  const prompt = body?.prompt || 'Sin prompt';
-
-  try {
     return {
       status: 'success',
-      orchestrationId: `nexus-${Date.now()}`,
-      modelUsed: model,
-      promptReceived: prompt,
-      message: 'Orquestación procesada correctamente en el backend',
-      timestamp: new Date().toISOString()
+      message: 'Conexión exitosa a Neon PostgreSQL',
+      timestamp: result.rows[0].now
     };
-  } catch (error: any) {
+  } catch (err: any) {
     reply.code(500);
     return {
       status: 'error',
-      message: error.message
+      message: 'Error al conectar con la base de datos',
+      error: err.message
     };
   }
 });
 
+// Ruta de simulación u orquestación de IA
+server.post('/api/orchestrate', async (request, reply) => {
+  const { model, prompt } = request.body as any;
+  return {
+    status: 'success',
+    orchestrator: 'Nexus Engine Enterprise',
+    modelUsed: model,
+    promptReceived: prompt,
+    response: `Respuesta simulada generada exitosamente por ${model} bajo la orquestación de Nexus.`,
+    timestamp: new Date().toISOString()
+  };
+});
+
+// Iniciar servidor
 const start = async () => {
   try {
-    await fastify.listen({ port: 3000, host: '0.0.0.0' });
+    await server.listen({ port: 3000, host: '0.0.0.0' });
     console.log('Servidor de Nexus Orchestrator iniciado con éxito.');
   } catch (err) {
-    fastify.log.error(err);
+    server.log.error(err);
     process.exit(1);
   }
 };
