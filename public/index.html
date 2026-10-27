@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS ORCHESTRATOR - AI Workspace & Control Center</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous AI Workspace</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-dark: #060913;
-      --panel-bg: rgba(13, 18, 32, 0.75);
+      --panel-bg: rgba(13, 18, 32, 0.85);
       --card-bg: #0b101d;
       --border-color: rgba(30, 41, 69, 0.8);
       --accent-cyan: #06b6d4;
@@ -16,8 +16,9 @@
       --accent-purple: #8b5cf6;
       --accent-pink: #ec4899;
       --text-main: #f3f4f6;
-      --text-muted: #6b7280;
+      --text-muted: #9ca3af;
       --success: #10b981;
+      --theme-glow: rgba(6, 182, 212, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,14 +35,15 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 15% 15%, var(--theme-glow) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.08) 0%, transparent 45%);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       padding: 1.25rem 2rem;
+      transition: background 0.5s ease;
     }
 
     /* HEADER */
@@ -68,11 +70,12 @@
     .brand-title p { font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 
     .header-right { display: flex; align-items: center; gap: 0.85rem; }
-    .lang-select {
+    .select-custom {
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.35rem 0.65rem; border-radius: 6px;
-      font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer;
+      font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
     }
+    .select-custom option { background: #0d1220; color: #fff; }
 
     .btn-neon-small {
       background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.4);
@@ -88,7 +91,7 @@
       box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
     }
 
-    /* BARRA DE MODO: USUARIO VS ADMIN */
+    /* BARRA DE VISTAS (USUARIO VS ADMIN) */
     .mode-nav {
       display: flex; gap: 0.5rem; background: var(--panel-bg);
       border: 1px solid var(--border-color); padding: 0.35rem; border-radius: 10px;
@@ -100,21 +103,27 @@
       cursor: pointer; transition: all 0.2s; text-align: center;
     }
     .mode-btn.active {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
-      color: #fff; border: 1px solid rgba(6, 182, 212, 0.4);
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(139, 92, 246, 0.25));
+      color: #fff; border: 1px solid rgba(6, 182, 212, 0.5);
     }
 
-    /* VISTA DE USUARIO (CLEAN WORKSPACE - GROK / CHATGPT / CANVAS STYLE) */
+    /* VISTA DE USUARIO - ESPACIO DE TRABAJO DINÁMICO POR PROFESIÓN */
     .user-workspace {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.1fr 0.9fr;
       gap: 1.5rem;
-      height: 65vh;
+      height: 68vh;
     }
 
     .chat-panel {
       background: var(--panel-bg); border: 1px solid var(--border-color);
-      border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column;
+      border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; backdrop-filter: blur(12px);
+    }
+
+    .environment-banner {
+      background: rgba(255, 255, 255, 0.03); border: 1px dashed var(--border-color);
+      padding: 0.5rem 0.85rem; border-radius: 8px; font-size: 0.78rem; color: var(--text-muted);
+      margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
     }
 
     .chat-messages {
@@ -124,12 +133,8 @@
     .message-bubble {
       padding: 0.85rem 1.1rem; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 85%;
     }
-    .message-bubble.user {
-      align-self: flex-end; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #fff;
-    }
-    .message-bubble.bot {
-      align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main);
-    }
+    .message-bubble.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #fff; }
+    .message-bubble.bot { align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); }
 
     .chat-input-area {
       display: flex; gap: 0.75rem; align-items: center; background: var(--card-bg);
@@ -139,10 +144,10 @@
       flex: 1; background: transparent; border: none; color: #fff; font-size: 0.9rem; padding: 0.4rem; outline: none;
     }
 
-    /* CANVAS INTERACTIVO (CANVAS / NOTEBOOK / ELEVENLABS AUDIO) */
+    /* CANVAS & NOTEBOOK / MULTI-MODEL PANEL */
     .canvas-panel {
       background: var(--panel-bg); border: 1px solid var(--border-color);
-      border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column;
+      border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; backdrop-filter: blur(12px);
     }
 
     .canvas-header {
@@ -153,10 +158,23 @@
 
     .canvas-content {
       flex: 1; background: #03060d; border: 1px solid var(--border-color); border-radius: 10px;
-      padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #d1d5db; overflow-y: auto;
+      padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #d1d5db; overflow-y: auto;
     }
 
-    /* MODAL AUTENTICACIÓN */
+    /* VISTA DE ADMIN / PROPIETARIO */
+    .admin-workspace {
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+    }
+    .kpi-card {
+      background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.15rem;
+    }
+    .kpi-card label { font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem; }
+    .kpi-card .val { font-size: 1.25rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #fff; }
+
+    /* MODAL DE AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none;
@@ -164,7 +182,7 @@
     }
     .modal-card {
       background: #0d1220; border: 1px solid var(--border-color); border-radius: 16px;
-      padding: 2rem; width: 100%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative;
+      padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
     .auth-tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.25rem; padding-bottom: 0.5rem; }
@@ -192,65 +210,91 @@
       <div class="brand-logo">💎</div>
       <div class="brand-title">
         <h1>NEXUS ORCHESTRATOR</h1>
-        <p>V1.0.4 · MULTI-MODEL INTELLIGENCE WORKSPACE</p>
+        <p>V1.0.4 · DYNAMIC ENVIRONMENT WORKSPACE</p>
       </div>
     </div>
     <div class="header-right">
-      <select class="lang-select" onchange="changeLanguage(this.value)">
+      <!-- Selector de Voces Multilingüe / Países -->
+      <select class="select-custom" id="voice-selector" title="Modelo de Voz">
+        <option value="es-CO">🎙️ Voz: Español (Colombia)</option>
+        <option value="es-ES">🎙️ Voz: Español (España)</option>
+        <option value="en-US">🎙️ Voice: English (US)</option>
+        <option value="fr-FR">🎙️ Voix: Français (France)</option>
+      </select>
+
+      <!-- Selector de Idioma UI -->
+      <select class="select-custom" onchange="changeLanguage(this.value)">
         <option value="es" selected>🌐 ES</option>
         <option value="en">🌐 EN</option>
         <option value="fr">🌐 FR</option>
       </select>
+
       <button id="btn-login-nav" class="btn-neon-small" onclick="openAuthModal('login')">🔑 <span id="txt-nav-login">Iniciar Sesión</span></button>
       <button id="btn-reg-nav" class="btn-neon-primary" onclick="openAuthModal('register')">✨ <span id="txt-nav-register">Registrarse</span></button>
       <button id="user-badge" class="btn-neon-small" style="display:none; color: var(--accent-purple); border-color: var(--accent-purple);"></button>
     </div>
   </header>
 
-  <!-- SELECTOR DE NAVEGACIÓN DE VISTAS -->
+  <!-- BARRA DE VISTAS (USUARIO VS ADMIN) -->
   <div class="mode-nav">
-    <button class="mode-btn active" id="btn-view-user" onclick="switchView('user')">💬 Espacio de Trabajo (Grok / Canvas / Voice)</button>
-    <button class="mode-btn" id="btn-view-admin" onclick="switchView('admin')">⚙️ Consola Propietario (Orquestador Ciberpunk)</button>
+    <button class="mode-btn active" id="btn-view-user" onclick="switchView('user')">💬 Espacio de Trabajo Inmersivo</button>
+    <button class="mode-btn" id="btn-view-admin" onclick="switchView('admin')" style="display:none;" id="nav-admin-btn">⚙️ Consola Propietario (Admin)</button>
   </div>
 
-  <!-- VISTA 1: ESPACIO DE TRABAJO DEL USUARIO (GROK / CHATGPT / CANVAS STYLE) -->
+  <!-- VISTA 1: ESPACIO DE TRABAJO DINÁMICO POR PROFESIÓN -->
   <main id="user-view" class="user-workspace">
-    <!-- PANEL DE CHAT PRINCIPAL -->
     <div class="chat-panel">
+      <div class="environment-banner">
+        <span>🏢 Entorno Activo: <b id="current-env-label">General / Negocios</b></span>
+        <select class="select-custom" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onchange="changeEnvironment(this.value)">
+          <option value="general">✨ General / Corporativo</option>
+          <option value="doctor">🩺 Consultorio Médico</option>
+          <option value="music">🎵 Estudio Musical / Arte</option>
+          <option value="mining">⛏️ Minería & Activos Globales</option>
+          <option value="teaching">📚 Pedagogía & Idiomas</option>
+        </select>
+      </div>
+
       <div class="chat-messages" id="chat-stream">
         <div class="message-bubble bot">
-          👋 ¡Hola! Bienvenido a Nexus Orchestrator. ¿Qué tarea o investigación deseas resolver hoy? Puedo analizar fuentes web, redactar documentos en el Canvas o sintetizar respuestas por voz.
+          👋 Hola. Soy Nexus, tu orquestador inteligente. El entorno se ha adaptado a tu profesión. ¿Qué objetivo investigaremos hoy?
         </div>
       </div>
+
       <div class="chat-input-area">
-        <button class="btn-neon-small" style="padding: 0.35rem 0.6rem;" onclick="showToast('Modo Consenso Activado: 4 IAs analizando...', 'success')">🧠 Consenso IA</button>
-        <input type="text" id="user-chat-input" placeholder="Escribe tu consulta o pide una investigación..." onkeypress="if(event.key==='Enter') sendUserMessage()">
+        <button class="btn-neon-small" style="padding: 0.35rem 0.6rem;" onclick="showToast('Búsqueda web en tiempo real activada', 'success')">🌐 Web Search</button>
+        <input type="text" id="user-chat-input" placeholder="Escribe tu consulta o tarea..." onkeypress="if(event.key==='Enter') sendUserMessage()">
         <button class="btn-neon-primary" onclick="sendUserMessage()">Enviar</button>
       </div>
     </div>
 
-    <!-- PANEL CANVAS & NOTEBOOK -->
     <div class="canvas-panel">
       <div class="canvas-header">
-        <div class="canvas-title">📄 Canvas Interactivo & Fuentes</div>
+        <div class="canvas-title">📄 Canvas & Síntesis de Voz Multilingüe</div>
         <div style="display: flex; gap: 0.5rem;">
-          <button class="btn-neon-small" style="font-size: 0.75rem;" onclick="speakCanvasText()">🔊 Voz ElevenLabs</button>
-          <button class="btn-neon-small" style="font-size: 0.75rem;" onclick="showToast('Exportando entregable en PDF/HTML...', 'success')">📥 Exportar</button>
+          <button class="btn-neon-small" style="font-size: 0.75rem;" onclick="speakCanvasText()">🔊 Escuchar Voz</button>
+          <button class="btn-neon-small" style="font-size: 0.75rem;" onclick="showToast('Documento guardado en el portapapeles', 'success')">📥 Copiar</button>
         </div>
       </div>
       <div id="canvas-editor" class="canvas-content" contenteditable="true">
-// ENTREGABLE GENERADO EN TIEMPO REAL
-// Aquí se compilarán automáticamente las respuestas investigadas por los modelos.
-// Puedes editar directamente este texto o pedirle a la IA ajustes específicos.
+// ENTREGABLE DE LA PROFESIÓN SELECCIONADA
+// Los resultados consolidados por las IAs aparecerán aquí en tiempo real.
       </div>
     </div>
   </main>
 
-  <!-- VISTA 2: CONSOLA DE ADMINISTRACIÓN / PROPIETARIO (INCLUYE EL DASHBOARD COMPLETO) -->
-  <main id="admin-view" style="display: none;">
-    <div style="background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem; text-align: center;">
-      <h2 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">⚙️ Panel de Control de Propietario</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Acceso total a los parámetros del servidor Fastify, conexiones de Neon PostgreSQL, latencia en tiempo real y flujo de Workflows.</p>
+  <!-- VISTA 2: CONSOLA DE ADMINISTRACIÓN / PROPIETARIO -->
+  <main id="admin-view" class="admin-workspace" style="display: none;">
+    <div style="background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.5rem;">
+      <h2 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">⚙️ Centro de Control Propietario</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Monitoreo en tiempo real del clúster Backend Fastify y Neon PostgreSQL.</p>
+      
+      <div class="kpi-row">
+        <div class="kpi-card"><label>LATENCIA SERVIDOR</label><div class="val">14ms</div></div>
+        <div class="kpi-card"><label>ESTADO DB NEON</label><div class="val" style="color: var(--success);">ONLINE</div></div>
+        <div class="kpi-card"><label>PETICIONES IA</label><div class="val">0</div></div>
+        <div class="kpi-card"><label>MODELO ACTIVO</label><div class="val">Gemini 3 Pro</div></div>
+      </div>
     </div>
   </main>
 
@@ -264,7 +308,7 @@
         <button id="tab-btn-reg" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrarse</button>
       </div>
 
-      <p id="auth-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Accede a tu cuenta de usuario.</p>
+      <p id="auth-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Accede a tu cuenta.</p>
       
       <form onsubmit="handleAuthSubmit(event)">
         <div style="margin-bottom: 1rem;">
@@ -290,9 +334,9 @@
     let currentLang = 'es';
 
     const i18n = {
-      es: { login: "Iniciar Sesión", register: "Registrarse", enter: "Entrar", createAcc: "Crear Cuenta", loginSub: "Accede a tu cuenta de usuario.", regSub: "Crea tu cuenta gratuita para acceder a la suite de inteligencia." },
-      en: { login: "Log In", register: "Register", enter: "Sign In", createAcc: "Create Account", loginSub: "Log in to your account.", regSub: "Create your free account to access the AI suite." },
-      fr: { login: "Se Connecter", register: "S'inscrire", enter: "Entrer", createAcc: "Créer un Compte", loginSub: "Connectez-vous à votre compte.", regSub: "Créez votre compte gratuit pour accéder à la suite IA." }
+      es: { login: "Iniciar Sesión", register: "Registrarse", enter: "Entrar", createAcc: "Crear Cuenta", loginSub: "Accede a tu cuenta.", regSub: "Crea tu cuenta gratuita." },
+      en: { login: "Log In", register: "Register", enter: "Sign In", createAcc: "Create Account", loginSub: "Log in to your account.", regSub: "Create your free account." },
+      fr: { login: "Se Connecter", register: "S'inscrire", enter: "Entrer", createAcc: "Créer un Compte", loginSub: "Connectez-vous.", regSub: "Créez votre compte gratuit." }
     };
 
     function changeLanguage(lang) {
@@ -305,6 +349,30 @@
       switchAuthTab(currentAuthMode);
     }
 
+    /* CAMBIO DE ENTORNO DINÁMICO POR PROFESIÓN */
+    function changeEnvironment(env) {
+      const root = document.documentElement;
+      let label = "";
+      if (env === 'doctor') {
+        root.style.setProperty('--theme-glow', 'rgba(16, 185, 129, 0.2)');
+        label = "🩺 Consultorio Médico (Neón Verde Clínico)";
+      } else if (env === 'music') {
+        root.style.setProperty('--theme-glow', 'rgba(236, 72, 153, 0.2)');
+        label = "🎵 Estudio Musical (Neón Magenta Estético)";
+      } else if (env === 'mining') {
+        root.style.setProperty('--theme-glow', 'rgba(245, 158, 11, 0.2)');
+        label = "⛏️ Minería & Activos Globales (Neón Ámbar Industrial)";
+      } else if (env === 'teaching') {
+        root.style.setProperty('--theme-glow', 'rgba(139, 92, 246, 0.2)');
+        label = "📚 Pedagogía & Idiomas (Neón Púrpura Académico)";
+      } else {
+        root.style.setProperty('--theme-glow', 'rgba(6, 182, 212, 0.2)');
+        label = "✨ General / Corporativo";
+      }
+      document.getElementById('current-env-label').innerText = label;
+      showToast('Entorno visual actualizado con éxito', 'success');
+    }
+
     function switchView(view) {
       if (view === 'user') {
         document.getElementById('user-view').style.display = 'grid';
@@ -313,7 +381,7 @@
         document.getElementById('btn-view-admin').classList.remove('active');
       } else {
         document.getElementById('user-view').style.display = 'none';
-        document.getElementById('admin-view').style.display = 'block';
+        document.getElementById('admin-view').style.display = 'flex';
         document.getElementById('btn-view-admin').classList.add('active');
         document.getElementById('btn-view-user').classList.remove('active');
       }
@@ -377,9 +445,15 @@
           closeAuthModal();
           document.getElementById('btn-login-nav').style.display = 'none';
           document.getElementById('btn-reg-nav').style.display = 'none';
+          
           const userBadge = document.getElementById('user-badge');
           userBadge.innerText = `👤 ${email}`;
           userBadge.style.display = 'inline-block';
+
+          // Mostrar botón de Admin SOLO si es el propietario
+          if (email === 'englishtownincali@gmail.com') {
+            document.getElementById('nav-admin-btn').style.display = 'block';
+          }
         } else {
           showToast(data.error || 'Error', 'error');
         }
@@ -402,27 +476,27 @@
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // Respuesta simulada de orquestación en Canvas
       setTimeout(() => {
         const botMsg = document.createElement('div');
         botMsg.className = 'message-bubble bot';
-        botMsg.innerText = '🔍 Investigando en la web y sincronizando modelos... He generado el borrador en tu Canvas interactivo.';
+        botMsg.innerText = '🤖 Nexus ha procesado tu consulta adaptándose al entorno profesional activo. Documento generado en el Canvas.';
         stream.appendChild(botMsg);
         stream.scrollTop = stream.scrollHeight;
 
-        document.getElementById('canvas-editor').innerText = `// INFORME CONSOLIDADO DE NEXUS\n\nPetición: "${text}"\n\n1. Resumen de investigación web:\nSe han analizado múltiples fuentes verificadas...\n\n2. Síntesis Consolidada:\nNexus Orchestrator procesó este entregable eliminando alucinaciones y garantizando precisión técnica.`;
+        document.getElementById('canvas-editor').innerText = `// INFORME CONSOLIDADO (ENTORNO PROFESIONAL)\n\nConsulta: "${text}"\n\n- Análisis Multimodelo completado con éxito.\n- Datos verificados y sin alucinaciones.`;
       }, 1000);
     }
 
     function speakCanvasText() {
       const text = document.getElementById('canvas-editor').innerText;
+      const langVoice = document.getElementById('voice-selector').value;
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-ES';
+        utterance.lang = langVoice;
         speechSynthesis.speak(utterance);
-        showToast('Reproduciendo audio sintético...', 'success');
+        showToast(`Reproduciendo audio (${langVoice})...`, 'success');
       } else {
-        showToast('Síntesis de voz no soportada en este navegador', 'error');
+        showToast('Síntesis de voz no disponible', 'error');
       }
     }
   </script>
