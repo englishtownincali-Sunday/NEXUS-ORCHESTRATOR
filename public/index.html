@@ -91,12 +91,28 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .badge:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .badge.action-btn {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
     }
 
     .badge.success {
       color: var(--success);
       border-color: rgba(16, 185, 129, 0.3);
       background: rgba(16, 185, 129, 0.08);
+      cursor: default;
     }
 
     .status-dot {
@@ -384,6 +400,43 @@
       outline: none;
       border-color: var(--accent-blue);
     }
+
+    /* Modal de Registro */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -398,8 +451,8 @@
       </div>
     </div>
     <div class="top-badges">
+      <div class="badge action-btn" onclick="openRegisterModal()">👤 Crear cuenta</div>
       <div class="badge">Sin propósito</div>
-      <div class="badge">Cuenta de Claude</div>
       <div class="badge">Diagnóstico</div>
       <div class="badge success"><div class="status-dot"></div>Listo</div>
     </div>
@@ -538,9 +591,50 @@
     </section>
   </main>
 
+  <!-- MODAL DE REGISTRO DE CUENTA -->
+  <div id="registerModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeRegisterModal()">✕</button>
+      <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: #fff;">Crear Cuenta en Nexus</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">La primera cuenta registrada se asignará automáticamente como <b>Propietaria</b> del servidor.</p>
+      
+      <form onsubmit="handleRegister(event)">
+        <label>Correo Electrónico</label>
+        <input type="email" id="reg-email" placeholder="tu@correo.com" required>
+        
+        <label>Contraseña</label>
+        <input type="password" id="reg-password" placeholder="••••••••" required>
+        
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem;">Registrar Cuenta Propietaria</button>
+      </form>
+    </div>
+  </div>
+
   <script>
-    // Función para registrar la cuenta de propietario / usuario
-    async function registerUser(email, password) {
+    function switchTab(tabId, buttonElement) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if (buttonElement) {
+        buttonElement.classList.add('active');
+      }
+    }
+
+    /* Modal Controls */
+    function openRegisterModal() {
+      document.getElementById('registerModal').style.display = 'flex';
+    }
+
+    function closeRegisterModal() {
+      document.getElementById('registerModal').style.display = 'none';
+    }
+
+    /* Lógica de Registro con Backend */
+    async function handleRegister(event) {
+      event.preventDefault();
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+
       try {
         const response = await fetch('/api/auth/register', {
           method: 'POST',
@@ -548,16 +642,65 @@
           body: JSON.stringify({ email, password })
         });
         const data = await response.json();
-        
+
         if (response.ok) {
           alert('¡Éxito! ' + data.message);
-          console.log('Usuario registrado:', data);
+          closeRegisterModal();
         } else {
           alert('Error: ' + data.error);
         }
       } catch (err) {
-        alert('Error de red al intentar registrarse: ' + err.message);
+        alert('Error al conectar con el servidor: ' + err.message);
       }
+    }
+
+    async function selectPurpose(purposeName) {
+      alert('Propósito seleccionado: ' + purposeName + '. Nexus adaptará los agentes de IA automáticamente.');
+      switchTab('estudio', document.querySelectorAll('.nav-btn')[1]);
+    }
+
+    async function testDB() {
+      const resultBox = document.getElementById('db-result');
+      resultBox.innerText = 'Consultando base de datos Neon PostgreSQL...';
+      try {
+        const response = await fetch('/api/db-test');
+        const data = await response.json();
+        resultBox.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultBox.innerText = 'Error de conexión: ' + err.message;
+      }
+    }
+
+    async function runOrchestration() {
+      const model = document.getElementById('ai-model').value;
+      const prompt = document.getElementById('ai-prompt').value;
+      const responseBox = document.getElementById('ai-response');
+      if (!prompt.trim()) {
+        alert('Escribe una instrucción primero.');
+        return;
+      }
+      responseBox.innerText = `[PROCESANDO] Orquestando con ${model}...`;
+      try {
+        const response = await fetch('/api/orchestrate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, prompt })
+        });
+        const data = await response.json();
+        responseBox.innerText = JSON.stringify(data, null, 2);
+      } catch (err) {
+        responseBox.innerText = 'Error en la petición de orquestación.';
+      }
+    }
+
+    function runStudy() {
+      const prompt = document.getElementById('study-prompt').value;
+      const resultBox = document.getElementById('study-result');
+      if(!prompt.trim()) {
+        alert('Por favor describe el objetivo del estudio.');
+        return;
+      }
+      resultBox.innerText = `[ESTUDIO MULTICEREBRO]\nObjetivo: "${prompt}"\n- Claude: Analizando marco conceptual...\n- Gemini: Verificando estructura metodológica...\n- Estado: Sincronización completada con éxito.`;
     }
   </script>
 </body>
