@@ -292,13 +292,13 @@
 
   <div class="container">
     <aside>
-      <ul class="nav-list">
-        <li><button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button></li>
-        <li><button class="nav-btn" onclick="switchTab('workflows')">Workflows</button></li>
-        <li><button class="nav-btn" onclick="switchTab('ai')">Consola IA</button></li>
-        <li><button class="nav-btn" onclick="switchTab('monitor')">Monitor de Logs</button></li>
-      </ul>
-    </aside>
+  <ul class="nav-list">
+    <li><button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button></li>
+    <li><button class="nav-btn" onclick="switchTab('workflows', this)">Workflows</button></li>
+    <li><button class="nav-btn" onclick="switchTab('ai', this)">Consola IA</button></li>
+    <li><button class="nav-btn" onclick="switchTab('monitor', this)">Monitor de Logs</button></li>
+  </ul>
+</aside>
 
     <main>
       <!-- TAB 1: DASHBOARD -->
@@ -400,15 +400,21 @@
     </main>
   </div>
 
-  <script>
-    // Navegación por pestañas
-    function switchTab(tabId) {
+ <script>
+    // Navegación por pestañas corregida
+    function switchTab(tabId, buttonElement) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
       document.getElementById(tabId).classList.add('active');
-      event.currentTarget.classList.add('active');
+      
+      if (buttonElement) {
+        buttonElement.classList.add('active');
+      }
     }
+
+    // ... el resto de tus funciones (testDB, runOrchestration) siguen abajo ...
+  </script>
 
     // Test de Base de Datos Neon
     async function testDB() {
