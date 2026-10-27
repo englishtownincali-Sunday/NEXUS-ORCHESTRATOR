@@ -15,7 +15,51 @@ server.register(fastifyStatic, {
   root: path.join(__dirname, '../public'),
 });
 
-// Utilidad para hash de contraseñas usando scrypt (nativo de Node.js)
+// Inicializador automático de tablas en PostgreSQL (Neon)
+async function initDB() {
+  const client = await pool.connect();
+  try {
+    await client.query(`
+      CREATE SCHEMA IF NOT EXISTS nexus;
+      
+      CREATE TABLE IF NOT EXISTS nexus.users (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        email text UNIQUE NOT NULL,
+        password_hash text,
+        status text DEFAULT 'active',
+        created_at timestamptz DEFAULT now()
+      );
+
+      CREATE TABLE IF NOT EXISTS nexus.organizations (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        slug text UNIQUE NOT NULL,
+        name text NOT NULL,
+        plan_key text DEFAULT 'selfhost'
+      );
+
+      CREATE TABLE IF NOT EXISTS nexus.memberships (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid REFERENCES nexus.users(id),
+        org_id uuid REFERENCES nexus.organizations(id),
+        status text DEFAULT 'active',
+        role text DEFAULT 'owner'
+      );
+
+      CREATE TABLE IF NOT EXISTS nexus.kv_docs (
+        path text PRIMARY KEY,
+        data jsonb NOT NULL,
+        updated_at timestamptz DEFAULT now()
+      );
+    `);
+    console.log('✅ Esquemas y tablas nexus.users verificados/creados correctamente en Neon.');
+  } catch (err) {
+    console.error('❌ Error al inicializar tablas en la base de datos:', err);
+  } finally {
+    client.release();
+  }
+}
+
+// Utilidades de seguridad (hash scrypt)
 function hashPassword(password: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const salt = crypto.randomBytes(16).toString('hex');
@@ -26,17 +70,7 @@ function hashPassword(password: string): Promise<string> {
   });
 }
 
-function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    const [salt, key] = hash.split(':');
-    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
-      if (err) reject(err);
-      resolve(crypto.timingSafeEqual(Buffer.from(key, 'hex'), derivedKey));
-    });
-  });
-}
-
-// 1. Endpoint de Registro (La primera cuenta se convierte en propietaria)
+// Endpoint de Registro (Asigna rol Propietario al primer usuario)
 server.post('/api/auth/register', async (request, reply) => {
   const { email, password } = request.body as any;
   if (!email || !password) {
@@ -47,20 +81,17 @@ server.post('/api/auth/register', async (request, reply) => {
   try {
     const client = await pool.connect();
     try {
-      // Verificar si ya existen usuarios para definir rol
       const userCountRes = await client.query('SELECT COUNT(*) FROM nexus.users');
       const isFirstUser = parseInt(userCountRes.rows[0].count) === 0;
 
       const password_hash = await hashPassword(password);
 
-      // Insertar usuario
       const userRes = await client.query(
         `INSERT INTO nexus.users (email, password_hash, status) VALUES ($1, $2, 'active') RETURNING id, email`,
         [email, password_hash]
       );
       const newUser = userRes.rows[0];
 
-      // Obtener o crear organización por defecto 'nexus'
       let orgRes = await client.query('SELECT id FROM nexus.organizations WHERE slug = $1', ['nexus']);
       let orgId;
       if (orgRes.rows.length === 0) {
@@ -72,7 +103,6 @@ server.post('/api/auth/register', async (request, reply) => {
         orgId = orgRes.rows[0].id;
       }
 
-      // Asignar membresía (Propietario si es el primero, miembro estándar si no)
       const roleName = isFirstUser ? 'owner' : 'member';
       await client.query(
         `INSERT INTO nexus.memberships (user_id, org_id, status, role) VALUES ($1, $2, 'active', $3)`,
@@ -81,7 +111,7 @@ server.post('/api/auth/register', async (request, reply) => {
 
       return {
         status: 'success',
-        message: isFirstUser ? 'Cuenta de propietario creada con éxito.' : 'Cuenta creada con éxito.',
+        message: isFirstUser ? '¡Cuenta de Propietario creada con éxito!' : '¡Cuenta creada con éxito!',
         userId: newUser.id
       };
     } finally {
@@ -93,7 +123,7 @@ server.post('/api/auth/register', async (request, reply) => {
   }
 });
 
-// 2. Endpoints de Almacenamiento KV (kv_docs)
+// Rutas de Persistencia KV y Diagnóstico
 server.get('/api/kv/:path', async (request, reply) => {
   const { path } = request.params as { path: string };
   try {
@@ -122,7 +152,6 @@ server.post('/api/kv/:path', async (request, reply) => {
   }
 });
 
-// 3. Prueba de Base de Datos
 server.get('/api/db-test', async (request, reply) => {
   try {
     const client = await pool.connect();
@@ -135,10 +164,12 @@ server.get('/api/db-test', async (request, reply) => {
   }
 });
 
+// Arranque de servidor con autoinstalación de BD
 const start = async () => {
   try {
+    await initDB();
     await server.listen({ port: 3000, host: '0.0.0.0' });
-    console.log('Servidor Nexus Orchestrator con autenticación activo.');
+    console.log('🚀 Servidor Nexus Orchestrator escuchando en puerto 3000');
   } catch (err) {
     server.log.error(err);
     process.exit(1);
