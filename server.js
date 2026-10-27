@@ -91,7 +91,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas, gestión de clústeres, auditoría de seguridad y optimización de flujos de trabajo B2B.";
     }
 
-    // Usamos el modelo estable gemini-2.5-flash
+    // Modelo estable y actualizado para respuestas de alta calidad
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
