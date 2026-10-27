@@ -35,7 +35,6 @@
       padding: 1.5rem 2rem;
     }
 
-    /* Header Superior */
     header {
       display: flex;
       justify-content: space-between;
@@ -74,7 +73,6 @@
       font-weight: 400;
     }
 
-    /* Top Badges / Status */
     .top-badges {
       display: flex;
       gap: 0.75rem;
@@ -108,6 +106,14 @@
       box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
     }
 
+    .badge.user-active {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #c4b5fd;
+      font-weight: 600;
+      cursor: default;
+    }
+
     .badge.success {
       color: var(--success);
       border-color: rgba(16, 185, 129, 0.3);
@@ -123,7 +129,6 @@
       box-shadow: 0 0 8px var(--success);
     }
 
-    /* Navbar Horizontal Principal */
     nav.main-nav {
       background: var(--panel-bg);
       border: 1px solid var(--border-color);
@@ -163,7 +168,6 @@
       box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
     }
 
-    /* Main Content Area */
     main {
       flex: 1;
     }
@@ -176,7 +180,6 @@
       display: block;
     }
 
-    /* Hero Banner Principal */
     .hero-banner {
       background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(11, 15, 25, 0.95));
       border: 1px solid var(--border-color);
@@ -258,7 +261,6 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* Orbital Graphic Simulation */
     .orbital-container {
       display: flex;
       justify-content: center;
@@ -293,7 +295,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Purpose Grid */
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -360,7 +361,6 @@
       line-height: 1.5;
     }
 
-    /* Console & Generics */
     .card {
       background: var(--panel-bg);
       border: 1px solid var(--border-color);
@@ -401,7 +401,7 @@
       border-color: var(--accent-blue);
     }
 
-    /* Modal de Registro */
+    /* Modal de Registro con Toggle de Contraseña */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -437,9 +437,78 @@
       font-size: 1.2rem;
       cursor: pointer;
     }
+
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-wrapper input {
+      padding-right: 2.5rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      top: 38%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    .toggle-password:hover {
+      color: var(--text-main);
+    }
+
+    /* Sistema de Notificaciones Toast Neón */
+    #toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .toast {
+      background: var(--panel-bg);
+      border: 1px solid var(--accent-blue);
+      color: var(--text-main);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.3);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 360px;
+    }
+
+    .toast.success {
+      border-color: var(--success);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .toast.error {
+      border-color: #ef4444;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Contenedor de Toasts -->
+  <div id="toast-container"></div>
 
   <!-- Header Superior -->
   <header>
@@ -451,7 +520,8 @@
       </div>
     </div>
     <div class="top-badges">
-      <div class="badge action-btn" onclick="openRegisterModal()">👤 Crear cuenta</div>
+      <div id="auth-btn-badge" class="badge action-btn" onclick="openRegisterModal()">👤 Crear cuenta</div>
+      <div id="user-info-badge" class="badge user-active" style="display: none;">Propietario Activo</div>
       <div class="badge">Sin propósito</div>
       <div class="badge">Diagnóstico</div>
       <div class="badge success"><div class="status-dot"></div>Listo</div>
@@ -546,7 +616,7 @@
       <h2 class="section-title" style="margin-bottom: 1.5rem;">Generación de Entregables</h2>
       <div class="card">
         <p style="color: var(--text-muted); margin-bottom: 1rem;">Consolida los resultados de las cuatro mentes en un documento estructurado listo para exportar.</p>
-        <button class="btn-primary" onclick="alert('Generando entregable consolidado...')">Compilar Entregable Final</button>
+        <button class="btn-primary" onclick="showToast('Compilando entregable final...', 'info')">Compilar Entregable Final</button>
       </div>
     </section>
 
@@ -591,7 +661,7 @@
     </section>
   </main>
 
-  <!-- MODAL DE REGISTRO DE CUENTA -->
+  <!-- MODAL DE REGISTRO CON VISUALIZACIÓN DE CONTRASEÑA -->
   <div id="registerModal" class="modal-overlay">
     <div class="modal-card">
       <button class="modal-close" onclick="closeRegisterModal()">✕</button>
@@ -603,7 +673,10 @@
         <input type="email" id="reg-email" placeholder="tu@correo.com" required>
         
         <label>Contraseña</label>
-        <input type="password" id="reg-password" placeholder="••••••••" required>
+        <div class="password-input-wrapper">
+          <input type="password" id="reg-password" placeholder="••••••••" required>
+          <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
         
         <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem;">Registrar Cuenta Propietaria</button>
       </form>
@@ -611,6 +684,35 @@
   </div>
 
   <script>
+    /* Sistema de Toasts Elegantes */
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? '✨' : type === 'error' ? '⚠️' : 'ℹ️';
+      toast.innerHTML = `<span>${icon}</span> <div>${message}</div>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    /* Mostrar / Ocultar Contraseña */
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('reg-password');
+      const toggleBtn = document.querySelector('.toggle-password');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.innerText = '🙈';
+      } else {
+        passInput.type = 'password';
+        toggleBtn.innerText = '👁️';
+      }
+    }
+
     function switchTab(tabId, buttonElement) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -620,7 +722,6 @@
       }
     }
 
-    /* Modal Controls */
     function openRegisterModal() {
       document.getElementById('registerModal').style.display = 'flex';
     }
@@ -629,7 +730,7 @@
       document.getElementById('registerModal').style.display = 'none';
     }
 
-    /* Lógica de Registro con Backend */
+    /* Lógica de Registro con Cierre Automático e Ingreso Directo */
     async function handleRegister(event) {
       event.preventDefault();
       const email = document.getElementById('reg-email').value;
@@ -644,18 +745,24 @@
         const data = await response.json();
 
         if (response.ok) {
-          alert('¡Éxito! ' + data.message);
+          showToast(data.message || 'Cuenta de Propietario activa', 'success');
           closeRegisterModal();
+          
+          // Actualizar UI para el estado autenticado de Propietario
+          document.getElementById('auth-btn-badge').style.display = 'none';
+          const userBadge = document.getElementById('user-info-badge');
+          userBadge.innerText = `👑 ${email}`;
+          userBadge.style.display = 'flex';
         } else {
-          alert('Error: ' + data.error);
+          showToast(data.error || 'Error al registrar', 'error');
         }
       } catch (err) {
-        alert('Error al conectar con el servidor: ' + err.message);
+        showToast('Error de red al conectar con el servidor', 'error');
       }
     }
 
     async function selectPurpose(purposeName) {
-      alert('Propósito seleccionado: ' + purposeName + '. Nexus adaptará los agentes de IA automáticamente.');
+      showToast(`Propósito activo: ${purposeName}`);
       switchTab('estudio', document.querySelectorAll('.nav-btn')[1]);
     }
 
@@ -666,8 +773,10 @@
         const response = await fetch('/api/db-test');
         const data = await response.json();
         resultBox.innerText = JSON.stringify(data, null, 2);
+        showToast('Conexión con PostgreSQL Neon verificada', 'success');
       } catch (err) {
         resultBox.innerText = 'Error de conexión: ' + err.message;
+        showToast('Fallo al conectar con la base de datos', 'error');
       }
     }
 
@@ -676,7 +785,7 @@
       const prompt = document.getElementById('ai-prompt').value;
       const responseBox = document.getElementById('ai-response');
       if (!prompt.trim()) {
-        alert('Escribe una instrucción primero.');
+        showToast('Ingresa un prompt de prueba primero', 'error');
         return;
       }
       responseBox.innerText = `[PROCESANDO] Orquestando con ${model}...`;
@@ -688,8 +797,10 @@
         });
         const data = await response.json();
         responseBox.innerText = JSON.stringify(data, null, 2);
+        showToast('Orquestación finalizada con éxito', 'success');
       } catch (err) {
         responseBox.innerText = 'Error en la petición de orquestación.';
+        showToast('Error de procesamiento', 'error');
       }
     }
 
@@ -697,10 +808,11 @@
       const prompt = document.getElementById('study-prompt').value;
       const resultBox = document.getElementById('study-result');
       if(!prompt.trim()) {
-        alert('Por favor describe el objetivo del estudio.');
+        showToast('Describe el objetivo del estudio', 'error');
         return;
       }
       resultBox.innerText = `[ESTUDIO MULTICEREBRO]\nObjetivo: "${prompt}"\n- Claude: Analizando marco conceptual...\n- Gemini: Verificando estructura metodológica...\n- Estado: Sincronización completada con éxito.`;
+      showToast('Estudio iniciado correctamente', 'success');
     }
   </script>
 </body>
