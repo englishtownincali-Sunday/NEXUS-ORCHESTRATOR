@@ -8,11 +8,14 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@fastify/cors": "^9.0.0",
-    "@fastify/static": "^7.0.0",
-    "dotenv": "^16.4.0",
-    "fastify": "^4.26.0",
-    "pg": "^8.11.3"
+  "@fastify/static": "^7.0.0",
+  "dotenv": "^16.4.0",
+  "fastify": "^4.26.0",
+  "postgres": "^3.4.3"
+},
+"scripts": {
+  "start": "node server.js"
+}
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
