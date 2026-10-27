@@ -43,7 +43,6 @@
       transition: background-image 0.8s ease-in-out, background-color 0.8s ease, border-color 0.5s ease;
     }
 
-    /* HEADER TRANSLÚCIDO */
     header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1.25rem; padding: 0.9rem 1.5rem;
@@ -87,10 +86,7 @@
     }
     .btn-secondary:hover { background: rgba(255,255,255,0.95); }
 
-    /* LAYOUT PRINCIPAL Y PANELES GLASS */
-    .main-layout {
-      display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; flex: 1;
-    }
+    .main-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; flex: 1; }
 
     .glass-panel {
       background: rgba(255, 255, 255, 0.48);
@@ -134,9 +130,7 @@
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.85rem;
       max-height: 420px; padding-right: 0.5rem; margin-bottom: 1rem;
     }
-    .message {
-      padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%;
-    }
+    .message { padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%; }
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 4px 12px var(--theme-glow); }
     .message.bot { align-self: flex-start; background: rgba(255,255,255,0.92); border: 1px solid var(--border-color); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 
@@ -144,9 +138,7 @@
       display: flex; gap: 0.6rem; background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
     }
-    .chat-input-area input {
-      flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none;
-    }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
     .chat-input-area input::placeholder { color: #94a3b8; }
 
     .canvas-output {
@@ -156,7 +148,6 @@
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
 
-    /* MODAL DE AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); display: none;
@@ -179,7 +170,6 @@
 
   <div id="toast-container"></div>
 
-  <!-- HEADER -->
   <header>
     <div class="brand-container">
       <div class="brand-logo" id="header-logo-icon">💎</div>
@@ -201,9 +191,7 @@
     </div>
   </header>
 
-  <!-- LAYOUT PRINCIPAL -->
   <div class="main-layout">
-    <!-- PANEL IZQUIERDO -->
     <div class="glass-panel">
       <div class="panel-header">
         <div class="panel-title">🎛️ Centro de Control</div>
@@ -238,7 +226,6 @@
       </div>
     </div>
 
-    <!-- PANEL DERECHO -->
     <div class="glass-panel">
       <div class="workspace-grid">
         <div class="chat-box">
@@ -271,7 +258,6 @@
     </div>
   </div>
 
-  <!-- MODAL DE AUTENTICACIÓN -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -313,14 +299,14 @@
     let activeEnvironment = 'general';
     let loggedUserEmail = '';
     
-    // CORREO DEL ADMINISTRADOR EXCLUSIVO
     const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
     function updateEnvironmentOptions() {
       const switcher = document.getElementById('global-env-switcher');
       switcher.innerHTML = '';
 
-      if (loggedUserEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      // Si el correo coincide exactamente con el tuyo, renderiza la opción exclusiva de Admin
+      if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
         const optAdmin = document.createElement('option');
         optAdmin.value = 'admin';
         optAdmin.innerText = '🛡️ Admin Corporativo (Supervisión Total)';
@@ -551,7 +537,7 @@
           badge.style.display = 'block';
 
           let targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
-          if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && currentMode === 'login') {
+          if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
             targetProf = 'admin';
           }
           switchSystemEnvironment(targetProf);
@@ -559,7 +545,7 @@
           const welcome = document.getElementById('welcome-msg');
           const displayName = email.split('@')[0];
           const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Tu perfil ha sido autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
         } else {
           showToast(data.error || 'Error en las credenciales o usuario no registrado.');
         }
