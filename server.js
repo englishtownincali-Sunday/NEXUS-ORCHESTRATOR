@@ -17,7 +17,6 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const connectionString = process.env.DATABASE_URL || '';
 const sql = postgres(connectionString, { ssl: 'require' });
 
-// Inicialización de base de datos
 async function initDB() {
   try {
     await sql`
@@ -65,7 +64,6 @@ fastify.post('/api/auth/login', async (request, reply) => {
     }
     const user = users[0];
     
-    // Si inicia sesión tu correo administrativo, asignar automáticamente 'admin'
     let assignedProfession = user.profession || 'general';
     if (email.toLowerCase() === 'englishtownincali@gmail.com') {
       assignedProfession = 'admin';
@@ -81,25 +79,25 @@ fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
   try {
-    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial ejecutivo. Debes generar informes y análisis exhaustivos, detallados y técnicos. Estructura el entregable de forma profesional e impecable en el Canvas.";
+    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial ejecutivo. Debes generar informes y análisis exhaustivos, detallados y técnicos en el Canvas.";
 
     if (profession === 'mining') {
-      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activos de carbón térmico/metalúrgico, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020, cumplimiento ESG, análisis DART y especificaciones técnicas de laboratorio (SGS / Bureau Veritas). Proporciona desgloses exhaustivos.";
+      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activo de carbón, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020 y cumplimiento ESG.";
     } else if (profession === 'doctor') {
-      systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado, farmacología detallada, diagnóstico diferencial y protocolos de salud integral.";
+      systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado y protocolos de salud integral.";
     } else if (profession === 'music') {
-      systemInstruction = "Eres la IA de producción de Sonic Orchestrator. Experta en acústica, arreglos de armonía contemporánea, mezcla, masterización, análisis de espectro de frecuencias y gestión de derechos editoriales.";
+      systemInstruction = "Eres la IA de producción de Sonic Orchestrator. Experta en acústica, arreglos, mezcla y masterización.";
     } else if (profession === 'lawyer') {
-      systemInstruction = "Eres la IA jurídica de Jurídica Nexus. Experta en revisión contractual, cláusulas de responsabilidad, derecho corporativo preventivo, análisis jurisprudencial y mitigación de riesgos legales.";
+      systemInstruction = "Eres la IA jurídica de Jurídica Nexus. Experta en revisión contractual, derecho corporativo preventivo y mitigación de riesgos legales.";
     } else if (profession === 'teaching') {
-      systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en diseño curricular de Aprendizaje Basado en Proyectos (PBL), didáctica de lenguas extranjeras (Inglés/Francés), análisis fonético IPA, gramática B1 y diseño de rúbricas de evaluación de 5 pilares.";
+      systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en diseño curricular PBL, didáctica de lenguas extranjeras y fonética IPA.";
     } else if (profession === 'admin') {
-      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas, gestión de clústeres, auditoría de seguridad y supervisión total de flujos B2B.";
+      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Nombre del modelo exacto para la librería oficial
+    // Actualizado al modelo general compatible con la SDK oficial de Google GenAI
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,
