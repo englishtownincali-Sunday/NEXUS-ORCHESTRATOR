@@ -468,3 +468,651 @@
       color: var(--accent-cyan);
       flex: 1;
       white-space: pre-wrap;
+      overflow-y: auto;
+    }
+
+    /* LOGS EN VIVO */
+    .logs-panel {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .logs-content {
+      background: #03060d;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      height: 110px;
+      overflow-y: auto;
+      margin-top: 0.75rem;
+    }
+
+    .log-entry { margin-bottom: 0.3rem; }
+    .log-time { color: var(--text-muted); }
+    .log-info { color: var(--accent-cyan); font-weight: 600; }
+
+    footer {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* MODAL DE AUTENTICACIÓN (LOGIN & REGISTRO MULTILENGUA) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-card {
+      background: #0d1220;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .auth-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      transition: color 0.2s;
+    }
+
+    .auth-tab-btn.active {
+      color: var(--accent-cyan);
+      border-bottom: 2px solid var(--accent-cyan);
+    }
+
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-input-wrapper input {
+      padding-right: 2.5rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      top: 38%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    /* TOASTS */
+    #toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .toast {
+      background: #0d1220;
+      border: 1px solid var(--accent-cyan);
+      color: var(--text-main);
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success { border-color: var(--success); }
+    .toast.error { border-color: #ef4444; }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast-container"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-container">
+      <div class="brand-logo">💎</div>
+      <div class="brand-title">
+        <h1>NEXUS ORCHESTRATOR</h1>
+        <p>V1.0.4 · AUTONOMOUS CONTROL LAYER</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-badge"><div class="status-dot-green"></div><span id="txt-backend-status">BACKEND ONLINE</span></div>
+      
+      <!-- Selector de Idioma -->
+      <select class="lang-select" onchange="changeLanguage(this.value)">
+        <option value="es" selected>🌐 ES</option>
+        <option value="en">🌐 EN</option>
+        <option value="fr">🌐 FR</option>
+      </select>
+
+      <div class="header-actions">
+        <button id="btn-login-nav" class="btn-neon-small" onclick="openAuthModal('login')">🔑 <span id="txt-nav-login">Iniciar Sesión</span></button>
+        <button id="btn-reg-nav" class="btn-neon-primary" onclick="openAuthModal('register')">✨ <span id="txt-nav-register">Registrarse</span></button>
+        <button id="user-badge" class="btn-neon-small" style="display:none; color: var(--accent-purple); border-color: var(--accent-purple);">Propietario Activo</button>
+        <button class="btn-neon-small" onclick="testDB()">🗄️ Test DB</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TARJETAS KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">⚡</div>
+      <div class="kpi-info">
+        <label id="lbl-kpi-workflows">Workflows Activos</label>
+        <div class="val">2</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple">⚙️</div>
+      <div class="kpi-info">
+        <label id="lbl-kpi-requests">Peticiones de IA</label>
+        <div class="val">0</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green">📊</div>
+      <div class="kpi-info">
+        <label id="lbl-kpi-db">DB Status</label>
+        <div class="val" style="font-size: 1rem; color: var(--success);">NEON CONNECTED</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon pink">⚡</div>
+      <div class="kpi-info">
+        <label id="lbl-kpi-latency">Latencia Servidor</label>
+        <div class="val">14ms</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID PRINCIPAL -->
+  <div class="main-grid">
+    <!-- CREAR WORKFLOW -->
+    <div class="panel-box">
+      <div class="panel-header">
+        <div class="panel-title" id="txt-title-create-wf">➕ Crear Nuevo Workflow</div>
+      </div>
+      <form onsubmit="event.preventDefault(); showToast(i18n[currentLang].wfSaved, 'success');">
+        <div class="form-group">
+          <label id="lbl-wf-name">NOMBRE DEL FLUJO</label>
+          <input type="text" id="input-wf-name" placeholder="Ej: Analizador de Sentimiento">
+        </div>
+        <div class="form-group">
+          <label id="lbl-wf-provider">PROVEEDOR / HERRAMIENTA IA</label>
+          <select>
+            <option>Google Gemini Pro</option>
+            <option>OpenAI GPT-4o</option>
+            <option>Anthropic Claude 3.5 Sonnet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="lbl-wf-priority">PRIORIDAD</label>
+          <select id="select-wf-priority">
+            <option value="alta">Alta (High)</option>
+            <option value="media" selected>Media (Medium)</option>
+            <option value="baja">Baja (Low)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="lbl-wf-prompt">INSTRUCCIÓN / PROMPT DE ORQUESTACIÓN</label>
+          <textarea rows="3" id="input-wf-prompt" placeholder="Escribe el prompt del flujo..."></textarea>
+        </div>
+        <button type="submit" class="btn-gradient-submit" id="btn-submit-wf">+ Registrar Workflow</button>
+      </form>
+    </div>
+
+    <!-- WORKFLOWS EN SISTEMA -->
+    <div class="panel-box">
+      <div class="panel-header">
+        <div class="panel-title" id="txt-title-system-wf">📑 Workflows en Sistema</div>
+        <span class="panel-badge-count">2 <span id="txt-badge-saved">Guardados</span></span>
+      </div>
+      <div class="workflows-list">
+        <div class="workflow-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-title">Resumen Semanal de Transacciones</span>
+            <span class="badge-priority high" id="badge-p-1">Alta</span>
+          </div>
+          <div class="workflow-card-sub">OpenAI GPT-4o</div>
+          <div class="workflow-card-prompt">"Consultar Neon DB y generar reporte estructurado."</div>
+          <div class="workflow-card-actions">
+            <span class="status-tag" id="tag-completed-1">Completado</span>
+            <div class="workflow-btns">
+              <button class="btn-action-small" onclick="showToast(i18n[currentLang].executing, 'success')">▶ <span class="txt-btn-exec">Ejecutar</span></button>
+              <button class="btn-action-small danger">🗑️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="workflow-card">
+          <div class="workflow-card-header">
+            <span class="workflow-card-title">Validación de Webhooks Entrantes</span>
+            <span class="badge-priority medium" id="badge-p-2">Media</span>
+          </div>
+          <div class="workflow-card-sub">Gemini Pro (Google)</div>
+          <div class="workflow-card-prompt">"Analizar payload JSON y validar esquema."</div>
+          <div class="workflow-card-actions">
+            <span class="status-tag" style="color: var(--text-muted);" id="tag-pending-2">Pendiente</span>
+            <div class="workflow-btns">
+              <button class="btn-action-small" onclick="showToast(i18n[currentLang].executing, 'success')">▶ <span class="txt-btn-exec-2">Ejecutar</span></button>
+              <button class="btn-action-small danger">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSOLA DE ORQUESTACIÓN Y TERMINAL -->
+  <div class="orchestration-section">
+    <div class="panel-box">
+      <div class="panel-header">
+        <div class="panel-title" id="txt-title-console">⚡ Consola de Orquestación de IA</div>
+      </div>
+      <div class="form-group">
+        <label>MODELOTARGET</label>
+        <select id="ai-model">
+          <option value="gemini-3-flash">Gemini 3 Flash (Recomendado)</option>
+          <option value="gpt-4o">GPT-4o (OpenAI)</option>
+          <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (Anthropic)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label id="lbl-prompt-petition">PROMPT PETICIÓN</label>
+        <textarea id="ai-prompt" rows="3" placeholder="Ej: Genera una estrategia de sincronización..."></textarea>
+      </div>
+      <button class="btn-gradient-submit" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));" onclick="runOrchestration()" id="btn-exec-orchestrate">🚀 Ejecutar Orquestación (/api/orchestrate)</button>
+    </div>
+
+    <!-- TERMINAL APIS -->
+    <div class="terminal-box">
+      <div class="terminal-topbar">
+        <div class="terminal-dots">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <span class="terminal-title">nexus-terminal-response.json</span>
+        <span style="font-size: 0.7rem; color: var(--text-muted); cursor: pointer;" onclick="document.getElementById('ai-response').innerText='// Terminal reiniciada...';">🗑️</span>
+      </div>
+      <div id="ai-response" class="terminal-content">
+// Nexus Orchestrator API Terminal
+// Esperando ejecución de la petición...
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGS EN VIVO -->
+  <div class="logs-panel">
+    <div class="panel-header" style="margin-bottom: 0;">
+      <div class="panel-title" id="txt-title-logs">&gt;_ Registros del Sistema (Live Logs)</div>
+      <span style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" onclick="document.getElementById('live-logs').innerHTML='';" id="txt-clear-logs">Limpiar Logs</span>
+    </div>
+    <div id="live-logs" class="logs-content">
+      <div class="log-entry"><span class="log-time">[18:59:46]</span> <span class="log-info">[INFO]</span> Nexus Orchestrator UI inicializado correctamente.</div>
+      <div class="log-entry"><span class="log-time">[18:59:46]</span> <span class="log-info">[INFO]</span> Conectado a backend Fastify en Render.</div>
+    </div>
+  </div>
+
+  <footer>
+    Nexus Orchestrator Engine · Fastify Node.js Backend & Neon PostgreSQL Cloud Layer
+  </footer>
+
+  <!-- MODAL DE AUTENTICACIÓN UNIFICADO -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+      
+      <!-- Pestañas para cambiar entre Login y Registro -->
+      <div class="auth-tabs">
+        <button id="tab-btn-login" class="auth-tab-btn active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
+        <button id="tab-btn-reg" class="auth-tab-btn" onclick="switchAuthTab('register')">Registrarse</button>
+      </div>
+
+      <p id="auth-subtitle" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Ingresa tus datos para acceder al panel de control.</p>
+      
+      <form onsubmit="handleAuthSubmit(event)">
+        <div class="form-group">
+          <label id="lbl-auth-email">Correo Electrónico</label>
+          <input type="email" id="auth-email" placeholder="tu@correo.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label id="lbl-auth-pass">Contraseña</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="auth-password" placeholder="••••••••" required>
+            <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+          </div>
+        </div>
+        
+        <button type="submit" id="btn-auth-submit" class="btn-gradient-submit" style="margin-top: 0.5rem;">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentAuthMode = 'login';
+    let currentLang = 'es';
+
+    // DICCIONARIO TRADUCTOR MULTILENGUA (ES, EN, FR)
+    const i18n = {
+      es: {
+        login: "Iniciar Sesión",
+        register: "Registrarse",
+        enter: "Entrar",
+        createOwnerAcc: "Registrar Cuenta Propietaria",
+        loginSubtitle: "Ingresa tus datos para acceder al panel de control.",
+        regSubtitle: "Registro rápido. La primera cuenta será la Propietaria.",
+        kpiWorkflows: "Workflows Activos",
+        kpiRequests: "Peticiones de IA",
+        kpiDb: "DB Status",
+        kpiLatency: "Latencia Servidor",
+        createWfTitle: "➕ Crear Nuevo Workflow",
+        lblWfName: "NOMBRE DEL FLUJO",
+        lblWfProvider: "PROVEEDOR / HERRAMIENTA IA",
+        lblWfPriority: "PRIORIDAD",
+        lblWfPrompt: "INSTRUCCIÓN / PROMPT DE ORQUESTACIÓN",
+        btnRegisterWf: "+ Registrar Workflow",
+        systemWfTitle: "📑 Workflows en Sistema",
+        saved: "Guardados",
+        executing: "Ejecutando workflow...",
+        wfSaved: "Workflow guardado en el sistema",
+        orchestrationTitle: "⚡ Consola de Orquestación de IA",
+        promptPetition: "PROMPT PETICIÓN",
+        execOrchestrate: "🚀 Ejecutar Orquestación (/api/orchestrate)",
+        systemLogs: ">_ Registros del Sistema (Live Logs)",
+        clearLogs: "Limpiar Logs",
+        emailLbl: "Correo Electrónico",
+        passLbl: "Contraseña",
+        execBtn: "Ejecutar"
+      },
+      en: {
+        login: "Log In",
+        register: "Register",
+        enter: "Sign In",
+        createOwnerAcc: "Register Owner Account",
+        loginSubtitle: "Enter your credentials to access the control panel.",
+        regSubtitle: "Quick registration. First account will be Owner.",
+        kpiWorkflows: "Active Workflows",
+        kpiRequests: "AI Requests",
+        kpiDb: "DB Status",
+        kpiLatency: "Server Latency",
+        createWfTitle: "➕ Create New Workflow",
+        lblWfName: "WORKFLOW NAME",
+        lblWfProvider: "AI PROVIDER / TOOL",
+        lblWfPriority: "PRIORITY",
+        lblWfPrompt: "ORCHESTRATION INSTRUCTION / PROMPT",
+        btnRegisterWf: "+ Register Workflow",
+        systemWfTitle: "📑 System Workflows",
+        saved: "Saved",
+        executing: "Executing workflow...",
+        wfSaved: "Workflow saved in system",
+        orchestrationTitle: "⚡ AI Orchestration Console",
+        promptPetition: "PROMPT REQUEST",
+        execOrchestrate: "🚀 Run Orchestration (/api/orchestrate)",
+        systemLogs: ">_ System Live Logs",
+        clearLogs: "Clear Logs",
+        emailLbl: "Email Address",
+        passLbl: "Password",
+        execBtn: "Run"
+      },
+      fr: {
+        login: "Se Connecter",
+        register: "S'inscrire",
+        enter: "Entrer",
+        createOwnerAcc: "Créer un Compte Propriétaire",
+        loginSubtitle: "Saisissez vos identifiants pour accéder au panneau.",
+        regSubtitle: "Inscription rapide. Le premier compte sera le Propriétaire.",
+        kpiWorkflows: "Workflows Actifs",
+        kpiRequests: "Requêtes IA",
+        kpiDb: "Statut BD",
+        kpiLatency: "Latenance Serveur",
+        createWfTitle: "➕ Créer un Nouveau Workflow",
+        lblWfName: "NOM DU FLUX",
+        lblWfProvider: "FOURNISSEUR / OUTIL IA",
+        lblWfPriority: "PRIORITÉ",
+        lblWfPrompt: "INSTRUCTION / PROMPT D'ORCHESTRATION",
+        btnRegisterWf: "+ Enregistrer le Workflow",
+        systemWfTitle: "📑 Workflows du Système",
+        saved: "Enregistrés",
+        executing: "Exécution du workflow...",
+        wfSaved: "Workflow enregistré dans le système",
+        orchestrationTitle: "⚡ Console d'Orchestration IA",
+        promptPetition: "PROMPT DE REQUÊTE",
+        execOrchestrate: "🚀 Exécuter Orchestration (/api/orchestrate)",
+        systemLogs: ">_ Journaux du Système en Direct",
+        clearLogs: "Effacer les Journaux",
+        emailLbl: "Adresse E-mail",
+        passLbl: "Mot de passe",
+        execBtn: "Exécuter"
+      }
+    };
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      const t = i18n[lang];
+
+      document.getElementById('txt-nav-login').innerText = t.login;
+      document.getElementById('txt-nav-register').innerText = t.register;
+      document.getElementById('tab-btn-login').innerText = t.login;
+      document.getElementById('tab-btn-reg').innerText = t.register;
+
+      document.getElementById('lbl-kpi-workflows').innerText = t.kpiWorkflows;
+      document.getElementById('lbl-kpi-requests').innerText = t.kpiRequests;
+      document.getElementById('lbl-kpi-db').innerText = t.kpiDb;
+      document.getElementById('lbl-kpi-latency').innerText = t.kpiLatency;
+
+      document.getElementById('txt-title-create-wf').innerText = t.createWfTitle;
+      document.getElementById('lbl-wf-name').innerText = t.lblWfName;
+      document.getElementById('lbl-wf-provider').innerText = t.lblWfProvider;
+      document.getElementById('lbl-wf-priority').innerText = t.lblWfPriority;
+      document.getElementById('lbl-wf-prompt').innerText = t.lblWfPrompt;
+      document.getElementById('btn-submit-wf').innerText = t.btnRegisterWf;
+
+      document.getElementById('txt-title-system-wf').innerText = t.systemWfTitle;
+      document.getElementById('txt-badge-saved').innerText = t.saved;
+
+      document.getElementById('txt-title-console').innerText = t.orchestrationTitle;
+      document.getElementById('lbl-prompt-petition').innerText = t.promptPetition;
+      document.getElementById('btn-exec-orchestrate').innerText = t.execOrchestrate;
+
+      document.getElementById('txt-title-logs').innerText = t.systemLogs;
+      document.getElementById('txt-clear-logs').innerText = t.clearLogs;
+
+      document.getElementById('lbl-auth-email').innerText = t.emailLbl;
+      document.getElementById('lbl-auth-pass').innerText = t.passLbl;
+
+      document.querySelectorAll('.txt-btn-exec, .txt-btn-exec-2').forEach(el => el.innerText = t.execBtn);
+
+      switchAuthTab(currentAuthMode);
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? '✨' : type === 'error' ? '⚠️' : 'ℹ️';
+      toast.innerHTML = `<span>${icon}</span> <div>${message}</div>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('auth-password');
+      const toggleBtn = document.querySelector('.toggle-password');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.innerText = '🙈';
+      } else {
+        passInput.type = 'password';
+        toggleBtn.innerText = '👁️';
+      }
+    }
+
+    function openAuthModal(mode) {
+      document.getElementById('authModal').style.display = 'flex';
+      switchAuthTab(mode);
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      const t = i18n[currentLang];
+      const btnLogin = document.getElementById('tab-btn-login');
+      const btnReg = document.getElementById('tab-btn-reg');
+      const subtitle = document.getElementById('auth-subtitle');
+      const btnSubmit = document.getElementById('btn-auth-submit');
+
+      if (mode === 'login') {
+        btnLogin.classList.add('active');
+        btnReg.classList.remove('active');
+        subtitle.innerText = t.loginSubtitle;
+        btnSubmit.innerText = t.enter;
+      } else {
+        btnReg.classList.add('active');
+        btnLogin.classList.remove('active');
+        subtitle.innerText = t.regSubtitle;
+        btnSubmit.innerText = t.createOwnerAcc;
+      }
+    }
+
+    async function handleAuthSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const endpoint = currentAuthMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          showToast(data.message || (currentAuthMode === 'register' ? 'Cuenta creada con éxito' : 'Sesión iniciada'), 'success');
+          closeAuthModal();
+          
+          document.getElementById('btn-login-nav').style.display = 'none';
+          document.getElementById('btn-reg-nav').style.display = 'none';
+          const userBadge = document.getElementById('user-badge');
+          userBadge.innerText = `👑 ${email}`;
+          userBadge.style.display = 'inline-block';
+        } else {
+          showToast(data.error || 'Error en la petición', 'error');
+        }
+      } catch (err) {
+        showToast('Error de red al conectar con el servidor', 'error');
+      }
+    }
+
+    async function testDB() {
+      const resultBox = document.getElementById('ai-response');
+      resultBox.innerText = '// Consultando clúster PostgreSQL en Neon...';
+      try {
+        const response = await fetch('/api/db-test');
+        const data = await response.json();
+        resultBox.innerText = JSON.stringify(data, null, 2);
+        showToast('Conexión con PostgreSQL Neon verificada', 'success');
+      } catch (err) {
+        resultBox.innerText = '// Error de conexión: ' + err.message;
+        showToast('Fallo al conectar con la base de datos', 'error');
+      }
+    }
+
+    async function runOrchestration() {
+      const model = document.getElementById('ai-model').value;
+      const prompt = document.getElementById('ai-prompt').value;
+      const responseBox = document.getElementById('ai-response');
+      if (!prompt.trim()) {
+        showToast('Ingresa una instrucción de orquestación primero', 'error');
+        return;
+      }
+      responseBox.innerText = `// [PROCESANDO PETICIÓN]\n// Orquestando con ${model}...\n// Buscando información en tiempo real en la web...`;
+      try {
+        const response = await fetch('/api/orchestrate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, prompt })
+        });
+        const data = await response.json();
+        responseBox.innerText = JSON.stringify(data, null, 2);
+        showToast('Orquestación finalizada con éxito', 'success');
+      } catch (err) {
+        responseBox.innerText = '// Error en la petición de orquestación.';
+        showToast('Error de procesamiento', 'error');
+      }
+    }
+  </script>
+</body>
+</html>
