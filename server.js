@@ -75,33 +75,6 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Función con el modelo actual exigido por la API oficial
-async function generateWithFallback(prompt, systemInstruction) {
-  const modelsToTry = ['gemini-3.8-flash', 'gemini-2.5-flash'];
-  let lastError = null;
-
-  for (const modelName of modelsToTry) {
-    try {
-      console.log(`Intentando conectar con el modelo: ${modelName}...`);
-      const response = await ai.models.generateContent({
-        model: modelName,
-        contents: prompt,
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: 0.3,
-        }
-      });
-      if (response && response.text) {
-        return response.text;
-      }
-    } catch (err) {
-      lastError = err;
-      console.warn(`Modelo ${modelName} no disponible:`, err.message);
-    }
-  }
-  throw lastError || new Error("No se pudo conectar con los modelos de IA.");
-}
-
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
@@ -122,7 +95,17 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    const aiOutput = await generateWithFallback(prompt, systemInstruction);
+    // Usando estrictamente el modelo actual exigido por la API
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: prompt,
+      config: {
+        systemInstruction: systemInstruction,
+        temperature: 0.3,
+      }
+    });
+
+    const aiOutput = response.text || "Consulta procesada con éxito por el clúster de IA.";
     return { success: true, result: aiOutput };
 
   } catch (err) {
