@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 
-// Inicialización de Google Gen AI con la API Key
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const connectionString = process.env.DATABASE_URL || '';
@@ -96,15 +95,10 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Llamada corregida y compatible con la SDK oficial actual de @google/genai
+    // Llamada directa utilizando el identificador estándar del modelo flash
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
-      contents: [
-        {
-          role: 'user',
-          parts: [{ text: prompt }]
-        }
-      ],
+      contents: prompt,
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.3,
