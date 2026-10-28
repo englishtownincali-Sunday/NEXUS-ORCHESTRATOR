@@ -24,7 +24,11 @@ async function initDB() {
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        profession VARCHAR(50) DEFAULT 'general',
+        first_name VARCHAR(100),
+        last_name VARCHAR(100),
+        user_role VARCHAR(100),
+        profession VARCHAR(100),
+        env_assigned VARCHAR(50) DEFAULT 'general',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
@@ -41,15 +45,41 @@ fastify.register(fastifyStatic, {
   prefix: '/',
 });
 
+function determineEnvironment(profession = '', role = '', email = '') {
+  if (email.toLowerCase() === 'englishtownincali@gmail.com') return 'admin';
+  const text = `${profession} ${role}`.toLowerCase();
+  
+  if (text.includes('min') || text.includes('carbón') || text.includes('oro') || text.includes('mining')) return 'mining';
+  if (text.includes('medic') || text.includes('doctor') || text.includes('salud') || text.includes('saludable')) return 'doctor';
+  if (text.includes('músic') || text.includes('audio') || text.includes('productor') || text.includes('canción')) return 'music';
+  if (text.includes('abogad') || text.includes('jurídic') || text.includes('derecho') || text.includes('legal')) return 'lawyer';
+  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('enseñan')) return 'teaching';
+  
+  return 'general';
+}
+
 fastify.post('/api/auth/register', async (request, reply) => {
-  const { email, password, profession } = request.body;
+  const { email, password, firstName, lastName, userRole, profession } = request.body;
   try {
     const existing = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return reply.code(400).send({ error: 'El usuario ya está registrado en el sistema.' });
+      return reply.code(400).send({ error: 'El correo ya está registrado.' });
     }
-    await sql`INSERT INTO users (email, password, profession) VALUES (${email}, ${password}, ${profession || 'general'})`;
-    return { success: true, message: 'Usuario registrado correctamente.', profession: profession || 'general' };
+
+    const assignedEnv = determineEnvironment(profession, userRole, email);
+
+    await sql`
+      INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
+      VALUES (${email}, ${password}, ${firstName || ''}, ${lastName || ''}, ${userRole || 'Independiente'}, ${profession || 'General'}, ${assignedEnv})
+    `;
+
+    return { 
+      success: true, 
+      message: 'Cuenta creada e identificada con éxito.', 
+      firstName: firstName || 'Usuario',
+      profession: profession, 
+      env: assignedEnv 
+    };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
@@ -64,42 +94,17 @@ fastify.post('/api/auth/login', async (request, reply) => {
     }
     const user = users[0];
     
-    let assignedProfession = user.profession || 'general';
+    let assignedEnv = user.env_assigned || determineEnvironment(user.profession, user.user_role, email);
     if (email.toLowerCase() === 'englishtownincali@gmail.com') {
-      assignedProfession = 'admin';
-    }
-
-    return { success: true, message: `Bienvenido de nuevo, ${email}`, profession: assignedProfession };
-  } catch (err) {
-    return reply.code(500).send({ error: err.message });
-  }
-});
-
-// Endpoint para autenticación social simulada / federada (Google, Microsoft, Empresarial)
-fastify.post('/api/auth/social', async (request, reply) => {
-  const { provider, email } = request.body;
-  try {
-    let users = await sql`SELECT * FROM users WHERE email = ${email}`;
-    let assignedProfession = 'general';
-
-    if (email.toLowerCase() === 'englishtownincali@gmail.com') {
-      assignedProfession = 'admin';
-    }
-
-    if (users.length === 0) {
-      // Registrar automáticamente si accede por primera vez mediante proveedor externo
-      await sql`INSERT INTO users (email, password, profession) VALUES (${email}, ${'SOCIAL_AUTH_SECURE_' + provider}, ${assignedProfession})`;
-    } else {
-      assignedProfession = users[0].profession || assignedProfession;
-      if (email.toLowerCase() === 'englishtownincali@gmail.com') {
-        assignedProfession = 'admin';
-      }
+      assignedEnv = 'admin';
     }
 
     return { 
       success: true, 
-      message: `Autenticación exitosa vía ${provider.toUpperCase()}`, 
-      profession: assignedProfession 
+      message: `Bienvenido de nuevo, ${user.first_name || email}`, 
+      firstName: user.first_name || 'Usuario',
+      profession: user.profession,
+      env: assignedEnv 
     };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
@@ -110,20 +115,20 @@ fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
   try {
-    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial conversacional y ejecutivo. Responde de forma natural, fluida y técnica directamente en el chat.";
+    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial conversacional y ejecutivo. Responde de forma cálida, humana, empática y precisa.";
 
     if (profession === 'mining') {
-      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activo de carbón, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020 y cumplimiento ESG.";
+      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, carbón, oro, minerales críticos y contratos Incoterms.";
     } else if (profession === 'doctor') {
-      systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado y protocolos de salud integral.";
+      systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia y salud integral.";
     } else if (profession === 'music') {
-      systemInstruction = "Eres la IA de producción de Sonic Orchestrator. Experta en acústica, arreglos, mezcla y masterización.";
+      systemInstruction = "Eres la IA de producción de Sonic Orchestrator. Experta en composición, acústica, mezcla y producción musical.";
     } else if (profession === 'lawyer') {
-      systemInstruction = "Eres la IA jurídica de Jurídica Nexus. Experta en revisión contractual, derecho corporativo preventivo y mitigación de riesgos legales.";
+      systemInstruction = "Eres la IA jurídica de Jurídica Nexus. Experta en contratos, derecho corporativo y riesgos legales.";
     } else if (profession === 'teaching') {
-      systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en diseño curricular PBL, didáctica de lenguas extranjeras y fonética IPA.";
+      systemInstruction = "Eres la IA pedagógica de Lingua Orchestrator. Experta en didáctica, diseño curricular PBL, gramática y fonética.";
     } else if (profession === 'admin') {
-      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
+      systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de sistemas y seguridad.";
     }
 
     const response = await ai.models.generateContent({
@@ -135,14 +140,14 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       }
     });
 
-    const aiOutput = response.text || "Consulta procesada con éxito.";
+    const aiOutput = response.text || "Consulta procesada correctamente.";
     return { success: true, result: aiOutput };
 
   } catch (err) {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud con Gemini API: ${err.message}` 
+      result: `[Error de Conexión] No se pudo procesar la solicitud: ${err.message}` 
     });
   }
 });
