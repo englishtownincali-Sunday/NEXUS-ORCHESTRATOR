@@ -28,11 +28,15 @@ async function initDB() {
         last_name VARCHAR(100),
         user_role VARCHAR(100),
         profession VARCHAR(100),
+        phone VARCHAR(50),
+        address VARCHAR(255),
+        bio TEXT,
+        cv_public BOOLEAN DEFAULT false,
         env_assigned VARCHAR(50) DEFAULT 'general',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database initialized successfully.");
+    console.log("Database initialized successfully with complete profile support.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -50,10 +54,10 @@ function determineEnvironment(profession = '', role = '', email = '') {
   const text = `${profession} ${role}`.toLowerCase();
   
   if (text.includes('min') || text.includes('carbón') || text.includes('oro') || text.includes('mining')) return 'mining';
-  if (text.includes('medic') || text.includes('doctor') || text.includes('salud') || text.includes('saludable')) return 'doctor';
-  if (text.includes('músic') || text.includes('audio') || text.includes('productor') || text.includes('canción')) return 'music';
+  if (text.includes('medic') || text.includes('doctor') || text.includes('salud') || text.includes('enferm')) return 'doctor';
+  if (text.includes('músic') || text.includes('audio') || text.includes('productor') || text.includes('sound')) return 'music';
   if (text.includes('abogad') || text.includes('jurídic') || text.includes('derecho') || text.includes('legal')) return 'lawyer';
-  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('enseñan')) return 'teaching';
+  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('educ')) return 'teaching';
   
   return 'general';
 }
@@ -75,7 +79,7 @@ fastify.post('/api/auth/register', async (request, reply) => {
 
     return { 
       success: true, 
-      message: 'Cuenta creada e identificada con éxito.', 
+      message: 'Cuenta creada con éxito.', 
       firstName: firstName || 'Usuario',
       profession: profession, 
       env: assignedEnv 
@@ -104,15 +108,17 @@ fastify.post('/api/auth/login', async (request, reply) => {
       message: `Bienvenido de nuevo, ${user.first_name || email}`, 
       firstName: user.first_name || 'Usuario',
       profession: user.profession,
-      env: assignedEnv 
+      env: assignedEnv,
+      profile: user
     };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
 });
 
+// Endpoint de orquestación con IA usando el modelo estándar actual de alta compatibilidad
 fastify.post('/api/orchestrate', async (request, reply) => {
-  const { prompt, profession } = request.body;
+  const { prompt, profession, fileData } = request.body;
   
   try {
     let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial conversacional y ejecutivo. Responde de forma cálida, humana, empática y precisa.";
@@ -131,9 +137,14 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de sistemas y seguridad.";
     }
 
+    let fullPrompt = prompt;
+    if (fileData) {
+      fullPrompt = `[Archivo adjunto del usuario analizado como contexto: ${fileData.name} (${fileData.type})]\n\n${prompt}`;
+    }
+
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: prompt,
+      model: 'gemini-2.5-flash',
+      contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.4,
@@ -147,7 +158,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión] No se pudo procesar la solicitud: ${err.message}` 
+      result: `[Error de Conexión] No se pudo procesar la solicitud con el modelo activo: ${err.message}` 
     });
   }
 });
