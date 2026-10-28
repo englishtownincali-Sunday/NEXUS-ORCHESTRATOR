@@ -130,7 +130,7 @@
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.85rem;
       max-height: 420px; padding-right: 0.5rem; margin-bottom: 1rem;
     }
-    .message { padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%; }
+    .message { padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%; white-space: pre-wrap; }
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 4px 12px var(--theme-glow); }
     .message.bot { align-self: flex-start; background: rgba(255,255,255,0.92); border: 1px solid var(--border-color); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 
@@ -138,7 +138,7 @@
       display: flex; gap: 0.6rem; background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: nil; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
     .chat-input-area input::placeholder { color: #94a3b8; }
 
     .canvas-output {
@@ -238,7 +238,7 @@
           </div>
           <div class="chat-messages" id="chat-stream">
             <div class="message bot" id="welcome-msg">
-              👋 Hola. Nexus OS está en línea con IA conectada. Inicia sesión para cargar tu perfil profesional o escribe una tarea.
+              👋 Hola. Nexus OS está en línea y conectado. Escribe tu consulta para conversar directamente aquí.
             </div>
           </div>
           <div class="chat-input-area">
@@ -253,8 +253,8 @@
             <button class="btn-secondary" style="font-size:0.75rem;" onclick="speakCanvas()">🔊 Escuchar</button>
           </div>
           <div class="canvas-output" id="canvas-view" contenteditable="true">
-// NEXUS OS - ENTORNO DE TRABAJO ACTIVO
-// Los entregables avanzados de Gemini aparecerán aquí en tiempo real.
+// NEXOS OS - CANVAS COMPILADOR
+// Aquí se mostrarán automáticamente los documentos formales, códigos, tablas o recursos multimedia generados.
           </div>
         </div>
       </div>
@@ -547,7 +547,7 @@
           const welcome = document.getElementById('welcome-msg');
           const displayName = email.split('@')[0];
           const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado en el entorno <b>${targetProf.toUpperCase()}</b>.`;
         } else {
           showToast(data.error || 'Error en las credenciales o usuario no registrado.');
         }
@@ -564,7 +564,7 @@
       updateEnvironmentOptions();
       showToast('Sesión cerrada correctamente.');
       const welcome = document.getElementById('welcome-msg');
-      welcome.innerHTML = `👋 Hola. Nexus OS está en línea con IA conectada. Inicia sesión para cargar tu perfil profesional o escribe una tarea.`;
+      welcome.innerHTML = `👋 Hola. Nexus OS está en línea y conectado. Escribe tu consulta para conversar directamente aquí.`;
     }
 
     async function sendUserQuery() {
@@ -580,9 +580,10 @@
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
+      // Mensaje dinámico de "pensando" en el chat
       const loading = document.createElement('div');
       loading.className = 'message bot';
-      loading.innerText = `⚙️ Gemini analizando en entorno [${activeEnvironment.toUpperCase()}]: procesando solicitud profunda...`;
+      loading.innerText = 'Pensando...';
       stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
@@ -594,11 +595,15 @@
         });
         const data = await res.json();
 
-        loading.innerText = `✨ Tarea ejecutada con éxito en ${activeEnvironment.toUpperCase()}. Revisa el resultado detallado en el Canvas.`;
-        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE PROFESIONAL OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
+        // Reemplazamos el "Pensando..." por la respuesta real de la IA directamente en el chat
+        loading.innerText = data.result;
+
+        // Si la respuesta es larga o se pide un documento/entregable formal, lo volcamos también al Canvas Compilador
+        if (data.result.length > 250 || text.toLowerCase().includes('documento') || text.toLowerCase().includes('informe') || text.toLowerCase().includes('trabajo')) {
+          document.getElementById('canvas-view').innerText = `// NEXOS OS - CANVAS COMPILADOR OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
+        }
       } catch (err) {
-        loading.innerText = "✨ Procesamiento completado.";
-        document.getElementById('canvas-view').innerText = `// NEXOS OS - ENTREGABLE\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico estructurado con éxito.`;
+        loading.innerText = "[Error de Conexión] No se pudo procesar la solicitud.";
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
@@ -615,7 +620,7 @@
         const u = new SpeechSynthesisUtterance(text);
         u.lang = 'es-CO';
         speechSynthesis.speak(u);
-        showToast('Sintetizando voz del entregable...');
+        showToast('Sintetizando voz del Canvas...');
       }
     }
   </script>
