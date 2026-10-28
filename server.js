@@ -139,11 +139,11 @@ fastify.post('/api/orchestrate', async (request, reply) => {
 
     let fullPrompt = prompt;
     if (fileData) {
-      fullPrompt = `[Archivo adjunto: ${fileData.name}]\n\n${prompt}`;
+      fullPrompt = `[Archivo adjunto analizado: ${fileData.name}]\n\n${prompt}`;
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
