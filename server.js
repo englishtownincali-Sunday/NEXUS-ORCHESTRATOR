@@ -75,11 +75,42 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
+// Endpoint para autenticación social simulada / federada (Google, Microsoft, Empresarial)
+fastify.post('/api/auth/social', async (request, reply) => {
+  const { provider, email } = request.body;
+  try {
+    let users = await sql`SELECT * FROM users WHERE email = ${email}`;
+    let assignedProfession = 'general';
+
+    if (email.toLowerCase() === 'englishtownincali@gmail.com') {
+      assignedProfession = 'admin';
+    }
+
+    if (users.length === 0) {
+      // Registrar automáticamente si accede por primera vez mediante proveedor externo
+      await sql`INSERT INTO users (email, password, profession) VALUES (${email}, ${'SOCIAL_AUTH_SECURE_' + provider}, ${assignedProfession})`;
+    } else {
+      assignedProfession = users[0].profession || assignedProfession;
+      if (email.toLowerCase() === 'englishtownincali@gmail.com') {
+        assignedProfession = 'admin';
+      }
+    }
+
+    return { 
+      success: true, 
+      message: `Autenticación exitosa vía ${provider.toUpperCase()}`, 
+      profession: assignedProfession 
+    };
+  } catch (err) {
+    return reply.code(500).send({ error: err.message });
+  }
+});
+
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
   try {
-    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial ejecutivo. Debes generar informes y análisis exhaustivos, detallados y técnicos en el Canvas.";
+    let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial conversacional y ejecutivo. Responde de forma natural, fluida y técnica directamente en el chat.";
 
     if (profession === 'mining') {
       systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activo de carbón, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020 y cumplimiento ESG.";
@@ -95,17 +126,16 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Usando estrictamente el modelo actual exigido por la API
     const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
+      model: 'gemini-1.5-flash',
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.3,
+        temperature: 0.4,
       }
     });
 
-    const aiOutput = response.text || "Consulta procesada con éxito por el clúster de IA.";
+    const aiOutput = response.text || "Consulta procesada con éxito.";
     return { success: true, result: aiOutput };
 
   } catch (err) {
