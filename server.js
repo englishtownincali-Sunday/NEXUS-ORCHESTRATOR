@@ -68,7 +68,7 @@ fastify.post('/api/auth/register', async (request, reply) => {
   try {
     const existing = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return reply.code(400).send({ error: 'El correo ya está registrado.' });
+      return reply.code(400).send({ error: 'El correo ya está registrado en el sistema. Por favor inicia sesión.' });
     }
 
     const assignedEnv = determineEnvironment(profession, userRole, email);
@@ -78,12 +78,15 @@ fastify.post('/api/auth/register', async (request, reply) => {
       VALUES (${email}, ${password}, ${firstName || ''}, ${lastName || ''}, ${userRole || 'Independiente'}, ${profession || 'General'}, ${assignedEnv})
     `;
 
+    const newUser = await sql`SELECT * FROM users WHERE email = ${email}`;
+
     return { 
       success: true, 
-      message: 'Cuenta creada con éxito.', 
+      message: 'Cuenta creada con éxito. ¡Bienvenido a Nexus!', 
       firstName: firstName || 'Usuario',
       profession: profession, 
-      env: assignedEnv 
+      env: assignedEnv,
+      profile: newUser[0]
     };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
@@ -95,7 +98,7 @@ fastify.post('/api/auth/login', async (request, reply) => {
   try {
     const users = await sql`SELECT * FROM users WHERE email = ${email} AND password = ${password}`;
     if (users.length === 0) {
-      return reply.code(401).send({ error: 'Credenciales inválidas o usuario no registrado.' });
+      return reply.code(401).send({ error: 'Credenciales inválidas, contraseña incorrecta o usuario no registrado.' });
     }
     const user = users[0];
     
@@ -112,6 +115,26 @@ fastify.post('/api/auth/login', async (request, reply) => {
       env: assignedEnv,
       profile: user
     };
+  } catch (err) {
+    return reply.code(500).send({ error: err.message });
+  }
+});
+
+// Actualizar perfil y foto en la base de datos de manera persistente
+fastify.post('/api/user/update', async (request, reply) => {
+  const { email, phone, address, bio, avatar_url, cv_public } = request.body;
+  try {
+    await sql`
+      UPDATE users 
+      SET phone = ${phone || ''}, 
+          address = ${address || ''}, 
+          bio = ${bio || ''}, 
+          avatar_url = ${avatar_url || ''}, 
+          cv_public = ${cv_public || false}
+      WHERE email = ${email}
+    `;
+    const updated = await sql`SELECT * FROM users WHERE email = ${email}`;
+    return { success: true, message: 'Perfil actualizado de forma persistente.', profile: updated[0] };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
