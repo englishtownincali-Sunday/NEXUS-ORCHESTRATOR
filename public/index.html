@@ -108,26 +108,27 @@
 
     .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; }
     
+    /* Interfaz de Bienvenida Interactiva (Landing Page Estilo ElevenLabs / Canva) */
     .hero-welcome-area {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 2rem 1rem; text-align: center; margin-bottom: 1rem;
     }
     .hero-greeting {
-      font-size: 2rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
+      font-size: 2.1rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
       letter-spacing: -0.5px; margin-bottom: 0.4rem;
     }
-    .hero-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem; font-weight: 400; max-width: 520px; }
+    .hero-subtitle { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.2rem; font-weight: 400; max-width: 540px; line-height: 1.5; }
 
     .tools-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; width: 100%; max-width: 560px; margin-bottom: 1.2rem;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; width: 100%; max-width: 580px; margin-bottom: 1.2rem;
     }
     .tool-card {
-      background: rgba(255,255,255,0.85); border: 1px solid var(--border-color); border-radius: 14px;
-      padding: 1rem; text-align: left; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      background: rgba(255,255,255,0.88); border: 1px solid var(--border-color); border-radius: 14px;
+      padding: 1.1rem; text-align: left; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
     .tool-card:hover { border-color: var(--accent-primary); background: #ffffff; transform: translateY(-2px); }
-    .tool-card h4 { font-size: 0.85rem; color: #0f172a; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
-    .tool-card p { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+    .tool-card h4 { font-size: 0.88rem; color: #0f172a; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.4rem; font-weight: 700; }
+    .tool-card p { font-size: 0.74rem; color: var(--text-muted); line-height: 1.4; }
 
     .chat-messages {
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.85rem;
@@ -213,7 +214,6 @@
       </div>
     </div>
     <div class="header-right">
-      <!-- Selector de Voces y Acentos -->
       <select class="select-custom" id="voice-actor-selector" title="Actor de voz profesional">
         <option value="Burt Reynolds">🎙️ Burt Reynolds (Iconic)</option>
         <option value="Enrique Montragón">🎙️ Enrique Montragón (Mexican)</option>
@@ -233,7 +233,7 @@
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
 
-      <!-- Contenedor de Sesión con Avatar -->
+      <!-- Contenedor de Sesión con Avatar Persistente -->
       <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Mi Perfil y Hoja de Vida">
         <div id="user-avatar-container" style="width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <span id="user-avatar-initials">JG</span>
@@ -270,10 +270,10 @@
             <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
-          <!-- Pantalla de Bienvenida Interactiva (Landing Page / Estilo Canva / ElevenLabs) -->
+          <!-- Pantalla de Bienvenida Interactiva (Landing Page Estilo ElevenLabs / Canva) -->
           <div class="hero-welcome-area" id="hero-welcome">
-            <div class="hero-greeting" id="hero-title">¿Qué deseas crear hoy?</div>
-            <div class="hero-subtitle" id="hero-sub">Selecciona una herramienta impulsada por IA para automatizar tus tareas diarias o redactar documentos.</div>
+            <div class="hero-greeting" id="hero-title">🚀 Bienvenid@ a Nexus Orchestrator</div>
+            <div class="hero-subtitle" id="hero-sub">Tu sistema operativo de inteligencia artificial autónoma. Explora las herramientas o inicia sesión para sincronizar tu perfil profesional.</div>
             
             <div class="tools-grid">
               <div class="tool-card" onclick="useQuickQuery('Redactar un correo profesional persuasivo')">
@@ -323,7 +323,7 @@
     </div>
   </div>
 
-  <!-- Modal de Autenticación con OAuth Libre (Permite escribir cualquier cuenta nueva) -->
+  <!-- Modal de Autenticación con OAuth e Historial de Cuentas (Estilo X / Instagram) -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -342,10 +342,6 @@
           <button class="social-btn" onclick="startOAuthConfirmation('Microsoft')">
             <div class="social-icon-box">🪟</div>
             <div class="social-text">Continuar con Microsoft (SSO)</div>
-          </button>
-          <button class="social-btn" onclick="startOAuthConfirmation('Empresarial')">
-            <div class="social-icon-box">🏢</div>
-            <div class="social-text">Cuenta Institucional</div>
           </button>
           <div class="divider">o accede con correo y contraseña</div>
         </div>
@@ -398,27 +394,26 @@
         </form>
       </div>
 
-      <!-- Pantalla de Confirmación OAuth con Entrada Libre de Cualquier Cuenta -->
+      <!-- Pantalla de Confirmación OAuth para Cuentas Nuevas o Existentes -->
       <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.5rem;">
         <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
           <div style="font-size: 1.8rem;" id="oauth-provider-icon">🌐</div>
           <div>
             <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">Confirma tu cuenta y autoriza el acceso</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Autoriza el acceso a tu cuenta vinculada</p>
           </div>
         </div>
 
         <div class="form-group">
-          <label>DIGITA TU CUENTA DE CORREO (CUALQUIER CUENTA NUEVA)</label>
+          <label>SELECCIONA O ESCRIBE TU CUENTA</label>
           <input type="email" id="oauth-custom-email-input" placeholder="tucuenta@correo.com" style="width:100%; padding:0.7rem; font-size:0.9rem;">
         </div>
 
         <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin: 1rem 0; font-size: 0.8rem; color: #334155;">
           <p style="font-weight: 600; margin-bottom: 0.4rem;">Nexus Orchestrator solicitará permiso para:</p>
           <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li>Ver tu nombre y foto de perfil.</li>
+            <li>Ver tu nombre, correo y foto de perfil persistente.</li>
             <li>Gestionar tus entornos y preferencias de trabajo.</li>
-            <li>Sincronizar tus herramientas de automatización.</li>
           </ul>
         </div>
 
@@ -430,13 +425,13 @@
     </div>
   </div>
 
-  <!-- Modal de Perfil Profesional -->
+  <!-- Modal de Perfil Profesional con Persistencia Completa -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-card" style="max-width: 620px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
       <div style="text-align: center; margin-bottom: 1.5rem;">
         <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional y Credenciales</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Configura tu espacio, datos de contacto, foto, contraseña y hoja de vida</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Tus datos y foto de perfil se guardan de forma permanente en la base de datos</p>
       </div>
 
       <div style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
@@ -568,6 +563,10 @@
       document.getElementById('profile-bio').value = currentUserProfile.bio || '';
       document.getElementById('profile-cv-public').checked = currentUserProfile.cv_public || false;
       document.getElementById('profile-new-password').value = '';
+
+      if (currentUserProfile.avatar_url) {
+        document.getElementById('profile-avatar-preview').innerHTML = `<img src="${currentUserProfile.avatar_url}" style="width:100%; height:100%; object-fit:cover;">`;
+      }
     }
 
     function closeProfileModal() {
@@ -594,7 +593,7 @@
         forgotLink.style.display = 'block';
       } else {
         tR.classList.add('active'); tL.classList.remove('active');
-        btn.innerText = "Crear Cuenta y Entrar";
+        btn.innerText = "Siguiente: Completar Datos";
         namesGrid.style.display = 'grid';
         roleGroup.style.display = 'block';
         professionGroup.style.display = 'block';
@@ -619,7 +618,7 @@
       document.getElementById('auth-view-main').style.display = 'none';
       document.getElementById('oauth-consent-view').style.display = 'block';
       document.getElementById('oauth-title-text').innerText = `Accede a Nexus con ${provider}`;
-      document.getElementById('oauth-provider-icon').innerText = provider === 'Google' ? '🌐' : provider === 'Microsoft' ? '🪟' : '🏢';
+      document.getElementById('oauth-provider-icon').innerText = provider === 'Google' ? '🌐' : '🪟';
       document.getElementById('oauth-custom-email-input').value = '';
     }
 
@@ -628,48 +627,85 @@
       document.getElementById('auth-view-main').style.display = 'block';
     }
 
-    function confirmCustomOAuthConsent() {
+    async function confirmCustomOAuthConsent() {
       const customEmail = document.getElementById('oauth-custom-email-input').value.trim();
       if (!customEmail || !customEmail.includes('@')) {
-        alert("Por favor ingresa un correo electrónico válido para continuar.");
+        alert("Por favor ingresa un correo electrónico válido.");
         return;
       }
 
-      showToast(`Autenticando nueva cuenta con ${pendingOAuthProvider}...`);
-      
-      setTimeout(() => {
-        loggedUserEmail = customEmail;
-        loggedUserName = customEmail.split('@')[0].toUpperCase();
-        currentUserProfile = { email: customEmail, first_name: loggedUserName, avatar_url: null };
+      showToast(`Conectando con ${pendingOAuthProvider}...`);
 
-        updateEnvironmentOptions();
-        document.getElementById('auth-actions').style.display = 'none';
-        document.getElementById('user-session-container').style.display = 'flex';
-        document.getElementById('user-profile-badge').innerText = loggedUserName;
-        
-        // Restablecer avatar limpio con iniciales
-        document.getElementById('user-avatar-container').innerHTML = `<span id="user-avatar-initials">${loggedUserName.substring(0, 2)}</span>`;
-        document.getElementById('profile-avatar-preview').innerHTML = loggedUserName.substring(0, 2);
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: customEmail, password: 'oauth_default_secure_pass' })
+        });
+        const data = await res.json();
 
-        closeAuthModal();
-        switchSystemEnvironment('general');
-        showToast(`¡Bienvenido, ${loggedUserName}! Acceso concedido.`);
+        if (res.ok) {
+          applyUserSession(data.profile);
+          closeAuthModal();
+          showToast(`¡Bienvenido de nuevo, ${loggedUserName}! Datos recuperados.`);
+        } else {
+          // Si no existe, lo registramos automáticamente con datos básicos
+          const regRes = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: customEmail, password: 'oauth_default_secure_pass', firstName: customEmail.split('@')[0], userRole: 'Independiente', profession: 'General' })
+          });
+          const regData = await regRes.json();
+          if (regRes.ok) {
+            applyUserSession(regData.profile);
+            closeAuthModal();
+            showToast(`¡Cuenta creada con ${pendingOAuthProvider}!`);
+          } else {
+            showToast(regData.error || 'Error en autenticación.');
+          }
+        }
+      } catch (err) {
+        showToast('Error de red al procesar OAuth.');
+      }
+    }
 
-        const heroTitle = document.getElementById('hero-title');
-        const heroSub = document.getElementById('hero-sub');
-        heroTitle.innerText = `Bienvenido, ${loggedUserName}`;
-        heroSub.innerText = `Autenticado mediante ${pendingOAuthProvider}. Selecciona una herramienta para comenzar.`;
-      }, 800);
+    function applyUserSession(userProfile) {
+      currentUserProfile = userProfile;
+      loggedUserEmail = userProfile.email;
+      loggedUserName = userProfile.first_name || userProfile.email.split('@')[0].toUpperCase();
+
+      updateEnvironmentOptions();
+      document.getElementById('auth-actions').style.display = 'none';
+      document.getElementById('user-session-container').style.display = 'flex';
+      document.getElementById('user-profile-badge').innerText = loggedUserName;
+
+      const initials = loggedUserName.substring(0, 2).toUpperCase();
+      if (userProfile.avatar_url) {
+        document.getElementById('user-avatar-container').innerHTML = `<img src="${userProfile.avatar_url}" style="width:100%; height:100%; object-fit:cover;">`;
+        document.getElementById('profile-avatar-preview').innerHTML = `<img src="${userProfile.avatar_url}" style="width:100%; height:100%; object-fit:cover;">`;
+      } else {
+        document.getElementById('user-avatar-container').innerHTML = `<span id="user-avatar-initials">${initials}</span>`;
+        document.getElementById('profile-avatar-preview').innerText = initials;
+      }
+
+      let targetEnv = userProfile.env_assigned || 'general';
+      if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        targetEnv = 'admin';
+      }
+      switchSystemEnvironment(targetEnv);
+
+      document.getElementById('hero-title').innerText = `Bienvenid@ de nuevo, ${loggedUserName}`;
+      document.getElementById('hero-sub').innerText = `Tus datos y perfil están sincronizados [${targetEnv.toUpperCase()}]. ¿Qué tarea resolveremos hoy?`;
     }
 
     function handleForgotPassword(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
       if (!email) {
-        alert("Por favor ingresa tu correo electrónico en el campo superior para recuperar tu contraseña.");
+        alert("Por favor ingresa tu correo electrónico en el campo superior.");
         return;
       }
-      showToast(`Enlace de recuperación enviado a ${email}. Revisa tu bandeja.`);
+      showToast(`Enlace de recuperación enviado a ${email}.`);
     }
 
     function handleFileSelected(event) {
@@ -696,7 +732,7 @@
         currentUserProfile.avatar_url = e.target.result;
         document.getElementById('profile-avatar-preview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
         document.getElementById('user-avatar-container').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-        showToast('Foto de perfil actualizada.');
+        showToast('Foto cargada. Haz clic en "Guardar Cambios" para persistirla.');
       };
       reader.readAsDataURL(file);
     }
@@ -781,34 +817,10 @@
 
         if (res.ok) {
           showToast(data.message || 'Operación exitosa');
+          applyUserSession(data.profile);
           closeAuthModal();
-          loggedUserEmail = email;
-          loggedUserName = data.firstName || 'Usuario';
-          currentUserProfile = data.profile || { email, first_name: loggedUserName, avatar_url: null };
-
-          updateEnvironmentOptions();
-
-          document.getElementById('auth-actions').style.display = 'none';
-          document.getElementById('user-session-container').style.display = 'flex';
-          document.getElementById('user-profile-badge').innerText = loggedUserName;
-          
-          const initials = loggedUserName.substring(0, 2).toUpperCase();
-          document.getElementById('user-avatar-initials').innerText = initials;
-          document.getElementById('profile-avatar-preview').innerText = initials;
-
-          let targetEnv = data.env || 'general';
-          if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-            targetEnv = 'admin';
-          }
-          switchSystemEnvironment(targetEnv);
-
-          const heroTitle = document.getElementById('hero-title');
-          const heroSub = document.getElementById('hero-sub');
-          heroTitle.innerText = `Bienvenido, ${loggedUserName}`;
-          heroSub.innerText = `Entorno activo [${targetEnv.toUpperCase()}]. ¿Qué tarea diaria resolveremos hoy?`;
-
         } else {
-          showToast(data.error || 'Error en la autenticación.');
+          showToast(data.error || 'Este correo ya está registrado o credenciales inválidas.');
         }
       } catch (err) {
         showToast('Error de red al conectar con el servidor.');
@@ -824,8 +836,8 @@
       switchSystemEnvironment('general');
       updateEnvironmentOptions();
 
-      document.getElementById('hero-title').innerText = "¿Qué deseas crear hoy?";
-      document.getElementById('hero-sub').innerText = "Selecciona una herramienta impulsada por IA para automatizar tus tareas diarias o redactar documentos.";
+      document.getElementById('hero-title').innerText = "🚀 Bienvenid@ a Nexus Orchestrator";
+      document.getElementById('hero-sub').innerText = "Tu sistema operativo de inteligencia artificial autónoma. Explora las herramientas o inicia sesión para sincronizar tu perfil profesional.";
       document.getElementById('chat-stream').style.display = 'none';
       document.getElementById('hero-welcome').style.display = 'flex';
       closeProfileModal();
@@ -833,19 +845,36 @@
       showToast('Sesión cerrada correctamente.');
     }
 
-    function saveProfileData() {
+    async function saveProfileData() {
       currentUserProfile.phone = document.getElementById('profile-phone').value;
       currentUserProfile.address = document.getElementById('profile-address').value;
       currentUserProfile.bio = document.getElementById('profile-bio').value;
       currentUserProfile.cv_public = document.getElementById('profile-cv-public').checked;
       
-      const newPass = document.getElementById('profile-new-password').value;
-      if (newPass) {
-        showToast('Contraseña actualizada con éxito.');
+      try {
+        const res = await fetch('/api/user/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: loggedUserEmail,
+            phone: currentUserProfile.phone,
+            address: currentUserProfile.address,
+            bio: currentUserProfile.bio,
+            avatar_url: currentUserProfile.avatar_url,
+            cv_public: currentUserProfile.cv_public
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          currentUserProfile = data.profile;
+          showToast('¡Perfil y foto guardados de forma persistente!');
+          closeProfileModal();
+        } else {
+          showToast(data.error || 'Error al guardar perfil.');
+        }
+      } catch (err) {
+        showToast('Error de red al actualizar perfil.');
       }
-      
-      showToast('Perfil profesional guardado correctamente.');
-      closeProfileModal();
     }
 
     function downloadCV() {
@@ -871,7 +900,7 @@
 
     function useQuickQuery(queryText) {
       if (!loggedUserEmail) {
-        showToast('Por favor inicia sesión para utilizar las herramientas.');
+        showToast('Por favor inicia sesión para utilizar las herramientas del workspace.');
         openAuthModal('login');
         return;
       }
