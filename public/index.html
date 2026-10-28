@@ -108,7 +108,6 @@
 
     .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; }
     
-    /* Interfaz de Bienvenida Interactiva (Landing Page Estilo ElevenLabs / Canva) */
     .hero-welcome-area {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 2rem 1rem; text-align: center; margin-bottom: 1rem;
@@ -233,7 +232,6 @@
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
 
-      <!-- Contenedor de Sesión con Avatar Persistente -->
       <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Mi Perfil y Hoja de Vida">
         <div id="user-avatar-container" style="width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <span id="user-avatar-initials">JG</span>
@@ -270,7 +268,6 @@
             <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
-          <!-- Pantalla de Bienvenida Interactiva (Landing Page Estilo ElevenLabs / Canva) -->
           <div class="hero-welcome-area" id="hero-welcome">
             <div class="hero-greeting" id="hero-title">🚀 Bienvenid@ a Nexus Orchestrator</div>
             <div class="hero-subtitle" id="hero-sub">Tu sistema operativo de inteligencia artificial autónoma. Explora las herramientas o inicia sesión para sincronizar tu perfil profesional.</div>
@@ -323,7 +320,6 @@
     </div>
   </div>
 
-  <!-- Modal de Autenticación con OAuth e Historial de Cuentas (Estilo X / Instagram) -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -341,7 +337,7 @@
           </button>
           <button class="social-btn" onclick="startOAuthConfirmation('Microsoft')">
             <div class="social-icon-box">🪟</div>
-            <div class="social-text">Continuar con Microsoft (SSO)</div>
+            <div class="social-text">Continuar con Microsoft (Institucional)</div>
           </button>
           <div class="divider">o accede con correo y contraseña</div>
         </div>
@@ -361,21 +357,21 @@
           <div class="form-group" id="role-group" style="display:none;">
             <label>¿CÓMO UTILIZARÁS LA PLATAFORMA?</label>
             <select id="auth-user-role">
-              <option value="Independiente">Independiente / Profesional</option>
-              <option value="Estudiante">Estudiante / Investigador</option>
+              <option value="Licenciatura / Estudiante">Estudiante / Investigador</option>
+              <option value="Docente / Profesor">Docente / Profesor</option>
+              <option value="Independiente / Profesional">Independiente / Profesional</option>
               <option value="Empresario">Empresario / Líder de Negocio</option>
-              <option value="Corporativo">Empleado / Corporativo</option>
             </select>
           </div>
 
           <div class="form-group" id="profession-group" style="display:none;">
             <label>PROFESIÓN U OCUPACIÓN PRINCIPAL</label>
-            <input type="text" id="auth-profession" placeholder="Ej. Minero, Abogado, Médico, Profesor...">
+            <input type="text" id="auth-profession" placeholder="Ej. Licenciatura en Lenguas Extranjeras...">
           </div>
 
           <div class="form-group">
-            <label>CORREO ELECTRÓNICO</label>
-            <input type="email" id="auth-email" required placeholder="nombre@correo.com">
+            <label>CORREO ELECTRÓNICO (PERSONAL O INSTITUCIONAL)</label>
+            <input type="email" id="auth-email" required placeholder="tucuenta@usc.edu.co">
           </div>
 
           <div class="form-group" style="position:relative;">
@@ -394,26 +390,26 @@
         </form>
       </div>
 
-      <!-- Pantalla de Confirmación OAuth para Cuentas Nuevas o Existentes -->
+      <!-- Pantalla de Confirmación OAuth para Cuentas Institucionales Microsoft / Google -->
       <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.5rem;">
         <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
-          <div style="font-size: 1.8rem;" id="oauth-provider-icon">🌐</div>
+          <div style="font-size: 1.8rem;" id="oauth-provider-icon">🪟</div>
           <div>
-            <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">Autoriza el acceso a tu cuenta vinculada</p>
+            <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus con Microsoft</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Autoriza el acceso a tu cuenta institucional</p>
           </div>
         </div>
 
         <div class="form-group">
-          <label>SELECCIONA O ESCRIBE TU CUENTA</label>
-          <input type="email" id="oauth-custom-email-input" placeholder="tucuenta@correo.com" style="width:100%; padding:0.7rem; font-size:0.9rem;">
+          <label>INGRESA TU CORREO INSTITUCIONAL O PERSONAL</label>
+          <input type="email" id="oauth-custom-email-input" placeholder="jefferson.garces00@usc.edu.co" style="width:100%; padding:0.7rem; font-size:0.9rem;">
         </div>
 
         <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin: 1rem 0; font-size: 0.8rem; color: #334155;">
           <p style="font-weight: 600; margin-bottom: 0.4rem;">Nexus Orchestrator solicitará permiso para:</p>
           <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li>Ver tu nombre, correo y foto de perfil persistente.</li>
-            <li>Gestionar tus entornos y preferencias de trabajo.</li>
+            <li>Ver tu nombre, correo institucional y foto de perfil persistente.</li>
+            <li>Gestionar tus entornos académicos y preferencias de trabajo.</li>
           </ul>
         </div>
 
@@ -425,7 +421,6 @@
     </div>
   </div>
 
-  <!-- Modal de Perfil Profesional con Persistencia Completa -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-card" style="max-width: 620px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
@@ -593,7 +588,7 @@
         forgotLink.style.display = 'block';
       } else {
         tR.classList.add('active'); tL.classList.remove('active');
-        btn.innerText = "Siguiente: Completar Datos";
+        btn.innerText = "Registrarse y Acceder";
         namesGrid.style.display = 'grid';
         roleGroup.style.display = 'block';
         professionGroup.style.display = 'block';
@@ -617,9 +612,9 @@
       pendingOAuthProvider = provider;
       document.getElementById('auth-view-main').style.display = 'none';
       document.getElementById('oauth-consent-view').style.display = 'block';
-      document.getElementById('oauth-title-text').innerText = `Accede a Nexus con ${provider}`;
+      document.getElementById('oauth-title-text').innerText = `Accede a Nexus con ${provider} (Institucional)`;
       document.getElementById('oauth-provider-icon').innerText = provider === 'Google' ? '🌐' : '🪟';
-      document.getElementById('oauth-custom-email-input').value = '';
+      document.getElementById('oauth-custom-email-input').value = 'jefferson.garces00@usc.edu.co';
     }
 
     function cancelOAuthConsent() {
@@ -630,42 +625,29 @@
     async function confirmCustomOAuthConsent() {
       const customEmail = document.getElementById('oauth-custom-email-input').value.trim();
       if (!customEmail || !customEmail.includes('@')) {
-        alert("Por favor ingresa un correo electrónico válido.");
+        alert("Por favor ingresa un correo institucional o personal válido.");
         return;
       }
 
-      showToast(`Conectando con ${pendingOAuthProvider}...`);
+      showToast(`Conectando con ${pendingOAuthProvider} institucional...`);
 
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: customEmail, password: 'oauth_default_secure_pass' })
+          body: JSON.stringify({ email: customEmail, password: 'oauth_secure' })
         });
         const data = await res.json();
 
         if (res.ok) {
           applyUserSession(data.profile);
           closeAuthModal();
-          showToast(`¡Bienvenido de nuevo, ${loggedUserName}! Datos recuperados.`);
+          showToast(`¡Acceso institucional concedido a ${loggedUserName}!`);
         } else {
-          // Si no existe, lo registramos automáticamente con datos básicos
-          const regRes = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: customEmail, password: 'oauth_default_secure_pass', firstName: customEmail.split('@')[0], userRole: 'Independiente', profession: 'General' })
-          });
-          const regData = await regRes.json();
-          if (regRes.ok) {
-            applyUserSession(regData.profile);
-            closeAuthModal();
-            showToast(`¡Cuenta creada con ${pendingOAuthProvider}!`);
-          } else {
-            showToast(regData.error || 'Error en autenticación.');
-          }
+          showToast(data.error || 'Error en autenticación institucional.');
         }
       } catch (err) {
-        showToast('Error de red al procesar OAuth.');
+        showToast('Error de red al conectar con OAuth.');
       }
     }
 
@@ -694,18 +676,18 @@
       }
       switchSystemEnvironment(targetEnv);
 
-      document.getElementById('hero-title').innerText = `Bienvenid@ de nuevo, ${loggedUserName}`;
-      document.getElementById('hero-sub').innerText = `Tus datos y perfil están sincronizados [${targetEnv.toUpperCase()}]. ¿Qué tarea resolveremos hoy?`;
+      document.getElementById('hero-title').innerText = `Bienvenid@, ${loggedUserName}`;
+      document.getElementById('hero-sub').innerText = `Entorno institucional activo [${targetEnv.toUpperCase()}]. ¿Qué tarea resolveremos hoy?`;
     }
 
     function handleForgotPassword(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
       if (!email) {
-        alert("Por favor ingresa tu correo electrónico en el campo superior.");
+        alert("Por favor ingresa tu correo electrónico.");
         return;
       }
-      showToast(`Enlace de recuperación enviado a ${email}.`);
+      showToast(`Enlace institucional enviado a ${email}.`);
     }
 
     function handleFileSelected(event) {
@@ -721,7 +703,7 @@
       const ind = document.getElementById('file-indicator');
       ind.style.display = 'block';
       ind.innerHTML = `<div class="file-badge-card">📎 <span>Archivo cargado: <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)</span></div>`;
-      showToast(`Archivo adjunto listo para análisis.`);
+      showToast(`Archivo listo para análisis.`);
     }
 
     function handleAvatarSelected(event) {
@@ -820,7 +802,7 @@
           applyUserSession(data.profile);
           closeAuthModal();
         } else {
-          showToast(data.error || 'Este correo ya está registrado o credenciales inválidas.');
+          showToast(data.error || 'Error en la autenticación.');
         }
       } catch (err) {
         showToast('Error de red al conectar con el servidor.');
@@ -867,13 +849,13 @@
         const data = await res.json();
         if (res.ok) {
           currentUserProfile = data.profile;
-          showToast('¡Perfil y foto guardados de forma persistente!');
+          showToast('¡Perfil guardado de forma permanente!');
           closeProfileModal();
         } else {
-          showToast(data.error || 'Error al guardar perfil.');
+          showToast(data.error || 'Error al guardar.');
         }
       } catch (err) {
-        showToast('Error de red al actualizar perfil.');
+        showToast('Error de red al actualizar.');
       }
     }
 
