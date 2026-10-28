@@ -8,8 +8,7 @@
   <style>
     :root {
       --bg-dark: #f0f4f8;
-      --panel-bg: rgba(255, 255, 255, 0.48);
-      --card-bg: rgba(240, 244, 248, 0.6);
+      --panel-bg: rgba(255, 255, 255, 0.55);
       --border-color: rgba(14, 165, 233, 0.35);
       --accent-primary: #0284c7;
       --accent-secondary: #7c3aed;
@@ -30,7 +29,7 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: linear-gradient(rgba(240, 244, 248, 0.70), rgba(240, 244, 248, 0.80)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(240, 244, 248, 0.75), rgba(240, 244, 248, 0.85)), var(--env-bg-image);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -40,40 +39,38 @@
       display: flex;
       flex-direction: column;
       padding: 1.25rem 2rem;
-      transition: background-image 0.8s ease-in-out, background-color 0.8s ease, border-color 0.5s ease;
+      transition: all 0.5s ease;
     }
 
     header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1.25rem; padding: 0.9rem 1.5rem;
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-color); border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 20px var(--theme-glow);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.85rem; }
     .brand-logo {
-      width: 42px; height: 42px; background: rgba(255,255,255,0.7);
+      width: 42px; height: 42px; background: rgba(255,255,255,0.8);
       border: 1px solid var(--border-color); border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       color: var(--accent-primary); font-size: 1.3rem;
-      box-shadow: 0 0 15px var(--theme-glow);
     }
-    .brand-title h1 { font-size: 1.2rem; font-weight: 700; color: #0f172a; letter-spacing: 0.5px; }
+    .brand-title h1 { font-size: 1.2rem; font-weight: 700; color: #0f172a; }
     .brand-title p { font-size: 0.68rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; }
     .select-custom {
-      background: rgba(255,255,255,0.75); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.45rem 0.85rem; border-radius: 10px;
       font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
     }
-    .select-custom option { background: #ffffff; color: #0f172a; }
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff; border: none; padding: 0.5rem 1.2rem; border-radius: 10px;
+      color: #fff; border: none; padding: 0.55rem 1.2rem; border-radius: 10px;
       font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s;
     }
@@ -84,15 +81,14 @@
       color: var(--text-main); padding: 0.45rem 1rem; border-radius: 10px;
       font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
     }
-    .btn-secondary:hover { background: rgba(255,255,255,0.95); }
 
     .main-layout { display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; flex: 1; }
 
     .glass-panel {
-      background: rgba(255, 255, 255, 0.48);
+      background: rgba(255, 255, 255, 0.52);
       border: 1px solid var(--border-color);
       border-radius: 20px; padding: 1.5rem; backdrop-filter: blur(14px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.06); display: flex; flex-direction: column;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.05); display: flex; flex-direction: column;
     }
 
     .panel-header {
@@ -102,79 +98,91 @@
     .panel-title { font-size: 0.95rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; }
 
     .env-badge-box {
-      background: rgba(255,255,255,0.6); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.65); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 1rem; margin-bottom: 1.2rem; text-align: center;
     }
     .env-badge-box h3 { font-size: 0.9rem; color: var(--accent-primary); margin-bottom: 0.3rem; font-weight: 700; }
     .env-badge-box p { font-size: 0.75rem; color: var(--text-muted); }
 
-    .tool-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .tool-card {
-      background: rgba(255,255,255,0.6); border: 1px solid var(--border-color);
-      border-radius: 12px; padding: 0.85rem; display: flex; align-items: center; gap: 0.75rem;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .tool-card:hover { background: rgba(255,255,255,0.95); border-color: var(--accent-primary); transform: translateX(3px); }
-    .tool-icon {
-      width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.85);
-      display: flex; align-items: center; justify-content: center; color: var(--accent-primary); font-size: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .tool-info h4 { font-size: 0.82rem; font-weight: 600; color: #0f172a; }
-    .tool-info p { font-size: 0.7rem; color: var(--text-muted); }
-
     .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; flex: 1; }
 
-    .chat-box { display: flex; flex-direction: column; height: 100%; }
+    .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; }
+    
+    /* Header de Bienvenida Cálido al estilo Claude / Gemini */
+    .hero-welcome-area {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2.5rem 1rem 1.5rem 1rem; text-align: center; margin-bottom: 1rem;
+    }
+    .hero-greeting {
+      font-size: 2.2rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
+      letter-spacing: -0.5px; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .hero-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 400; }
+
+    .suggestion-chips {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; max-width: 520px;
+    }
+    .chip-btn {
+      background: rgba(255,255,255,0.85); border: 1px solid var(--border-color);
+      padding: 0.55rem 0.95rem; border-radius: 12px; font-size: 0.8rem; color: #334155;
+      cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.4rem;
+      font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .chip-btn:hover { background: #ffffff; border-color: var(--accent-primary); color: var(--accent-primary); transform: translateY(-2px); }
+
     .chat-messages {
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.85rem;
-      max-height: 420px; padding-right: 0.5rem; margin-bottom: 1rem;
+      max-height: 380px; padding-right: 0.5rem; margin-bottom: 1rem;
     }
     .message { padding: 0.9rem 1.1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; max-width: 90%; white-space: pre-wrap; }
-    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 4px 12px var(--theme-glow); }
-    .message.bot { align-self: flex-start; background: rgba(255,255,255,0.92); border: 1px solid var(--border-color); color: var(--text-main); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
+    .message.bot { align-self: flex-start; background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); color: var(--text-main); }
 
     .chat-input-area {
-      display: flex; gap: 0.6rem; background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
-      border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
+      display: flex; gap: 0.6rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
+      border-radius: 16px; padding: 0.6rem 0.9rem; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
-    .chat-input-area input::placeholder { color: #94a3b8; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.92rem; outline: none; }
 
     .canvas-output {
       background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #334155;
-      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 460px;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; height: 460px; user-select: text;
     }
 
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(10px); display: none;
+      background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(8px); display: none;
       align-items: center; justify-content: center; z-index: 100;
     }
     .modal-card {
       background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2.2rem; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
+      padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
     
+    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.2rem; padding-bottom: 0.5rem; }
+    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
+
     .social-btn {
       width: 100%; display: flex; align-items: center; border: 1px solid var(--border-color);
-      border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.75rem;
-      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: #1e293b;
+      border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.6rem;
+      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.82rem; color: #1e293b; padding: 0.55rem;
     }
     .social-btn:hover { background: #f8fafc; border-color: var(--accent-primary); }
-    .social-icon-box {
-      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
-      border-right: 1px solid var(--border-color); background: #fdfdfd; font-size: 1.1rem;
-    }
-    .social-text { flex: 1; text-align: center; padding-right: 44px; }
+    .social-icon-box { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .social-text { flex: 1; text-align: center; }
 
-    .divider { display: flex; align-items: center; text-align: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+    .divider { display: flex; align-items: center; text-align: center; margin: 0.8rem 0; color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; }
     .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
     .divider::before { margin-right: .5em; }
     .divider::after { margin-left: .5em; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.7rem; }
+    .form-group { margin-bottom: 0.7rem; }
+    .form-group label { display: block; font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .form-group input, .form-group select { width: 100%; padding: 0.6rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; color: #0f172a; font-size: 0.85rem; outline: none; }
 
     #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
     .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
@@ -198,7 +206,8 @@
         <option value="en-US">🎙️ Voice Pro (EN)</option>
       </select>
       <div id="auth-actions">
-        <button class="btn-secondary" onclick="openAuthModal()">🔑 Iniciar Sesión</button>
+        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
+        <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
       <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem;">
         <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></span>
@@ -223,23 +232,6 @@
         <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
         </select>
       </div>
-
-      <div class="tool-list" id="dynamic-tools-container">
-        <div class="tool-card" onclick="executeQuickTool('search')">
-          <div class="tool-icon">🌐</div>
-          <div class="tool-info">
-            <h4>Búsqueda en Vivo</h4>
-            <p>Conexión web sin alucinaciones</p>
-          </div>
-        </div>
-        <div class="tool-card" onclick="executeQuickTool('consensus')">
-          <div class="tool-icon">🧠</div>
-          <div class="tool-info">
-            <h4>Consenso Multi-IA</h4>
-            <p>Gemini + Claude + GPT</p>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="glass-panel">
@@ -249,13 +241,23 @@
             <div class="panel-title">💬 Chat Inteligente</div>
             <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
-          <div class="chat-messages" id="chat-stream">
-            <div class="message bot" id="welcome-msg">
-              👋 Hola. Nexus OS está en línea y conectado. Escribe tu consulta para conversar directamente aquí.
+
+          <!-- Área de Bienvenida Cálida Personalizada -->
+          <div class="hero-welcome-area" id="hero-welcome">
+            <div class="hero-greeting" id="hero-title">👋 ¿Dónde deberíamos empezar?</div>
+            <div class="hero-subtitle" id="hero-sub">Selecciona una sugerencia o escribe tu consulta para comenzar</div>
+            
+            <div class="suggestion-chips" id="suggestion-chips">
+              <button class="chip-btn" onclick="useQuickQuery('Redactar un correo profesional para mi equipo')">✍️ Redactar un correo profesional</button>
+              <button class="chip-btn" onclick="useQuickQuery('Diseñar una propuesta ejecutiva de proyecto')">📝 Diseñar una propuesta ejecutiva</button>
+              <button class="chip-btn" onclick="useQuickQuery('Ayúdame a organizar un plan de trabajo semanal')">📅 Organizar plan de trabajo</button>
             </div>
           </div>
+
+          <div class="chat-messages" id="chat-stream" style="display:none;"></div>
+
           <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Escribe una tarea o consulta..." onkeypress="if(event.key==='Enter') sendUserQuery()">
+            <input type="text" id="chat-input" placeholder="¿En qué puedo ayudarte hoy?" onkeypress="if(event.key==='Enter') sendUserQuery()">
             <button class="btn-neon" onclick="sendUserQuery()" id="send-btn">Enviar</button>
           </div>
         </div>
@@ -265,61 +267,91 @@
             <div class="panel-title">📄 Canvas Compilador</div>
             <button class="btn-secondary" style="font-size:0.75rem;" onclick="speakCanvas()">🔊 Escuchar</button>
           </div>
-          <div class="canvas-output" id="canvas-view" contenteditable="true">
+          <div class="canvas-output" id="canvas-view">
 // NEXOS OS - CANVAS COMPILADOR OFICIAL
-// Aquí aparecerán exclusivamente los documentos formales, informes, código o recursos requeridos.
+// Los entregables formales, código o documentos extensos se proyectarán automáticamente en esta área.
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Modal Estético de Login / Registro -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
-      <div style="text-align: center; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 0.3rem;">Iniciar sesión</h2>
-        <p style="font-size: 0.82rem; color: var(--text-muted);">Selecciona tu método de acceso preferido</p>
+      
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Iniciar Sesión</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthMode('register')">Registrarse</button>
       </div>
 
-      <!-- Botones de Autenticación Social (Google, Microsoft, Institucional) -->
-      <button class="social-btn" onclick="handleSocialLogin('Google')">
-        <div class="social-icon-box">🌐</div>
-        <div class="social-text">Continuar con Google</div>
-      </button>
+      <div id="social-auth-section">
+        <button class="social-btn" onclick="triggerQuickSocialAuth('Google')">
+          <div class="social-icon-box">🌐</div>
+          <div class="social-text">Continuar con Google</div>
+        </button>
+        <button class="social-btn" onclick="triggerQuickSocialAuth('Microsoft')">
+          <div class="social-icon-box">🪟</div>
+          <div class="social-text">Continuar con Microsoft</div>
+        </button>
+        <button class="social-btn" onclick="triggerQuickSocialAuth('Empresarial')">
+          <div class="social-icon-box">🏢</div>
+          <div class="social-text">Cuenta Empresarial / SSO</div>
+        </button>
+        <div class="divider">o accede con correo</div>
+      </div>
 
-      <button class="social-btn" onclick="handleSocialLogin('Microsoft')">
-        <div class="social-icon-box">🪟</div>
-        <div class="social-text">Continuar con Microsoft</div>
-      </button>
-
-      <button class="social-btn" onclick="handleSocialLogin('Institucional / Empresarial')">
-        <div class="social-icon-box">🏢</div>
-        <div class="social-text">Cuenta Empresarial / Institucional</div>
-      </button>
-
-      <div class="divider">o accede con correo y contraseña</div>
-
-      <form onsubmit="handleAuthSubmit(event)" autocomplete="off">
-        <div style="margin-bottom:0.9rem;">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CORREO ELECTRÓNICO</label>
-          <input type="email" id="auth-email" required autocomplete="off" placeholder="nombre@correo.com" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
+      <form id="auth-form-main" onsubmit="handleAuthSubmit(event)" autocomplete="off">
+        <div class="form-grid" id="names-grid" style="display:none;">
+          <div class="form-group">
+            <label>NOMBRE</label>
+            <input type="text" id="auth-first-name" placeholder="Ej. Jefferson">
+          </div>
+          <div class="form-group">
+            <label>APELLIDO</label>
+            <input type="text" id="auth-last-name" placeholder="Ej. Garcés">
+          </div>
         </div>
-        <div style="margin-bottom:1.2rem; position:relative;">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CONTRASEÑA</label>
+
+        <div class="form-group" id="role-group" style="display:none;">
+          <label>¿CÓMO UTILIZARÁS LA PLATAFORMA?</label>
+          <select id="auth-user-role">
+            <option value="Independiente">Independiente / Profesional</option>
+            <option value="Estudiante">Estudiante / Investigador</option>
+            <option value="Empresario">Empresario / Líder de Negocio</option>
+            <option value="Corporativo">Empleado / Corporativo</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="profession-group" style="display:none;">
+          <label>PROFESIÓN U OCUPACIÓN PRINCIPAL</label>
+          <input type="text" id="auth-profession" placeholder="Ej. Minero, Abogado, Médico, Profesor, Músico...">
+        </div>
+
+        <div class="form-group">
+          <label>CORREO ELECTRÓNICO</label>
+          <input type="email" id="auth-email" required placeholder="nombre@correo.com">
+        </div>
+
+        <div class="form-group" style="position:relative;">
+          <label>CONTRASEÑA</label>
           <div style="display:flex; align-items:center; position:relative;">
-            <input type="password" id="auth-password" required autocomplete="new-password" placeholder="••••••••" style="width:100%; padding:0.65rem 2.5rem 0.65rem 0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
+            <input type="password" id="auth-password" required placeholder="••••••••" style="padding-right: 2.5rem;">
             <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:10px; background:transparent; border:none; cursor:pointer; font-size:1rem;" id="eye-btn">👁️</button>
           </div>
         </div>
-        <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar al Sistema</button>
+
+        <button type="submit" class="btn-neon" style="width:100%; margin-top:0.5rem;" id="auth-submit-btn">Entrar al Sistema</button>
       </form>
     </div>
   </div>
 
   <script>
+    let authMode = 'login';
     let activeEnvironment = 'general';
     let loggedUserEmail = '';
+    let loggedUserName = '';
     
     const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
@@ -365,16 +397,45 @@
     function clearAuthInputs() {
       document.getElementById('auth-email').value = '';
       document.getElementById('auth-password').value = '';
+      document.getElementById('auth-first-name').value = '';
+      document.getElementById('auth-last-name').value = '';
+      document.getElementById('auth-profession').value = '';
     }
 
-    function openAuthModal() {
+    function openAuthModal(mode) {
       document.getElementById('auth-modal').style.display = 'flex';
       clearAuthInputs();
+      switchAuthMode(mode);
     }
 
     function closeAuthModal() {
       clearAuthInputs();
       document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function switchAuthMode(mode) {
+      authMode = mode;
+      clearAuthInputs();
+      const tL = document.getElementById('tab-login');
+      const tR = document.getElementById('tab-register');
+      const btn = document.getElementById('auth-submit-btn');
+      const namesGrid = document.getElementById('names-grid');
+      const roleGroup = document.getElementById('role-group');
+      const professionGroup = document.getElementById('profession-group');
+
+      if (mode === 'login') {
+        tL.classList.add('active'); tR.classList.remove('active');
+        btn.innerText = "Entrar al Sistema";
+        namesGrid.style.display = 'none';
+        roleGroup.style.display = 'none';
+        professionGroup.style.display = 'none';
+      } else {
+        tR.classList.add('active'); tL.classList.remove('active');
+        btn.innerText = "Crear Cuenta y Entrar";
+        namesGrid.style.display = 'grid';
+        roleGroup.style.display = 'block';
+        professionGroup.style.display = 'block';
+      }
     }
 
     function togglePasswordVisibility() {
@@ -389,46 +450,10 @@
       }
     }
 
-    async function handleSocialLogin(provider) {
-      // Simulación de autenticación federada con OAuth / SSO institucional
-      const sampleEmail = provider === 'Google' ? 'google.user@gmail.com' : (provider === 'Microsoft' ? 'user@outlook.com' : 'corporate.exec@enterprise.com');
-      const emailInput = prompt(`Ingresa tu correo institucional o de ${provider}:`, sampleEmail);
-      if (!emailInput) return;
-
-      try {
-        const res = await fetch('/api/auth/social', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ provider, email: emailInput })
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          showToast(`¡Conectado vía ${provider} con éxito!`);
-          closeAuthModal();
-          loggedUserEmail = emailInput;
-          updateEnvironmentOptions();
-
-          document.getElementById('auth-actions').style.display = 'none';
-          document.getElementById('user-session-container').style.display = 'flex';
-          document.getElementById('user-profile-badge').innerText = `👤 ${emailInput}`;
-
-          let targetProf = data.profession || 'general';
-          if (emailInput.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-            targetProf = 'admin';
-          }
-          switchSystemEnvironment(targetProf);
-
-          const welcome = document.getElementById('welcome-msg');
-          const displayName = emailInput.split('@')[0];
-          const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Autenticado mediante <b>${provider}</b>. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
-        } else {
-          showToast(data.error || 'Error en autenticación social.');
-        }
-      } catch (err) {
-        showToast('Error de red al conectar con el servidor.');
-      }
+    function triggerQuickSocialAuth(provider) {
+      document.getElementById('auth-email').value = `usuario.${provider.toLowerCase()}@gmail.com`;
+      document.getElementById('auth-password').value = 'SOCIAL_AUTH_123';
+      showToast(`Accediendo con cuenta de ${provider}...`);
     }
 
     function switchSystemEnvironment(env) {
@@ -440,87 +465,51 @@
       const logoEl = document.getElementById('header-logo-icon');
       const titleEl = document.getElementById('brand-title-text');
       const subEl = document.getElementById('brand-subtitle');
-      const toolsContainer = document.getElementById('dynamic-tools-container');
 
       document.getElementById('global-env-switcher').value = env;
 
       if (env === 'admin') {
         root.style.setProperty('--accent-primary', '#4f46e5');
         root.style.setProperty('--accent-secondary', '#3730a3');
-        root.style.setProperty('--theme-glow', 'rgba(79, 70, 229, 0.35)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🛡️ Admin Corporativo";
-        descEl.innerText = "Panel de supervisión general del sistema operativo";
+        descEl.innerText = "Panel de supervisión general del sistema";
         tagEl.innerText = "ADMIN CORE";
-        logoEl.innerText = "🛡️";
-        titleEl.innerText = "NEXUS COMMAND";
-        subEl.innerText = "V2.0 · EXECUTIVE SUPERVISOR";
       } else if (env === 'mining') {
         root.style.setProperty('--accent-primary', '#d97706');
         root.style.setProperty('--accent-secondary', '#b45309');
-        root.style.setProperty('--theme-glow', 'rgba(217, 119, 6, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⛏️ Minería & Activos Globales";
-        descEl.innerText = "Entorno especializado en carbón, oro, metales y ESG";
+        descEl.innerText = "Carbón, oro, minerales y ESG";
         tagEl.innerText = "MINING CORE";
-        logoEl.innerText = "⛏️";
-        titleEl.innerText = "AURA-X GLOBAL";
-        subEl.innerText = "V2.0 · B2B MINING OS";
       } else if (env === 'doctor') {
         root.style.setProperty('--accent-primary', '#059669');
         root.style.setProperty('--accent-secondary', '#047857');
-        root.style.setProperty('--theme-glow', 'rgba(5, 150, 105, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🩺 Consultorio Médico & Salud";
-        descEl.innerText = "Entorno clínico, triaje y protocolos sanitarios";
+        descEl.innerText = "Triaje, clínica y protocolos sanitarios";
         tagEl.innerText = "MED OS";
-        logoEl.innerText = "🩺";
-        titleEl.innerText = "CLINIC NEXUS";
-        subEl.innerText = "V2.0 · HEALTHCARE SYSTEM";
       } else if (env === 'music') {
         root.style.setProperty('--accent-primary', '#db2777');
         root.style.setProperty('--accent-secondary', '#be185d');
-        root.style.setProperty('--theme-glow', 'rgba(219, 39, 119, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "🎵 Estudio Musical & Producción";
-        descEl.innerText = "Composición, arreglos, mezcla y frecuencias";
+        descEl.innerText = "Composición, arreglos y acústica";
         tagEl.innerText = "AUDIO LAB";
-        logoEl.innerText = "🎵";
-        titleEl.innerText = "SONIC ORCHESTRATOR";
-        subEl.innerText = "V2.0 · STUDIO OS";
       } else if (env === 'lawyer') {
         root.style.setProperty('--accent-primary', '#2563eb');
         root.style.setProperty('--accent-secondary', '#1d4ed8');
-        root.style.setProperty('--theme-glow', 'rgba(37, 99, 235, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "⚖️ Bufete Jurídico & Normativa";
-        descEl.innerText = "Revisión contractual, contratos y jurisprudencia";
+        descEl.innerText = "Revisión contractual y derecho";
         tagEl.innerText = "LEGAL OS";
-        logoEl.innerText = "⚖️";
-        titleEl.innerText = "JURIDICA NEXUS";
-        subEl.innerText = "V2.0 · LEGAL SUITE";
       } else if (env === 'teaching') {
         root.style.setProperty('--accent-primary', '#7c3aed');
         root.style.setProperty('--accent-secondary', '#6d28d9');
-        root.style.setProperty('--theme-glow', 'rgba(124, 58, 237, 0.3)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "📚 Academia & Lenguas Extranjeras";
-        descEl.innerText = "Diseño curricular PBL, gramática B1 y evaluación";
+        descEl.innerText = "Diseño curricular PBL y didáctica";
         tagEl.innerText = "EDUTECH";
-        logoEl.innerText = "📚";
-        titleEl.innerText = "LINGUA ORCHESTRATOR";
-        subEl.innerText = "V2.0 · LPT ACADEMY";
       } else {
         root.style.setProperty('--accent-primary', '#0284c7');
         root.style.setProperty('--accent-secondary', '#7c3aed');
-        root.style.setProperty('--theme-glow', 'rgba(2, 132, 199, 0.25)');
-        root.style.setProperty('--env-bg-image', "url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop')");
         nameEl.innerText = "✨ Entorno General";
         descEl.innerText = "Workspace corporativo multipropósito";
         tagEl.innerText = "GENERAL";
-        logoEl.innerText = "💎";
-        titleEl.innerText = "NEXUS ORCHESTRATOR";
-        subEl.innerText = "V2.0 · MULTI-OS WORKSPACE";
       }
       showToast(`Entorno activado: ${nameEl.innerText}`);
     }
@@ -529,37 +518,51 @@
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
+      
+      const endpoint = authMode === 'register' ? '/api/auth/register' : '/api/auth/login';
+      const payload = authMode === 'register' ? {
+        email,
+        password,
+        firstName: document.getElementById('auth-first-name').value,
+        lastName: document.getElementById('auth-last-name').value,
+        userRole: document.getElementById('auth-user-role').value,
+        profession: document.getElementById('auth-profession').value
+      } : { email, password };
 
       try {
-        const res = await fetch('/api/auth/login', {
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
 
         if (res.ok) {
-          showToast(data.message || 'Acceso concedido');
+          showToast(data.message || 'Operación exitosa');
           closeAuthModal();
           loggedUserEmail = email;
+          loggedUserName = data.firstName || 'Usuario';
+
           updateEnvironmentOptions();
 
           document.getElementById('auth-actions').style.display = 'none';
           document.getElementById('user-session-container').style.display = 'flex';
-          document.getElementById('user-profile-badge').innerText = `👤 ${email}`;
+          document.getElementById('user-profile-badge').innerText = `👤 ${loggedUserName}`;
 
-          let targetProf = data.profession || 'general';
+          let targetEnv = data.env || 'general';
           if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-            targetProf = 'admin';
+            targetEnv = 'admin';
           }
-          switchSystemEnvironment(targetProf);
+          switchSystemEnvironment(targetEnv);
 
-          const welcome = document.getElementById('welcome-msg');
-          const displayName = email.split('@')[0];
-          const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
+          // Actualizar Saludo Cálido Personalizado al estilo Claude/Gemini
+          const heroTitle = document.getElementById('hero-title');
+          const heroSub = document.getElementById('hero-sub');
+          heroTitle.innerText = `Buenas tardes, ${loggedUserName}`;
+          heroSub.innerText = `Bienvenido a tu entorno activo [${targetEnv.toUpperCase()}]. ¿En qué podemos trabajar hoy?`;
+
         } else {
-          showToast(data.error || 'Credenciales inválidas.');
+          showToast(data.error || 'Error en la autenticación.');
         }
       } catch (err) {
         showToast('Error de red al conectar con el servidor.');
@@ -568,13 +571,23 @@
 
     function handleLogout() {
       loggedUserEmail = '';
+      loggedUserName = '';
       document.getElementById('user-session-container').style.display = 'none';
       document.getElementById('auth-actions').style.display = 'flex';
       switchSystemEnvironment('general');
       updateEnvironmentOptions();
+
+      document.getElementById('hero-title').innerText = "👋 ¿Dónde deberíamos empezar?";
+      document.getElementById('hero-sub').innerText = "Selecciona una sugerencia o escribe tu consulta para comenzar";
+      document.getElementById('chat-stream').style.display = 'none';
+      document.getElementById('hero-welcome').style.display = 'flex';
+
       showToast('Sesión cerrada correctamente.');
-      const welcome = document.getElementById('welcome-msg');
-      welcome.innerHTML = `👋 Hola. Nexus OS está en línea y conectado. Escribe tu consulta para conversar directamente aquí.`;
+    }
+
+    function useQuickQuery(queryText) {
+      document.getElementById('chat-input').value = queryText;
+      sendUserQuery();
     }
 
     async function sendUserQuery() {
@@ -582,7 +595,13 @@
       const text = input.value.trim();
       if (!text) return;
 
+      const hero = document.getElementById('hero-welcome');
       const stream = document.getElementById('chat-stream');
+
+      // Ocultar el saludo estático y mostrar la lista de mensajes de conversación
+      hero.style.display = 'none';
+      stream.style.display = 'flex';
+
       const uMsg = document.createElement('div');
       uMsg.className = 'message user';
       uMsg.innerText = text;
@@ -590,7 +609,6 @@
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // Mensaje de pensando exclusivamente en el chat
       const loading = document.createElement('div');
       loading.className = 'message bot';
       loading.innerText = 'Pensando...';
@@ -605,12 +623,11 @@
         });
         const data = await res.json();
 
-        // La respuesta va directa y exclusivamente al chat
         loading.innerText = data.result;
 
-        // El Canvas Compilador se queda intacto a menos que se pida un entregable formal explícito
-        if (text.toLowerCase().includes('documento') || text.toLowerCase().includes('informe formal') || text.toLowerCase().includes('genera un entregable')) {
-          document.getElementById('canvas-view').innerText = `// NEXOS OS - ENTREGABLE OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Petición: "${text}"\n\n${data.result}`;
+        // Si se pide un documento o entregable pesado, se proyecta automáticamente en el Canvas
+        if (text.toLowerCase().includes('documento') || text.toLowerCase().includes('informe') || text.toLowerCase().includes('propuesta') || data.result.length > 300) {
+          document.getElementById('canvas-view').innerText = `// NEXOS OS - CANVAS COMPILADOR OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserName || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
           showToast('Entregable compilado en el Canvas.');
         }
       } catch (err) {
