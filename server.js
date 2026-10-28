@@ -75,9 +75,9 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Función con respaldo automático entre modelos para evitar errores 503 de alta demanda
+// Función con el modelo actual exigido por la API oficial
 async function generateWithFallback(prompt, systemInstruction) {
-  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.5-flash'];
+  const modelsToTry = ['gemini-3.8-flash', 'gemini-2.5-flash'];
   let lastError = null;
 
   for (const modelName of modelsToTry) {
@@ -96,10 +96,10 @@ async function generateWithFallback(prompt, systemInstruction) {
       }
     } catch (err) {
       lastError = err;
-      console.warn(`Modelo ${modelName} no disponible o con alta demanda:`, err.message);
+      console.warn(`Modelo ${modelName} no disponible:`, err.message);
     }
   }
-  throw lastError || new Error("Todos los modelos de respaldo están experimentando alta demanda en este momento.");
+  throw lastError || new Error("No se pudo conectar con los modelos de IA.");
 }
 
 fastify.post('/api/orchestrate', async (request, reply) => {
@@ -129,7 +129,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud debido a alta demanda global en los servidores: ${err.message}` 
+      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud con Gemini API: ${err.message}` 
     });
   }
 });
