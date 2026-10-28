@@ -11,7 +11,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
-
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const connectionString = process.env.DATABASE_URL || '';
@@ -38,7 +37,6 @@ async function initDB() {
       )
     `;
 
-    // Auto-reparación por si la tabla ya existía sin alguna columna
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(100)`;
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(100)`;
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS user_role VARCHAR(100)`;
@@ -50,7 +48,7 @@ async function initDB() {
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS cv_public BOOLEAN DEFAULT false`;
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS env_assigned VARCHAR(50) DEFAULT 'general'`;
 
-    console.log("Database initialized and verified successfully.");
+    console.log("Database initialized and columns verified successfully.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -81,21 +79,21 @@ fastify.post('/api/auth/register', async (request, reply) => {
   try {
     const existing = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return reply.code(400).send({ error: 'El correo ya está registrado. Inicia sesión directamente.' });
+      return reply.code(400).send({ error: 'Este correo ya se encuentra registrado. Por favor selecciona Iniciar Sesión.' });
     }
 
     const assignedEnv = determineEnvironment(profession, userRole, email);
 
     await sql`
       INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
-      VALUES (${email}, ${password || 'oauth_secure'}, ${firstName || email.split('@')[0]}, ${lastName || ''}, ${userRole || 'Estudiante/Profesional'}, ${profession || 'General'}, ${assignedEnv})
+      VALUES (${email}, ${password || 'oauth_secure'}, ${firstName || email.split('@')[0]}, ${lastName || ''}, ${userRole || 'Independiente'}, ${profession || 'General'}, ${assignedEnv})
     `;
 
     const newUser = await sql`SELECT * FROM users WHERE email = ${email}`;
 
     return { 
       success: true, 
-      message: 'Cuenta creada e institucionalizada con éxito.', 
+      message: 'Registro completado con éxito.', 
       profile: newUser[0]
     };
   } catch (err) {
@@ -106,16 +104,9 @@ fastify.post('/api/auth/register', async (request, reply) => {
 fastify.post('/api/auth/login', async (request, reply) => {
   const { email, password } = request.body;
   try {
-    let users = await sql`SELECT * FROM users WHERE email = ${email}`;
-    
-    // Si la cuenta es institucional (ej. Microsoft / USC) y no está en BD, la registramos automáticamente para dar acceso fluido
+    const users = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (users.length === 0) {
-      const assignedEnv = determineEnvironment('', '', email);
-      await sql`
-        INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
-        VALUES (${email}, ${password || 'oauth_secure'}, ${email.split('@')[0]}, '', 'Institucional / Académico', 'Licenciatura / Docencia', ${assignedEnv})
-      `;
-      users = await sql`SELECT * FROM users WHERE email = ${email}`;
+      return reply.code(404).send({ error: 'La cuenta no existe. Por favor ve a la pestaña Registrarse para crear tu usuario.' });
     }
 
     const user = users[0];
@@ -126,7 +117,7 @@ fastify.post('/api/auth/login', async (request, reply) => {
 
     return { 
       success: true, 
-      message: `Bienvenido, ${user.first_name || email}`, 
+      message: `Bienvenido de nuevo, ${user.first_name || email}`, 
       profile: user
     };
   } catch (err) {
@@ -147,7 +138,7 @@ fastify.post('/api/user/update', async (request, reply) => {
       WHERE email = ${email}
     `;
     const updated = await sql`SELECT * FROM users WHERE email = ${email}`;
-    return { success: true, message: 'Perfil actualizado de forma persistente.', profile: updated[0] };
+    return { success: true, message: 'Perfil guardado correctamente.', profile: updated[0] };
   } catch (err) {
     return reply.code(500).send({ error: err.message });
   }
@@ -179,7 +170,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.8-flash',
       contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
