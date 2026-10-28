@@ -31,12 +31,13 @@ async function initDB() {
         phone VARCHAR(50),
         address VARCHAR(255),
         bio TEXT,
+        avatar_url TEXT,
         cv_public BOOLEAN DEFAULT false,
         env_assigned VARCHAR(50) DEFAULT 'general',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database initialized successfully with complete profile support.");
+    console.log("Database initialized successfully.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -116,7 +117,7 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Endpoint de orquestación con IA usando el modelo estándar actual de alta compatibilidad
+// Endpoint de orquestación configurado con el modelo universal y estable gemini-1.5-flash
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession, fileData } = request.body;
   
@@ -143,7 +144,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       contents: fullPrompt,
       config: {
         systemInstruction: systemInstruction,
@@ -158,7 +159,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión] No se pudo procesar la solicitud con el modelo activo: ${err.message}` 
+      result: `[Error de Conexión] No se pudo procesar la solicitud con Gemini API: ${err.message}` 
     });
   }
 });
