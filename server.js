@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 
+// Inicialización de Google Gen AI con la API Key
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const connectionString = process.env.DATABASE_URL || '';
@@ -82,7 +83,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial ejecutivo. Debes generar informes y análisis exhaustivos, detallados y técnicos en el Canvas.";
 
     if (profession === 'mining') {
-      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activos de carbón, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020 y cumplimiento ESG.";
+      systemInstruction = "Eres la IA ejecutiva de AuraX Global. Especialista máster en minería internacional, activo de carbón, oro, minerales críticos, valuación de reservas, contratos Incoterms 2020 y cumplimiento ESG.";
     } else if (profession === 'doctor') {
       systemInstruction = "Eres la IA clínica médica de Clinic Nexus. Especialista en medicina basada en evidencia, triaje clínico avanzado y protocolos de salud integral.";
     } else if (profession === 'music') {
@@ -95,10 +96,15 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Usando el modelo exacto soportado por @google/genai
+    // Llamada corregida y compatible con la SDK oficial actual de @google/genai
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
+      model: 'gemini-1.5-flash',
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: prompt }]
+        }
+      ],
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.3,
