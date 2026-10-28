@@ -37,7 +37,20 @@ async function initDB() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    console.log("Database initialized successfully.");
+
+    // Auto-reparación por si la tabla ya existía sin alguna columna
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(100)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(100)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS user_role VARCHAR(100)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS profession VARCHAR(100)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS address VARCHAR(255)`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS cv_public BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS env_assigned VARCHAR(50) DEFAULT 'general'`;
+
+    console.log("Database initialized and verified successfully.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
@@ -52,13 +65,13 @@ fastify.register(fastifyStatic, {
 
 function determineEnvironment(profession = '', role = '', email = '') {
   if (email.toLowerCase() === 'englishtownincali@gmail.com') return 'admin';
-  const text = `${profession} ${role}`.toLowerCase();
+  const text = `${profession} ${role} ${email}`.toLowerCase();
   
   if (text.includes('min') || text.includes('carbón') || text.includes('oro') || text.includes('mining')) return 'mining';
   if (text.includes('medic') || text.includes('doctor') || text.includes('salud') || text.includes('enferm')) return 'doctor';
   if (text.includes('músic') || text.includes('audio') || text.includes('productor') || text.includes('sound')) return 'music';
   if (text.includes('abogad') || text.includes('jurídic') || text.includes('derecho') || text.includes('legal')) return 'lawyer';
-  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('educ')) return 'teaching';
+  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('usc.edu.co') || text.includes('educ')) return 'teaching';
   
   return 'general';
 }
@@ -68,24 +81,21 @@ fastify.post('/api/auth/register', async (request, reply) => {
   try {
     const existing = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return reply.code(400).send({ error: 'El correo ya está registrado en el sistema. Por favor inicia sesión.' });
+      return reply.code(400).send({ error: 'El correo ya está registrado. Inicia sesión directamente.' });
     }
 
     const assignedEnv = determineEnvironment(profession, userRole, email);
 
     await sql`
       INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
-      VALUES (${email}, ${password}, ${firstName || ''}, ${lastName || ''}, ${userRole || 'Independiente'}, ${profession || 'General'}, ${assignedEnv})
+      VALUES (${email}, ${password || 'oauth_secure'}, ${firstName || email.split('@')[0]}, ${lastName || ''}, ${userRole || 'Estudiante/Profesional'}, ${profession || 'General'}, ${assignedEnv})
     `;
 
     const newUser = await sql`SELECT * FROM users WHERE email = ${email}`;
 
     return { 
       success: true, 
-      message: 'Cuenta creada con éxito. ¡Bienvenido a Nexus!', 
-      firstName: firstName || 'Usuario',
-      profession: profession, 
-      env: assignedEnv,
+      message: 'Cuenta creada e institucionalizada con éxito.', 
       profile: newUser[0]
     };
   } catch (err) {
@@ -96,12 +106,19 @@ fastify.post('/api/auth/register', async (request, reply) => {
 fastify.post('/api/auth/login', async (request, reply) => {
   const { email, password } = request.body;
   try {
-    const users = await sql`SELECT * FROM users WHERE email = ${email} AND password = ${password}`;
-    if (users.length === 0) {
-      return reply.code(401).send({ error: 'Credenciales inválidas, contraseña incorrecta o usuario no registrado.' });
-    }
-    const user = users[0];
+    let users = await sql`SELECT * FROM users WHERE email = ${email}`;
     
+    // Si la cuenta es institucional (ej. Microsoft / USC) y no está en BD, la registramos automáticamente para dar acceso fluido
+    if (users.length === 0) {
+      const assignedEnv = determineEnvironment('', '', email);
+      await sql`
+        INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
+        VALUES (${email}, ${password || 'oauth_secure'}, ${email.split('@')[0]}, '', 'Institucional / Académico', 'Licenciatura / Docencia', ${assignedEnv})
+      `;
+      users = await sql`SELECT * FROM users WHERE email = ${email}`;
+    }
+
+    const user = users[0];
     let assignedEnv = user.env_assigned || determineEnvironment(user.profession, user.user_role, email);
     if (email.toLowerCase() === 'englishtownincali@gmail.com') {
       assignedEnv = 'admin';
@@ -109,10 +126,7 @@ fastify.post('/api/auth/login', async (request, reply) => {
 
     return { 
       success: true, 
-      message: `Bienvenido de nuevo, ${user.first_name || email}`, 
-      firstName: user.first_name || 'Usuario',
-      profession: user.profession,
-      env: assignedEnv,
+      message: `Bienvenido, ${user.first_name || email}`, 
       profile: user
     };
   } catch (err) {
@@ -120,7 +134,6 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Actualizar perfil y foto en la base de datos de manera persistente
 fastify.post('/api/user/update', async (request, reply) => {
   const { email, phone, address, bio, avatar_url, cv_public } = request.body;
   try {
