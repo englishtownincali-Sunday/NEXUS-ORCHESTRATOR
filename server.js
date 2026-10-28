@@ -95,9 +95,9 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Modelo estándar oficial actual de la SDK @google/genai
+    // Usando el modelo exacto soportado por @google/genai
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,
