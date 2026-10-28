@@ -187,7 +187,10 @@
         <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
-      <div id="user-profile-badge" style="display:none; font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></div>
+      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem;">
+        <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></span>
+        <button class="btn-secondary" onclick="handleLogout()" style="padding: 0.35rem 0.8rem; font-size: 0.75rem; border-color: #ef4444; color: #ef4444;">🚪 Cerrar Sesión</button>
+      </div>
     </div>
   </header>
 
@@ -305,7 +308,6 @@
       const switcher = document.getElementById('global-env-switcher');
       switcher.innerHTML = '';
 
-      // Si el correo coincide exactamente con el tuyo, renderiza la opción exclusiva de Admin
       if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
         const optAdmin = document.createElement('option');
         optAdmin.value = 'admin';
@@ -532,9 +534,9 @@
           updateEnvironmentOptions();
 
           document.getElementById('auth-actions').style.display = 'none';
+          document.getElementById('user-session-container').style.display = 'flex';
           const badge = document.getElementById('user-profile-badge');
           badge.innerText = `👤 ${email}`;
-          badge.style.display = 'block';
 
           let targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
           if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
@@ -552,6 +554,17 @@
       } catch (err) {
         showToast('Error de red al conectar con el servidor.');
       }
+    }
+
+    function handleLogout() {
+      loggedUserEmail = '';
+      document.getElementById('user-session-container').style.display = 'none';
+      document.getElementById('auth-actions').style.display = 'flex';
+      switchSystemEnvironment('general');
+      updateEnvironmentOptions();
+      showToast('Sesión cerrada correctamente.');
+      const welcome = document.getElementById('welcome-msg');
+      welcome.innerHTML = `👋 Hola. Nexus OS está en línea con IA conectada. Inicia sesión para cargar tu perfil profesional o escribe una tarea.`;
     }
 
     async function sendUserQuery() {
@@ -585,7 +598,7 @@
         document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE PROFESIONAL OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
       } catch (err) {
         loading.innerText = "✨ Procesamiento completado.";
-        document.getElementById('canvas-view').innerText = `// NEXUS OS - ENTREGABLE\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico estructurado con éxito.`;
+        document.getElementById('canvas-view').innerText = `// NEXOS OS - ENTREGABLE\n\nPetición: "${text}"\nEntorno: ${activeEnvironment.toUpperCase()}\n\nResultado analítico estructurado con éxito.`;
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
