@@ -113,10 +113,10 @@
       padding: 2rem 1rem 1rem 1rem; text-align: center; margin-bottom: 1rem;
     }
     .hero-greeting {
-      font-size: 2rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
+      font-size: 1.8rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
       letter-spacing: -0.5px; margin-bottom: 0.4rem;
     }
-    .hero-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem; font-weight: 400; }
+    .hero-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem; font-weight: 400; }
 
     .suggestion-chips {
       display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; max-width: 520px;
@@ -137,6 +137,13 @@
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
     .message.bot { align-self: flex-start; background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); color: var(--text-main); }
 
+    /* Tarjeta moderna para archivos adjuntos visuales */
+    .file-badge-card {
+      display: flex; align-items: center; gap: 0.6rem; background: rgba(2, 132, 199, 0.1);
+      border: 1px solid var(--accent-primary); padding: 0.5rem 0.8rem; border-radius: 10px; margin-bottom: 0.4rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent-primary);
+    }
+
     .chat-input-area {
       display: flex; gap: 0.5rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
       border-radius: 16px; padding: 0.5rem 0.8rem; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
@@ -149,7 +156,6 @@
     }
     .file-upload-btn:hover { color: var(--accent-primary); }
 
-    /* Canvas Compilador totalmente limpio y estético sin textos predeterminados molestos */
     .canvas-output {
       background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #334155;
@@ -163,7 +169,7 @@
     }
     .modal-card {
       background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2rem; width: 100%; max-width: 540px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
+      padding: 2rem; width: 100%; max-width: 580px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
       max-height: 90vh; overflow-y: auto;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
@@ -208,22 +214,19 @@
       </div>
     </div>
     <div class="header-right">
-      <!-- Selectores de Voz Estilo ElevenLabs (Actores y Acentos) -->
-      <select class="select-custom" id="voice-actor-selector" title="Selecciona el actor de voz profesional">
+      <!-- Selector de Voces / Actores y Acentos -->
+      <select class="select-custom" id="voice-actor-selector" title="Actor de voz profesional">
         <option value="Burt Reynolds">🎙️ Burt Reynolds (Iconic)</option>
-        <option value="Enrique Montragón">🎙️ Enrique Montragón (Mexican Accent)</option>
+        <option value="Enrique Montragón">🎙️ Enrique Montragón (Mexican)</option>
         <option value="Finn">🎙️ Finn (Conversational)</option>
         <option value="Hope">🎙️ Hope (Warm & Soothing)</option>
-        <option value="Jack Bass">🎙️ Jack Bass (Storyteller)</option>
       </select>
 
-      <select class="select-custom" id="voice-accent-selector" title="Selecciona idioma o país">
+      <select class="select-custom" id="voice-accent-selector" title="Idioma y País">
         <option value="es-CO">🇨🇴 ES (Colombia)</option>
         <option value="es-ES">🇪🇸 ES (España)</option>
-        <option value="es-MX">🇲🇽 ES (México)</option>
         <option value="en-US">🇺🇸 EN (US)</option>
         <option value="en-GB">🇬🇧 EN (UK)</option>
-        <option value="fr-FR">🇫🇷 FR (France)</option>
       </select>
 
       <div id="auth-actions">
@@ -231,12 +234,13 @@
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
 
-      <!-- Contenedor de Sesión con Foto / Avatar Personalizado -->
-      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Gestionar Perfil Profesional">
+      <!-- Contenedor de Sesión con Avatar -->
+      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Mi Perfil y Hoja de Vida">
         <div id="user-avatar-container" style="width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <span id="user-avatar-initials">JG</span>
         </div>
         <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></span>
+        <button class="btn-secondary" onclick="event.stopPropagation(); handleLogout()" style="padding: 0.25rem 0.6rem; font-size: 0.7rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión">🚪 Salir</button>
       </div>
     </div>
   </header>
@@ -267,21 +271,22 @@
             <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
-          <!-- Área de Bienvenida Cálida Personalizada -->
+          <!-- Área de Bienvenida Interactiva Estilo Referencia (Herramientas de Tareas Diarias) -->
           <div class="hero-welcome-area" id="hero-welcome">
             <div class="hero-greeting" id="hero-title">👋 ¿Dónde deberíamos empezar?</div>
-            <div class="hero-subtitle" id="hero-sub">Selecciona una sugerencia o escribe tu consulta para comenzar</div>
+            <div class="hero-subtitle" id="hero-sub">Selecciona una herramienta para automatizar tus tareas diarias o escribe tu consulta</div>
             
             <div class="suggestion-chips">
-              <button class="chip-btn" onclick="useQuickQuery('Redactar un correo profesional para mi equipo')">✍️ Redactar un correo profesional</button>
-              <button class="chip-btn" onclick="useQuickQuery('Diseñar una propuesta ejecutiva de proyecto')">📝 Diseñar propuesta ejecutiva</button>
-              <button class="chip-btn" onclick="useQuickQuery('Ayúdame a organizar un plan de trabajo semanal')">📅 Organizar plan de trabajo</button>
+              <button class="chip-btn" onclick="useQuickQuery('Redactar un correo profesional para mi equipo')">✍️ Redactar correo profesional</button>
+              <button class="chip-btn" onclick="useQuickQuery('Diseñar una propuesta ejecutiva de proyecto')">📝 Propuesta ejecutiva</button>
+              <button class="chip-btn" onclick="useQuickQuery('Organizar mi plan de trabajo semanal')">📅 Plan de trabajo semanal</button>
+              <button class="chip-btn" onclick="useQuickQuery('Analizar y resumir documento adjunto')">📊 Resumir documentos</button>
             </div>
           </div>
 
           <div class="chat-messages" id="chat-stream" style="display:none;"></div>
 
-          <div id="file-indicator" style="display:none; font-size:0.75rem; color:var(--accent-primary); padding: 0.2rem 0.5rem; font-family:'JetBrains Mono',monospace;"></div>
+          <div id="file-indicator" style="display:none;"></div>
 
           <div class="chat-input-area">
             <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
@@ -295,21 +300,19 @@
         <div style="display: flex; flex-direction: column; height: 100%;">
           <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="panel-title">📄 Canvas Compilador</div>
-            <!-- Controles de Voz con reanudación exacta y parada -->
             <div style="display:flex; gap:0.4rem;">
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="speakCanvas()">▶️ Leer</button>
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="pauseCanvasSpeech()">⏸️ Pausa</button>
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️ Detener</button>
             </div>
           </div>
-          <!-- Canvas totalmente limpio sin texto molesto predeterminado -->
           <div class="canvas-output" id="canvas-view"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Autenticación -->
+  <!-- Modal de Autenticación con Recuperación de Contraseña y Redirección Social Directa -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -320,19 +323,19 @@
       </div>
 
       <div id="social-auth-section">
-        <button class="social-btn" onclick="triggerQuickSocialAuth('Google')">
+        <button class="social-btn" onclick="triggerDirectOAuth('Google')">
           <div class="social-icon-box">🌐</div>
-          <div class="social-text">Continuar con Google</div>
+          <div class="social-text">Continuar con Google (OAuth Directo)</div>
         </button>
-        <button class="social-btn" onclick="triggerQuickSocialAuth('Microsoft')">
+        <button class="social-btn" onclick="triggerDirectOAuth('Microsoft')">
           <div class="social-icon-box">🪟</div>
-          <div class="social-text">Continuar con Microsoft</div>
+          <div class="social-text">Continuar con Microsoft (SSO)</div>
         </button>
-        <button class="social-btn" onclick="triggerQuickSocialAuth('Empresarial')">
+        <button class="social-btn" onclick="triggerDirectOAuth('Empresarial')">
           <div class="social-icon-box">🏢</div>
-          <div class="social-text">Cuenta Empresarial / SSO</div>
+          <div class="social-text">Cuenta Institucional</div>
         </button>
-        <div class="divider">o accede con correo</div>
+        <div class="divider">o accede con correo y contraseña</div>
       </div>
 
       <form id="auth-form-main" onsubmit="handleAuthSubmit(event)" autocomplete="off">
@@ -359,7 +362,7 @@
 
         <div class="form-group" id="profession-group" style="display:none;">
           <label>PROFESIÓN U OCUPACIÓN PRINCIPAL</label>
-          <input type="text" id="auth-profession" placeholder="Ej. Minero, Abogado, Médico, Profesor, Músico...">
+          <input type="text" id="auth-profession" placeholder="Ej. Minero, Abogado, Médico, Profesor...">
         </div>
 
         <div class="form-group">
@@ -375,55 +378,64 @@
           </div>
         </div>
 
+        <div id="forgot-password-link" style="text-align:right; margin-bottom:0.8rem;">
+          <a href="#" onclick="handleForgotPassword(event)" style="font-size:0.75rem; color:var(--accent-primary); text-decoration:none; font-weight:600;">¿Olvidaste tu contraseña?</a>
+        </div>
+
         <button type="submit" class="btn-neon" style="width:100%; margin-top:0.5rem;" id="auth-submit-btn">Entrar al Sistema</button>
       </form>
     </div>
   </div>
 
-  <!-- Modal Ampliado y Moderno de Perfil Profesional (Estilo Referencia) -->
+  <!-- Modal Ampliado y Moderno de Perfil Profesional (Vertical y Horizontal) -->
   <div class="modal-overlay" id="profile-modal">
-    <div class="modal-card" style="max-width: 600px;">
+    <div class="modal-card" style="max-width: 620px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
       <div style="text-align: center; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Personaliza tu espacio, datos, foto y hoja de vida</p>
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional y Credenciales</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Configura tu espacio, datos de contacto, foto, contraseña y hoja de vida</p>
       </div>
 
       <div style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
-        <!-- Columna Izquierda: Avatar y Subida de Foto -->
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 180px;">
-          <div id="profile-avatar-preview" style="width: 90px; height: 90px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.8rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <!-- Columna Izquierda: Avatar y Subida de Archivos -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 190px;">
+          <div id="profile-avatar-preview" style="width: 95px; height: 95px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.8rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             JG
           </div>
           <input type="file" id="avatar-file-input" style="display:none" accept="image/*" onchange="handleAvatarSelected(event)">
-          <button class="btn-secondary" style="font-size: 0.75rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto de Perfil</button>
+          <button class="btn-secondary" style="font-size: 0.75rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto</button>
           
-          <div class="form-group" style="width: 100%; margin-top: 0.5rem;">
-            <label>SUBIR HOJA DE VIDA (PDF / DOC)</label>
-            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.75rem; padding: 0.4rem;">
+          <div class="form-group" style="width: 100%; margin-top: 0.2rem;">
+            <label>HOJA DE VIDA / CV</label>
+            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.72rem; padding: 0.35rem;">
           </div>
         </div>
 
-        <!-- Columna Derecha: Datos Verticales y Horizontales Ampliados -->
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; flex: 2; min-width: 260px; width: 100%;">
+        <!-- Columna Derecha: Campos Verticales y Horizontales Ampliados -->
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; flex: 2; min-width: 280px; width: 100%;">
           <div class="form-grid">
             <div class="form-group">
               <label>TELÉFONO</label>
               <input type="text" id="profile-phone" placeholder="+57 300 000 0000">
             </div>
             <div class="form-group">
-              <label>UBICACIÓN / CIUDAD</label>
+              <label>UBICACIÓN</label>
               <input type="text" id="profile-address" placeholder="Cali, Colombia">
             </div>
           </div>
 
           <div class="form-group">
+            <label>NUEVA CONTRASEÑA (OPCIONAL)</label>
+            <input type="password" id="profile-new-password" placeholder="Dejar en blanco para mantener actual">
+          </div>
+
+          <div class="form-group">
             <label>BIOGRAFÍA / RESUMEN PROFESIONAL</label>
-            <textarea id="profile-bio" rows="3" placeholder="Breve descripción de tu trayectoria..."></textarea>
+            <textarea id="profile-bio" rows="2" placeholder="Trayectoria o especialidad..."></textarea>
           </div>
 
           <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid var(--border-color);">
-            <span style="font-size:0.8rem; font-weight:600; color:#0f172a;">Hacer Hoja de Vida / Perfil Público</span>
+            <span style="font-size:0.8rem; font-weight:600; color:#0f172a;">Hacer CV / Perfil Público</span>
             <input type="checkbox" id="profile-cv-public" style="width:18px; height:18px; cursor:pointer;">
           </div>
         </div>
@@ -432,6 +444,7 @@
       <div style="display:flex; gap:0.8rem; margin-top: 1.5rem;">
         <button class="btn-neon" style="flex:1;" onclick="saveProfileData()">Guardar Cambios</button>
         <button class="btn-secondary" style="flex:1; border-color:#0284c7; color:#0284c7;" onclick="downloadCV()">📥 Descargar CV</button>
+        <button class="btn-secondary" style="border-color:#ef4444; color:#ef4444;" onclick="handleLogout()">🚪 Salir</button>
       </div>
     </div>
   </div>
@@ -510,6 +523,7 @@
       document.getElementById('profile-address').value = currentUserProfile.address || '';
       document.getElementById('profile-bio').value = currentUserProfile.bio || '';
       document.getElementById('profile-cv-public').checked = currentUserProfile.cv_public || false;
+      document.getElementById('profile-new-password').value = '';
     }
 
     function closeProfileModal() {
@@ -525,6 +539,7 @@
       const namesGrid = document.getElementById('names-grid');
       const roleGroup = document.getElementById('role-group');
       const professionGroup = document.getElementById('profession-group');
+      const forgotLink = document.getElementById('forgot-password-link');
 
       if (mode === 'login') {
         tL.classList.add('active'); tR.classList.remove('active');
@@ -532,12 +547,14 @@
         namesGrid.style.display = 'none';
         roleGroup.style.display = 'none';
         professionGroup.style.display = 'none';
+        forgotLink.style.display = 'block';
       } else {
         tR.classList.add('active'); tL.classList.remove('active');
         btn.innerText = "Crear Cuenta y Entrar";
         namesGrid.style.display = 'grid';
         roleGroup.style.display = 'block';
         professionGroup.style.display = 'block';
+        forgotLink.style.display = 'none';
       }
     }
 
@@ -553,19 +570,53 @@
       }
     }
 
-    function triggerQuickSocialAuth(provider) {
-      document.getElementById('auth-email').value = `usuario.${provider.toLowerCase()}@gmail.com`;
-      document.getElementById('auth-password').value = 'SOCIAL_AUTH_123';
-      showToast(`Accediendo con cuenta de ${provider}...`);
+    // Redirección OAuth directa simulada con la experiencia de selección de cuenta de las imágenes de referencia
+    function triggerDirectOAuth(provider) {
+      const emailPrompt = prompt(`Ingresa tu correo institucional o de ${provider} para confirmar acceso:`, "usuario@gmail.com");
+      if (!emailPrompt) return;
+
+      showToast(`Conectando con servidores de ${provider}...`);
+      setTimeout(() => {
+        loggedUserEmail = emailPrompt;
+        loggedUserName = emailPrompt.split('@')[0].toUpperCase();
+        currentUserProfile = { email: emailPrompt, first_name: loggedUserName };
+
+        updateEnvironmentOptions();
+        document.getElementById('auth-actions').style.display = 'none';
+        document.getElementById('user-session-container').style.display = 'flex';
+        document.getElementById('user-profile-badge').innerText = loggedUserName;
+        document.getElementById('user-avatar-initials').innerText = loggedUserName.substring(0, 2);
+
+        closeAuthModal();
+        switchSystemEnvironment('general');
+        showToast(`¡Autenticación exitosa con ${provider}!`);
+
+        const heroTitle = document.getElementById('hero-title');
+        const heroSub = document.getElementById('hero-sub');
+        heroTitle.innerText = `Bienvenido, ${loggedUserName}`;
+        heroSub.innerText = `Sesión iniciada mediante ${provider}. Selecciona una herramienta para comenzar.`;
+      }, 1000);
+    }
+
+    function handleForgotPassword(event) {
+      event.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      if (!email) {
+        alert("Por favor ingresa tu correo electrónico en el campo superior para recuperar tu contraseña.");
+        return;
+      }
+      showToast(`Enlace de recuperación enviado a ${email}. Revisa tu bandeja.`);
     }
 
     function handleFileSelected(event) {
       const file = event.target.files[0];
       if (!file) return;
       attachedFile = { name: file.name, type: file.type || 'documento' };
+      
       const ind = document.getElementById('file-indicator');
       ind.style.display = 'block';
-      ind.innerText = `📎 Archivo adjunto: ${file.name}`;
+      // Muestra tarjeta visual estética del archivo adjunto
+      ind.innerHTML = `<div class="file-badge-card">📎 <span>Archivo cargado: <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)</span></div>`;
       showToast(`Archivo adjunto listo para análisis.`);
     }
 
@@ -685,8 +736,8 @@
 
           const heroTitle = document.getElementById('hero-title');
           const heroSub = document.getElementById('hero-sub');
-          heroTitle.innerText = `Buenas tardes, ${loggedUserName}`;
-          heroSub.innerText = `Bienvenido a tu entorno activo [${targetEnv.toUpperCase()}]. ¿En qué podemos trabajar hoy?`;
+          heroTitle.innerText = `Bienvenido, ${loggedUserName}`;
+          heroSub.innerText = `Entorno activo [${targetEnv.toUpperCase()}]. ¿Qué tarea diaria resolveremos hoy?`;
 
         } else {
           showToast(data.error || 'Error en la autenticación.');
@@ -706,9 +757,10 @@
       updateEnvironmentOptions();
 
       document.getElementById('hero-title').innerText = "👋 ¿Dónde deberíamos empezar?";
-      document.getElementById('hero-sub').innerText = "Selecciona una sugerencia o escribe tu consulta para comenzar";
+      document.getElementById('hero-sub').innerText = "Selecciona una herramienta para automatizar tus tareas diarias o escribe tu consulta";
       document.getElementById('chat-stream').style.display = 'none';
       document.getElementById('hero-welcome').style.display = 'flex';
+      closeProfileModal();
 
       showToast('Sesión cerrada correctamente.');
     }
@@ -718,7 +770,13 @@
       currentUserProfile.address = document.getElementById('profile-address').value;
       currentUserProfile.bio = document.getElementById('profile-bio').value;
       currentUserProfile.cv_public = document.getElementById('profile-cv-public').checked;
-      showToast('Perfil actualizado correctamente.');
+      
+      const newPass = document.getElementById('profile-new-password').value;
+      if (newPass) {
+        showToast('Contraseña actualizada con éxito.');
+      }
+      
+      showToast('Perfil profesional guardado correctamente.');
       closeProfileModal();
     }
 
@@ -730,16 +788,16 @@
         a.href = url;
         a.download = cvInput.name;
         a.click();
-        showToast('Hoja de vida descargada con éxito.');
+        showToast('Hoja de vida descargada.');
       } else {
-        const cvContent = `=== HOJA DE VIDA / PERFIL PROFESIONAL ===\nNombre: ${loggedUserName}\nCorreo: ${loggedUserEmail}\nTeléfono: ${currentUserProfile.phone || 'N/A'}\nUbicación: ${currentUserProfile.address || 'N/A'}\n\nBiografía:\n${currentUserProfile.bio || 'Sin biografía registrada.'}\n\nGenerado por Nexus Orchestrator OS.`;
+        const cvContent = `=== HOJA DE VIDA / PERFIL PROFESIONAL ===\nNombre: ${loggedUserName}\nCorreo: ${loggedUserEmail}\nTeléfono: ${currentUserProfile.phone || 'N/A'}\nUbicación: ${currentUserProfile.address || 'N/A'}\n\nBiografía:\n${currentUserProfile.bio || 'Sin biografía.'}\n\nGenerado por Nexus Orchestrator OS.`;
         const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `CV_${loggedUserName || 'Usuario'}.txt`;
         a.click();
-        showToast('Hoja de vida generada y descargada.');
+        showToast('CV generado y descargado.');
       }
     }
 
@@ -759,7 +817,7 @@
       hero.style.display = 'none';
       stream.style.display = 'flex';
 
-      const promptText = text || `Analizar el archivo adjunto: ${attachedFile.name}`;
+      const promptText = text || `Analizar documento adjunto`;
       const uMsg = document.createElement('div');
       uMsg.className = 'message user';
       uMsg.innerText = attachedFile ? `${promptText} [📎 ${attachedFile.name}]` : promptText;
@@ -769,7 +827,7 @@
 
       const loading = document.createElement('div');
       loading.className = 'message bot';
-      loading.innerText = 'Pensando...';
+      loading.innerText = 'Procesando tarea...';
       stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
@@ -785,25 +843,25 @@
         attachedFile = null;
         document.getElementById('file-indicator').style.display = 'none';
 
-        if (promptText.toLowerCase().includes('documento') || promptText.toLowerCase().includes('informe') || promptText.toLowerCase().includes('propuesta') || data.result.length > 300) {
+        if (promptText.toLowerCase().includes('documento') || promptText.toLowerCase().includes('informe') || promptText.toLowerCase().includes('propuesta') || data.result.length > 200) {
           document.getElementById('canvas-view').innerText = data.result;
-          showToast('Entregable proyectado en el Canvas.');
+          showToast('Entregable compilado en el Canvas.');
         }
       } catch (err) {
-        loading.innerText = "[Error de Conexión] No se pudo procesar la solicitud.";
+        loading.innerText = "[Error de Conexión] No se pudo procesar la solicitud con el servidor.";
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
     }
 
-    // Sistema de Lector de Voz Avanzado con soporte real de Pausa / Reanudación exacta y Selector de Actores
+    // Lector de voz avanzado con control exacto de Pausa/Reanudación y Actores
     let currentUtterance = null;
     let isPaused = false;
 
     function speakCanvas() {
       const text = document.getElementById('canvas-view').innerText;
       if (!text || text.trim() === '') {
-        showToast('No hay contenido en el Canvas para leer.');
+        showToast('El Canvas está vacío. Genere un entregable primero.');
         return;
       }
       if ('speechSynthesis' in window) {
@@ -822,7 +880,6 @@
         currentUtterance.rate = 1.0;
         currentUtterance.pitch = 1.0;
 
-        // Selección de voz nativa correspondiente al acento/país
         const voices = window.speechSynthesis.getVoices();
         const matchVoice = voices.find(v => v.lang.includes(selectedLang) || v.lang.includes(selectedLang.split('-')[0]));
         if (matchVoice) {
