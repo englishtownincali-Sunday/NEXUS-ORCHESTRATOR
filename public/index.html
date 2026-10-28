@@ -138,7 +138,7 @@
       display: flex; gap: 0.6rem; background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 0.5rem 0.8rem; align-items: center;
     }
-    .chat-input-area input { flex: 1; background: transparent; border: nil; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.9rem; outline: none; }
     .chat-input-area input::placeholder { color: #94a3b8; }
 
     .canvas-output {
@@ -155,12 +155,26 @@
     }
     .modal-card {
       background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2.2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
+      padding: 2.2rem; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
-    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.2rem; padding-bottom: 0.5rem; }
-    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
-    .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
+    
+    .social-btn {
+      width: 100%; display: flex; align-items: center; border: 1px solid var(--border-color);
+      border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.75rem;
+      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.85rem; color: #1e293b;
+    }
+    .social-btn:hover { background: #f8fafc; border-color: var(--accent-primary); }
+    .social-icon-box {
+      width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+      border-right: 1px solid var(--border-color); background: #fdfdfd; font-size: 1.1rem;
+    }
+    .social-text { flex: 1; text-align: center; padding-right: 44px; }
+
+    .divider { display: flex; align-items: center; text-align: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+    .divider::before { margin-right: .5em; }
+    .divider::after { margin-left: .5em; }
 
     #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
     .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
@@ -184,8 +198,7 @@
         <option value="en-US">🎙️ Voice Pro (EN)</option>
       </select>
       <div id="auth-actions">
-        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
-        <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
+        <button class="btn-secondary" onclick="openAuthModal()">🔑 Iniciar Sesión</button>
       </div>
       <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem;">
         <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></span>
@@ -253,8 +266,8 @@
             <button class="btn-secondary" style="font-size:0.75rem;" onclick="speakCanvas()">🔊 Escuchar</button>
           </div>
           <div class="canvas-output" id="canvas-view" contenteditable="true">
-// NEXOS OS - CANVAS COMPILADOR
-// Aquí se mostrarán automáticamente los documentos formales, códigos, tablas o recursos multimedia generados.
+// NEXOS OS - CANVAS COMPILADOR OFICIAL
+// Aquí aparecerán exclusivamente los documentos formales, informes, código o recursos requeridos.
           </div>
         </div>
       </div>
@@ -264,41 +277,47 @@
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 0.3rem;">Iniciar sesión</h2>
+        <p style="font-size: 0.82rem; color: var(--text-muted);">Selecciona tu método de acceso preferido</p>
       </div>
-      <p id="auth-sub" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Accede con tus credenciales.</p>
+
+      <!-- Botones de Autenticación Social (Google, Microsoft, Institucional) -->
+      <button class="social-btn" onclick="handleSocialLogin('Google')">
+        <div class="social-icon-box">🌐</div>
+        <div class="social-text">Continuar con Google</div>
+      </button>
+
+      <button class="social-btn" onclick="handleSocialLogin('Microsoft')">
+        <div class="social-icon-box">🪟</div>
+        <div class="social-text">Continuar con Microsoft</div>
+      </button>
+
+      <button class="social-btn" onclick="handleSocialLogin('Institucional / Empresarial')">
+        <div class="social-icon-box">🏢</div>
+        <div class="social-text">Cuenta Empresarial / Institucional</div>
+      </button>
+
+      <div class="divider">o accede con correo y contraseña</div>
+
       <form onsubmit="handleAuthSubmit(event)" autocomplete="off">
         <div style="margin-bottom:0.9rem;">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CORREO</label>
-          <input type="email" id="auth-email" required autocomplete="off" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
-        </div>
-        <div style="margin-bottom:0.9rem; display:none;" id="reg-prof-group">
-          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">PROFESIÓN PREDETERMINADA</label>
-          <select id="auth-profession" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
-            <option value="general">✨ General</option>
-            <option value="mining">⛏️ Minería</option>
-            <option value="doctor">🩺 Medicina</option>
-            <option value="music">🎵 Música</option>
-            <option value="lawyer">⚖️ Derecho</option>
-            <option value="teaching">📚 Academia</option>
-          </select>
+          <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CORREO ELECTRÓNICO</label>
+          <input type="email" id="auth-email" required autocomplete="off" placeholder="nombre@correo.com" style="width:100%; padding:0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
         </div>
         <div style="margin-bottom:1.2rem; position:relative;">
           <label style="display:block; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">CONTRASEÑA</label>
           <div style="display:flex; align-items:center; position:relative;">
-            <input type="password" id="auth-password" required autocomplete="new-password" style="width:100%; padding:0.65rem 2.5rem 0.65rem 0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
+            <input type="password" id="auth-password" required autocomplete="new-password" placeholder="••••••••" style="width:100%; padding:0.65rem 2.5rem 0.65rem 0.65rem; background:#f8fafc; border:1px solid var(--border-color); border-radius:8px; color:#0f172a; font-size:0.9rem;">
             <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:10px; background:transparent; border:none; cursor:pointer; font-size:1rem;" id="eye-btn">👁️</button>
           </div>
         </div>
-        <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar</button>
+        <button type="submit" class="btn-neon" style="width:100%;" id="auth-submit-btn">Entrar al Sistema</button>
       </form>
     </div>
   </div>
 
   <script>
-    let currentMode = 'login';
     let activeEnvironment = 'general';
     let loggedUserEmail = '';
     
@@ -348,37 +367,14 @@
       document.getElementById('auth-password').value = '';
     }
 
-    function openAuthModal(mode) {
+    function openAuthModal() {
       document.getElementById('auth-modal').style.display = 'flex';
       clearAuthInputs();
-      switchAuthTab(mode);
     }
 
     function closeAuthModal() {
       clearAuthInputs();
       document.getElementById('auth-modal').style.display = 'none';
-    }
-
-    function switchAuthTab(mode) {
-      currentMode = mode;
-      clearAuthInputs();
-      const tL = document.getElementById('tab-login');
-      const tR = document.getElementById('tab-register');
-      const sub = document.getElementById('auth-sub');
-      const btn = document.getElementById('auth-submit-btn');
-      const profG = document.getElementById('reg-prof-group');
-
-      if (mode === 'login') {
-        tL.classList.add('active'); tR.classList.remove('active');
-        sub.innerText = "Accede a tu cuenta institucional.";
-        btn.innerText = "Entrar";
-        profG.style.display = 'none';
-      } else {
-        tR.classList.add('active'); tL.classList.remove('active');
-        sub.innerText = "Crea tu cuenta y define tu entorno predeterminado.";
-        btn.innerText = "Registrarse";
-        profG.style.display = 'block';
-      }
     }
 
     function togglePasswordVisibility() {
@@ -390,6 +386,48 @@
       } else {
         passInput.type = 'password';
         eyeBtn.innerText = '👁️';
+      }
+    }
+
+    async function handleSocialLogin(provider) {
+      // Simulación de autenticación federada con OAuth / SSO institucional
+      const sampleEmail = provider === 'Google' ? 'google.user@gmail.com' : (provider === 'Microsoft' ? 'user@outlook.com' : 'corporate.exec@enterprise.com');
+      const emailInput = prompt(`Ingresa tu correo institucional o de ${provider}:`, sampleEmail);
+      if (!emailInput) return;
+
+      try {
+        const res = await fetch('/api/auth/social', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ provider, email: emailInput })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showToast(`¡Conectado vía ${provider} con éxito!`);
+          closeAuthModal();
+          loggedUserEmail = emailInput;
+          updateEnvironmentOptions();
+
+          document.getElementById('auth-actions').style.display = 'none';
+          document.getElementById('user-session-container').style.display = 'flex';
+          document.getElementById('user-profile-badge').innerText = `👤 ${emailInput}`;
+
+          let targetProf = data.profession || 'general';
+          if (emailInput.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+            targetProf = 'admin';
+          }
+          switchSystemEnvironment(targetProf);
+
+          const welcome = document.getElementById('welcome-msg');
+          const displayName = emailInput.split('@')[0];
+          const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Autenticado mediante <b>${provider}</b>. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
+        } else {
+          showToast(data.error || 'Error en autenticación social.');
+        }
+      } catch (err) {
+        showToast('Error de red al conectar con el servidor.');
       }
     }
 
@@ -417,10 +455,6 @@
         logoEl.innerText = "🛡️";
         titleEl.innerText = "NEXUS COMMAND";
         subEl.innerText = "V2.0 · EXECUTIVE SUPERVISOR";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Auditoría General de Usuarios y Logs')"><div class="tool-icon">📊</div><div class="tool-info"><h4>Auditoría del Sistema</h4><p>Estado de nodos y BD</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Configuración Global de Políticas AI')"><div class="tool-icon">⚙️</div><div class="tool-info"><h4>Políticas de IA</h4><p>Control de parámetros</p></div></div>
-        `;
       } else if (env === 'mining') {
         root.style.setProperty('--accent-primary', '#d97706');
         root.style.setProperty('--accent-secondary', '#b45309');
@@ -432,10 +466,6 @@
         logoEl.innerText = "⛏️";
         titleEl.innerText = "AURA-X GLOBAL";
         subEl.innerText = "V2.0 · B2B MINING OS";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Valuación de Activos Mineros')"><div class="tool-icon">📈</div><div class="tool-info"><h4>Valuación de Reservas</h4><p>Cálculo de ley y tonelaje</p></div></div>
-          <div class="tool-card" onclick="runToolAction('Verificación ESG & Trazabilidad')"><div class="tool-icon">🛡️</div><div class="tool-info"><h4>Auditoría ESG / DART</h4><p>Cumplimiento internacional</p></div></div>
-        `;
       } else if (env === 'doctor') {
         root.style.setProperty('--accent-primary', '#059669');
         root.style.setProperty('--accent-secondary', '#047857');
@@ -447,9 +477,6 @@
         logoEl.innerText = "🩺";
         titleEl.innerText = "CLINIC NEXUS";
         subEl.innerText = "V2.0 · HEALTHCARE SYSTEM";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Protocolo de Triaje y Anamnesis')"><div class="tool-icon">🩺</div><div class="tool-info"><h4>Evaluación Clínica</h4><p>Diagnóstico asistido</p></div></div>
-        `;
       } else if (env === 'music') {
         root.style.setProperty('--accent-primary', '#db2777');
         root.style.setProperty('--accent-secondary', '#be185d');
@@ -461,9 +488,6 @@
         logoEl.innerText = "🎵";
         titleEl.innerText = "SONIC ORCHESTRATOR";
         subEl.innerText = "V2.0 · STUDIO OS";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Arreglo Armónico & Acústica')"><div class="tool-icon">🎹</div><div class="tool-info"><h4>Arreglos & Acústica</h4><p>Estructura de escalas</p></div></div>
-        `;
       } else if (env === 'lawyer') {
         root.style.setProperty('--accent-primary', '#2563eb');
         root.style.setProperty('--accent-secondary', '#1d4ed8');
@@ -475,9 +499,6 @@
         logoEl.innerText = "⚖️";
         titleEl.innerText = "JURIDICA NEXUS";
         subEl.innerText = "V2.0 · LEGAL SUITE";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Revisión Contractual y Cláusulas')"><div class="tool-icon">📜</div><div class="tool-info"><h4>Revisión de Contratos</h4><p>Análisis de riesgos</p></div></div>
-        `;
       } else if (env === 'teaching') {
         root.style.setProperty('--accent-primary', '#7c3aed');
         root.style.setProperty('--accent-secondary', '#6d28d9');
@@ -489,9 +510,6 @@
         logoEl.innerText = "📚";
         titleEl.innerText = "LINGUA ORCHESTRATOR";
         subEl.innerText = "V2.0 · LPT ACADEMY";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="runToolAction('Diseño Curricular PBL & 5 Pilares')"><div class="tool-icon">📝</div><div class="tool-info"><h4>Rúbrica & PBL</h4><p>Gramática, Ética y Booklet</p></div></div>
-        `;
       } else {
         root.style.setProperty('--accent-primary', '#0284c7');
         root.style.setProperty('--accent-secondary', '#7c3aed');
@@ -503,10 +521,6 @@
         logoEl.innerText = "💎";
         titleEl.innerText = "NEXUS ORCHESTRATOR";
         subEl.innerText = "V2.0 · MULTI-OS WORKSPACE";
-        toolsContainer.innerHTML = `
-          <div class="tool-card" onclick="executeQuickTool('search')"><div class="tool-icon">🌐</div><div class="tool-info"><h4>Búsqueda en Vivo</h4><p>Conexión web sin alucinaciones</p></div></div>
-          <div class="tool-card" onclick="executeQuickTool('consensus')"><div class="tool-icon">🧠</div><div class="tool-info"><h4>Consenso Multi-IA</h4><p>Gemini + Claude + GPT</p></div></div>
-        `;
       }
       showToast(`Entorno activado: ${nameEl.innerText}`);
     }
@@ -515,30 +529,26 @@
       event.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const profession = document.getElementById('auth-profession').value;
-      const endpoint = currentMode === 'register' ? '/api/auth/register' : '/api/auth/login';
 
       try {
-        const res = await fetch(endpoint, {
+        const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, profession })
+          body: JSON.stringify({ email, password })
         });
         const data = await res.json();
 
         if (res.ok) {
-          showToast(data.message || 'Operación exitosa');
+          showToast(data.message || 'Acceso concedido');
           closeAuthModal();
           loggedUserEmail = email;
-
           updateEnvironmentOptions();
 
           document.getElementById('auth-actions').style.display = 'none';
           document.getElementById('user-session-container').style.display = 'flex';
-          const badge = document.getElementById('user-profile-badge');
-          badge.innerText = `👤 ${email}`;
+          document.getElementById('user-profile-badge').innerText = `👤 ${email}`;
 
-          let targetProf = data.profession || (currentMode === 'register' ? profession : 'general');
+          let targetProf = data.profession || 'general';
           if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
             targetProf = 'admin';
           }
@@ -547,9 +557,9 @@
           const welcome = document.getElementById('welcome-msg');
           const displayName = email.split('@')[0];
           const capitalized = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado en el entorno <b>${targetProf.toUpperCase()}</b>.`;
+          welcome.innerHTML = `👋 ¡Bienvenido, ${capitalized}! Perfil autenticado. Entorno activo: <b>${targetProf.toUpperCase()}</b>.`;
         } else {
-          showToast(data.error || 'Error en las credenciales o usuario no registrado.');
+          showToast(data.error || 'Credenciales inválidas.');
         }
       } catch (err) {
         showToast('Error de red al conectar con el servidor.');
@@ -580,7 +590,7 @@
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // Mensaje dinámico de "pensando" en el chat
+      // Mensaje de pensando exclusivamente en el chat
       const loading = document.createElement('div');
       loading.className = 'message bot';
       loading.innerText = 'Pensando...';
@@ -595,23 +605,19 @@
         });
         const data = await res.json();
 
-        // Reemplazamos el "Pensando..." por la respuesta real de la IA directamente en el chat
+        // La respuesta va directa y exclusivamente al chat
         loading.innerText = data.result;
 
-        // Si la respuesta es larga o se pide un documento/entregable formal, lo volcamos también al Canvas Compilador
-        if (data.result.length > 250 || text.toLowerCase().includes('documento') || text.toLowerCase().includes('informe') || text.toLowerCase().includes('trabajo')) {
-          document.getElementById('canvas-view').innerText = `// NEXOS OS - CANVAS COMPILADOR OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Usuario: ${loggedUserEmail || 'Invitado'}\n// Petición: "${text}"\n\n${data.result}`;
+        // El Canvas Compilador se queda intacto a menos que se pida un entregable formal explícito
+        if (text.toLowerCase().includes('documento') || text.toLowerCase().includes('informe formal') || text.toLowerCase().includes('genera un entregable')) {
+          document.getElementById('canvas-view').innerText = `// NEXOS OS - ENTREGABLE OFICIAL\n// Entorno: ${activeEnvironment.toUpperCase()}\n// Petición: "${text}"\n\n${data.result}`;
+          showToast('Entregable compilado en el Canvas.');
         }
       } catch (err) {
         loading.innerText = "[Error de Conexión] No se pudo procesar la solicitud.";
       } finally {
         stream.scrollTop = stream.scrollHeight;
       }
-    }
-
-    function runToolAction(toolName) {
-      document.getElementById('chat-input').value = `Ejecutar herramienta: ${toolName}`;
-      sendUserQuery();
     }
 
     function speakCanvas() {
