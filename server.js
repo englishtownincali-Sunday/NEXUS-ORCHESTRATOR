@@ -117,7 +117,6 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
-// Endpoint de orquestación configurado con el modelo universal y estable gemini-1.5-flash
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession, fileData } = request.body;
   
@@ -140,7 +139,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
 
     let fullPrompt = prompt;
     if (fileData) {
-      fullPrompt = `[Archivo adjunto del usuario analizado como contexto: ${fileData.name} (${fileData.type})]\n\n${prompt}`;
+      fullPrompt = `[Archivo adjunto: ${fileData.name}]\n\n${prompt}`;
     }
 
     const response = await ai.models.generateContent({
@@ -159,7 +158,7 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión] No se pudo procesar la solicitud con Gemini API: ${err.message}` 
+      result: `[Error de Conexión] No se pudo procesar la solicitud con Gemini: ${err.message}` 
     });
   }
 });
