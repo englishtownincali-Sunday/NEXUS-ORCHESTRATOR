@@ -75,6 +75,33 @@ fastify.post('/api/auth/login', async (request, reply) => {
   }
 });
 
+// Función con respaldo automático entre modelos para evitar errores 503 de alta demanda
+async function generateWithFallback(prompt, systemInstruction) {
+  const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.5-flash'];
+  let lastError = null;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`Intentando conectar con el modelo: ${modelName}...`);
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          systemInstruction: systemInstruction,
+          temperature: 0.3,
+        }
+      });
+      if (response && response.text) {
+        return response.text;
+      }
+    } catch (err) {
+      lastError = err;
+      console.warn(`Modelo ${modelName} no disponible o con alta demanda:`, err.message);
+    }
+  }
+  throw lastError || new Error("Todos los modelos de respaldo están experimentando alta demanda en este momento.");
+}
+
 fastify.post('/api/orchestrate', async (request, reply) => {
   const { prompt, profession } = request.body;
   
@@ -95,24 +122,14 @@ fastify.post('/api/orchestrate', async (request, reply) => {
       systemInstruction = "Eres el núcleo central Nexus Command. Proporciona análisis ejecutivo de arquitectura de sistemas y auditoría de seguridad.";
     }
 
-    // Usando exactamente el modelo gemini-3.8-flash solicitado por la API
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.8-flash',
-      contents: prompt,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.3,
-      }
-    });
-
-    const aiOutput = response.text || "Consulta procesada con éxito por el clúster de IA.";
+    const aiOutput = await generateWithFallback(prompt, systemInstruction);
     return { success: true, result: aiOutput };
 
   } catch (err) {
     request.log.error(err);
     return reply.code(500).send({ 
       success: false, 
-      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud con Gemini API: ${err.message}` 
+      result: `[Error de Conexión con el Modelo]\nNo se pudo procesar la solicitud debido a alta demanda global en los servidores: ${err.message}` 
     });
   }
 });
