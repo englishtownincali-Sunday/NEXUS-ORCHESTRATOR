@@ -108,18 +108,16 @@
 
     .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; }
     
-    /* Interfaz de Bienvenida Interactiva (Estilo Canva / ElevenLabs) */
     .hero-welcome-area {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 2.5rem 1rem; text-align: center; margin-bottom: 1rem;
+      padding: 2rem 1rem; text-align: center; margin-bottom: 1rem;
     }
     .hero-greeting {
-      font-size: 2.2rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
-      letter-spacing: -0.5px; margin-bottom: 0.5rem;
+      font-size: 2rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
+      letter-spacing: -0.5px; margin-bottom: 0.4rem;
     }
-    .hero-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 400; max-width: 500px; }
+    .hero-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem; font-weight: 400; max-width: 520px; }
 
-    /* Tarjetas Interactivas de Herramientas Diarias (Estilo Referencia) */
     .tools-grid {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; width: 100%; max-width: 560px; margin-bottom: 1.2rem;
     }
@@ -128,7 +126,7 @@
       padding: 1rem; text-align: left; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
     .tool-card:hover { border-color: var(--accent-primary); background: #ffffff; transform: translateY(-2px); }
-    .tool-card h4 { font-size: 0.88rem; color: #0f172a; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
+    .tool-card h4 { font-size: 0.85rem; color: #0f172a; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
     .tool-card p { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
 
     .chat-messages {
@@ -272,7 +270,7 @@
             <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
-          <!-- Área de Bienvenida Interactiva Estilo Canva / ElevenLabs con Tarjetas de Herramientas -->
+          <!-- Pantalla de Bienvenida Interactiva (Landing Page / Estilo Canva / ElevenLabs) -->
           <div class="hero-welcome-area" id="hero-welcome">
             <div class="hero-greeting" id="hero-title">¿Qué deseas crear hoy?</div>
             <div class="hero-subtitle" id="hero-sub">Selecciona una herramienta impulsada por IA para automatizar tus tareas diarias o redactar documentos.</div>
@@ -305,7 +303,7 @@
             <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
             <button class="file-upload-btn" onclick="document.getElementById('hidden-file-input').click()" title="Adjuntar PDF, Word, Imagen, Audio o Vídeo">📎</button>
             
-            <input type="text" id="chat-input" placeholder="Pregúntale a Nexus o escribe tu tarea..." onkeypress="if(event.key==='Enter') sendUserQuery()">
+            <input type="text" id="chat-input" placeholder="Inicia sesión para interactuar con Nexus..." onkeypress="if(event.key==='Enter') sendUserQuery()">
             <button class="btn-neon" onclick="sendUserQuery()" id="send-btn">Enviar</button>
           </div>
         </div>
@@ -325,12 +323,11 @@
     </div>
   </div>
 
-  <!-- Modal de Autenticación Moderno con Ventana de Confirmación de Permisos OAuth (Estilo Referencia) -->
+  <!-- Modal de Autenticación con OAuth Libre (Permite escribir cualquier cuenta nueva) -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
       
-      <!-- Paso 1: Vista de Inicio de Sesión / Selección Social -->
       <div id="auth-view-main">
         <div class="auth-tabs">
           <button class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Iniciar Sesión</button>
@@ -401,43 +398,39 @@
         </form>
       </div>
 
-      <!-- Paso 2: Ventana de Confirmación de Permisos OAuth (Estilo Referencia) -->
+      <!-- Pantalla de Confirmación OAuth con Entrada Libre de Cualquier Cuenta -->
       <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.5rem;">
         <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
           <div style="font-size: 1.8rem;" id="oauth-provider-icon">🌐</div>
           <div>
-            <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus Orchestrator</h3>
-            <p style="font-size: 0.75rem; color: var(--text-muted);" id="oauth-subtitle-text">Selecciona la cuenta para continuar</p>
+            <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Confirma tu cuenta y autoriza el acceso</p>
           </div>
         </div>
 
         <div class="form-group">
-          <label>CUENTA VINCULADA</label>
-          <select id="oauth-account-select" class="select-custom" style="width:100%; padding:0.7rem;">
-            <option value="englishtownincali@gmail.com">Jeff GM (englishtownincali@gmail.com)</option>
-            <option value="daicy.hurtado@sanvicente.edu.co">Daicy Hurtado (daicy.hurtado@sanvicente.edu.co)</option>
-            <option value="usuario.externo@gmail.com">Usuario Invitado (usuario.externo@gmail.com)</option>
-          </select>
+          <label>DIGITA TU CUENTA DE CORREO (CUALQUIER CUENTA NUEVA)</label>
+          <input type="email" id="oauth-custom-email-input" placeholder="tucuenta@correo.com" style="width:100%; padding:0.7rem; font-size:0.9rem;">
         </div>
 
         <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin: 1rem 0; font-size: 0.8rem; color: #334155;">
-          <p style="font-weight: 600; margin-bottom: 0.4rem;">Nexus Orchestrator accederá a:</p>
+          <p style="font-weight: 600; margin-bottom: 0.4rem;">Nexus Orchestrator solicitará permiso para:</p>
           <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.3rem;">
             <li>Ver tu nombre y foto de perfil.</li>
-            <li>Ver tu dirección de correo electrónico.</li>
-            <li>Gestionar tus entornos de trabajo y preferencias.</li>
+            <li>Gestionar tus entornos y preferencias de trabajo.</li>
+            <li>Sincronizar tus herramientas de automatización.</li>
           </ul>
         </div>
 
         <div style="display:flex; gap: 0.8rem; margin-top: 1.2rem;">
           <button class="btn-secondary" style="flex:1;" onclick="cancelOAuthConsent()">Cancelar</button>
-          <button class="btn-neon" style="flex:1;" onclick="confirmOAuthConsent()">Continuar y Dar Permiso</button>
+          <button class="btn-neon" style="flex:1;" onclick="confirmCustomOAuthConsent()">Continuar y Dar Permiso</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Ampliado y Moderno de Perfil Profesional -->
+  <!-- Modal de Perfil Profesional -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-card" style="max-width: 620px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
@@ -621,13 +614,13 @@
       }
     }
 
-    // Flujo OAuth Profesional (Muestra la pantalla de confirmación de permisos idéntica a la referencia)
     function startOAuthConfirmation(provider) {
       pendingOAuthProvider = provider;
       document.getElementById('auth-view-main').style.display = 'none';
       document.getElementById('oauth-consent-view').style.display = 'block';
       document.getElementById('oauth-title-text').innerText = `Accede a Nexus con ${provider}`;
       document.getElementById('oauth-provider-icon').innerText = provider === 'Google' ? '🌐' : provider === 'Microsoft' ? '🪟' : '🏢';
+      document.getElementById('oauth-custom-email-input').value = '';
     }
 
     function cancelOAuthConsent() {
@@ -635,20 +628,28 @@
       document.getElementById('auth-view-main').style.display = 'block';
     }
 
-    function confirmOAuthConsent() {
-      const selectedEmail = document.getElementById('oauth-account-select').value;
-      showToast(`Autenticando con ${pendingOAuthProvider}...`);
+    function confirmCustomOAuthConsent() {
+      const customEmail = document.getElementById('oauth-custom-email-input').value.trim();
+      if (!customEmail || !customEmail.includes('@')) {
+        alert("Por favor ingresa un correo electrónico válido para continuar.");
+        return;
+      }
+
+      showToast(`Autenticando nueva cuenta con ${pendingOAuthProvider}...`);
       
       setTimeout(() => {
-        loggedUserEmail = selectedEmail;
-        loggedUserName = selectedEmail.split('@')[0].toUpperCase();
-        currentUserProfile = { email: selectedEmail, first_name: loggedUserName };
+        loggedUserEmail = customEmail;
+        loggedUserName = customEmail.split('@')[0].toUpperCase();
+        currentUserProfile = { email: customEmail, first_name: loggedUserName, avatar_url: null };
 
         updateEnvironmentOptions();
         document.getElementById('auth-actions').style.display = 'none';
         document.getElementById('user-session-container').style.display = 'flex';
         document.getElementById('user-profile-badge').innerText = loggedUserName;
-        document.getElementById('user-avatar-initials').innerText = loggedUserName.substring(0, 2);
+        
+        // Restablecer avatar limpio con iniciales
+        document.getElementById('user-avatar-container').innerHTML = `<span id="user-avatar-initials">${loggedUserName.substring(0, 2)}</span>`;
+        document.getElementById('profile-avatar-preview').innerHTML = loggedUserName.substring(0, 2);
 
         closeAuthModal();
         switchSystemEnvironment('general');
@@ -672,6 +673,11 @@
     }
 
     function handleFileSelected(event) {
+      if (!loggedUserEmail) {
+        showToast('Debes iniciar sesión para adjuntar archivos.');
+        openAuthModal('login');
+        return;
+      }
       const file = event.target.files[0];
       if (!file) return;
       attachedFile = { name: file.name, type: file.type || 'documento' };
@@ -778,7 +784,7 @@
           closeAuthModal();
           loggedUserEmail = email;
           loggedUserName = data.firstName || 'Usuario';
-          currentUserProfile = data.profile || { email, first_name: loggedUserName };
+          currentUserProfile = data.profile || { email, first_name: loggedUserName, avatar_url: null };
 
           updateEnvironmentOptions();
 
@@ -865,7 +871,7 @@
 
     function useQuickQuery(queryText) {
       if (!loggedUserEmail) {
-        showToast('Debes iniciar sesión para utilizar las herramientas de tareas.');
+        showToast('Por favor inicia sesión para utilizar las herramientas.');
         openAuthModal('login');
         return;
       }
@@ -927,7 +933,6 @@
       }
     }
 
-    // Lector de voz avanzado con control exacto de Pausa/Reanudación y Actores
     let currentUtterance = null;
     let isPaused = false;
 
