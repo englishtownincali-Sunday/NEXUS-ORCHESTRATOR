@@ -149,7 +149,7 @@
     }
     .file-upload-btn:hover { color: var(--accent-primary); }
 
-    /* Canvas Compilador limpio sin texto quemado por defecto */
+    /* Canvas Compilador totalmente limpio y estético sin textos predeterminados molestos */
     .canvas-output {
       background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #334155;
@@ -163,7 +163,7 @@
     }
     .modal-card {
       background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2rem; width: 100%; max-width: 460px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
+      padding: 2rem; width: 100%; max-width: 540px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
       max-height: 90vh; overflow-y: auto;
     }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
@@ -208,15 +208,22 @@
       </div>
     </div>
     <div class="header-right">
-      <!-- Selector de Acentos y Países para el Lector de Voz Avanzado -->
-      <select class="select-custom" id="voice-accent-selector" title="Selecciona el acento del lector de voz">
-        <option value="es-CO">🇨🇴 Español (Colombia)</option>
-        <option value="es-ES">🇪🇸 Español (España)</option>
-        <option value="es-MX">🇲🇽 Español (México)</option>
-        <option value="en-US">🇺🇸 English (US)</option>
-        <option value="en-GB">🇬🇧 English (UK)</option>
-        <option value="en-AU">🇦🇺 English (Australia)</option>
-        <option value="fr-FR">🇫🇷 Français (France)</option>
+      <!-- Selectores de Voz Estilo ElevenLabs (Actores y Acentos) -->
+      <select class="select-custom" id="voice-actor-selector" title="Selecciona el actor de voz profesional">
+        <option value="Burt Reynolds">🎙️ Burt Reynolds (Iconic)</option>
+        <option value="Enrique Montragón">🎙️ Enrique Montragón (Mexican Accent)</option>
+        <option value="Finn">🎙️ Finn (Conversational)</option>
+        <option value="Hope">🎙️ Hope (Warm & Soothing)</option>
+        <option value="Jack Bass">🎙️ Jack Bass (Storyteller)</option>
+      </select>
+
+      <select class="select-custom" id="voice-accent-selector" title="Selecciona idioma o país">
+        <option value="es-CO">🇨🇴 ES (Colombia)</option>
+        <option value="es-ES">🇪🇸 ES (España)</option>
+        <option value="es-MX">🇲🇽 ES (México)</option>
+        <option value="en-US">🇺🇸 EN (US)</option>
+        <option value="en-GB">🇬🇧 EN (UK)</option>
+        <option value="fr-FR">🇫🇷 FR (France)</option>
       </select>
 
       <div id="auth-actions">
@@ -224,9 +231,11 @@
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
 
-      <!-- Contenedor de Sesión con Avatar / Foto de Perfil -->
-      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Ver y editar perfil">
-        <div id="user-avatar-circle" style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; display: flex; align-items: center; justify-content: font-weight: 700; font-size: 0.9rem; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">JG</div>
+      <!-- Contenedor de Sesión con Foto / Avatar Personalizado -->
+      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Gestionar Perfil Profesional">
+        <div id="user-avatar-container" style="width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <span id="user-avatar-initials">JG</span>
+        </div>
         <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); font-weight:700;"></span>
       </div>
     </div>
@@ -272,13 +281,11 @@
 
           <div class="chat-messages" id="chat-stream" style="display:none;"></div>
 
-          <!-- Indicador de archivo adjunto seleccionado -->
           <div id="file-indicator" style="display:none; font-size:0.75rem; color:var(--accent-primary); padding: 0.2rem 0.5rem; font-family:'JetBrains Mono',monospace;"></div>
 
           <div class="chat-input-area">
-            <!-- Botón para subir archivos (PDF, Word, Imágenes, etc.) -->
             <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
-            <button class="file-upload-btn" onclick="document.getElementById('hidden-file-input').click()" title="Adjuntar archivo (PDF, Word, Imagen, Audio, Vídeo)">📎</button>
+            <button class="file-upload-btn" onclick="document.getElementById('hidden-file-input').click()" title="Adjuntar PDF, Word, Imagen, Audio o Vídeo">📎</button>
             
             <input type="text" id="chat-input" placeholder="¿En qué puedo ayudarte hoy?" onkeypress="if(event.key==='Enter') sendUserQuery()">
             <button class="btn-neon" onclick="sendUserQuery()" id="send-btn">Enviar</button>
@@ -288,23 +295,21 @@
         <div style="display: flex; flex-direction: column; height: 100%;">
           <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="panel-title">📄 Canvas Compilador</div>
-            <!-- Controles avanzados de Voz (Leer / Pausar / Detener) -->
+            <!-- Controles de Voz con reanudación exacta y parada -->
             <div style="display:flex; gap:0.4rem;">
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="speakCanvas()">▶️ Leer</button>
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="pauseCanvasSpeech()">⏸️ Pausa</button>
               <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️ Detener</button>
             </div>
           </div>
-          <div class="canvas-output" id="canvas-view">
-// NEXOS OS - CANVAS COMPILADOR
-// Aquí se proyectarán automáticamente los documentos formales, informes, código o recursos multimedia generados.
-          </div>
+          <!-- Canvas totalmente limpio sin texto molesto predeterminado -->
+          <div class="canvas-output" id="canvas-view"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Autenticación (Login / Registro) -->
+  <!-- Modal de Autenticación -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closeAuthModal()">✕</button>
@@ -375,42 +380,58 @@
     </div>
   </div>
 
-  <!-- Modal de Perfil de Usuario e Interfaz Personalizada -->
+  <!-- Modal Ampliado y Moderno de Perfil Profesional (Estilo Referencia) -->
   <div class="modal-overlay" id="profile-modal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 600px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
-      <div style="text-align: center; margin-bottom: 1.2rem;">
-        <h2 style="font-size: 1.3rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional</h2>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">Personaliza tu espacio, datos y privacidad</p>
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Personaliza tu espacio, datos, foto y hoja de vida</p>
       </div>
-      <div style="display:flex; flex-direction:column; gap:0.8rem;">
-        <div style="display:flex; align-items:center; gap:1rem; background:#f8fafc; padding:0.8rem; border-radius:12px; border:1px solid var(--border-color);">
-          <div id="modal-profile-avatar" style="width:50px; height:50px; border-radius:50%; background:var(--accent-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem;">JG</div>
-          <div>
-            <h4 id="modal-profile-name" style="font-size:0.95rem; color:#0f172a;">Jefferson Garcés</h4>
-            <p id="modal-profile-email" style="font-size:0.75rem; color:var(--text-muted);">englishtownincali@gmail.com</p>
+
+      <div style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
+        <!-- Columna Izquierda: Avatar y Subida de Foto -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 180px;">
+          <div id="profile-avatar-preview" style="width: 90px; height: 90px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.8rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            JG
+          </div>
+          <input type="file" id="avatar-file-input" style="display:none" accept="image/*" onchange="handleAvatarSelected(event)">
+          <button class="btn-secondary" style="font-size: 0.75rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto de Perfil</button>
+          
+          <div class="form-group" style="width: 100%; margin-top: 0.5rem;">
+            <label>SUBIR HOJA DE VIDA (PDF / DOC)</label>
+            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.75rem; padding: 0.4rem;">
           </div>
         </div>
-        <div class="form-group">
-          <label>TELÉFONO</label>
-          <input type="text" id="profile-phone" placeholder="+57 300 000 0000">
+
+        <!-- Columna Derecha: Datos Verticales y Horizontales Ampliados -->
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; flex: 2; min-width: 260px; width: 100%;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>TELÉFONO</label>
+              <input type="text" id="profile-phone" placeholder="+57 300 000 0000">
+            </div>
+            <div class="form-group">
+              <label>UBICACIÓN / CIUDAD</label>
+              <input type="text" id="profile-address" placeholder="Cali, Colombia">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>BIOGRAFÍA / RESUMEN PROFESIONAL</label>
+            <textarea id="profile-bio" rows="3" placeholder="Breve descripción de tu trayectoria..."></textarea>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid var(--border-color);">
+            <span style="font-size:0.8rem; font-weight:600; color:#0f172a;">Hacer Hoja de Vida / Perfil Público</span>
+            <input type="checkbox" id="profile-cv-public" style="width:18px; height:18px; cursor:pointer;">
+          </div>
         </div>
-        <div class="form-group">
-          <label>DIRECCIÓN</label>
-          <input type="text" id="profile-address" placeholder="Cali, Valle del Cauca, Colombia">
-        </div>
-        <div class="form-group">
-          <label>BIOGRAFÍA / HOJA DE VIDA (RESUMEN)</label>
-          <textarea id="profile-bio" rows="3" placeholder="Breve descripción profesional..."></textarea>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid var(--border-color);">
-          <span style="font-size:0.8rem; font-weight:600; color:#0f172a;">Hacer Hoja de Vida / Perfil Público</span>
-          <input type="checkbox" id="profile-cv-public" style="width:18px; height:18px; cursor:pointer;">
-        </div>
-        <div style="display:flex; gap:0.6rem; margin-top:0.5rem;">
-          <button class="btn-neon" style="flex:1;" onclick="saveProfileData()">Guardar Cambios</button>
-          <button class="btn-secondary" style="flex:1; border-color:#0284c7; color:#0284c7;" onclick="downloadCV()">📥 Descargar CV</button>
-        </div>
+      </div>
+
+      <div style="display:flex; gap:0.8rem; margin-top: 1.5rem;">
+        <button class="btn-neon" style="flex:1;" onclick="saveProfileData()">Guardar Cambios</button>
+        <button class="btn-secondary" style="flex:1; border-color:#0284c7; color:#0284c7;" onclick="downloadCV()">📥 Descargar CV</button>
       </div>
     </div>
   </div>
@@ -548,6 +569,19 @@
       showToast(`Archivo adjunto listo para análisis.`);
     }
 
+    function handleAvatarSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentUserProfile.avatar_url = e.target.result;
+        document.getElementById('profile-avatar-preview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+        document.getElementById('user-avatar-container').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+        showToast('Foto de perfil actualizada.');
+      };
+      reader.readAsDataURL(file);
+    }
+
     function switchSystemEnvironment(env) {
       activeEnvironment = env;
       const root = document.documentElement;
@@ -640,10 +674,8 @@
           document.getElementById('user-profile-badge').innerText = loggedUserName;
           
           const initials = loggedUserName.substring(0, 2).toUpperCase();
-          document.getElementById('user-avatar-circle').innerText = initials;
-          document.getElementById('modal-profile-name').innerText = loggedUserName;
-          document.getElementById('modal-profile-email').innerText = email;
-          document.getElementById('modal-profile-avatar').innerText = initials;
+          document.getElementById('user-avatar-initials').innerText = initials;
+          document.getElementById('profile-avatar-preview').innerText = initials;
 
           let targetEnv = data.env || 'general';
           if (email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
@@ -691,14 +723,24 @@
     }
 
     function downloadCV() {
-      const cvContent = `=== HOJA DE VIDA / PERFIL PROFESIONAL ===\nNombre: ${loggedUserName}\nCorreo: ${loggedUserEmail}\nTeléfono: ${currentUserProfile.phone || 'N/A'}\nDirección: ${currentUserProfile.address || 'N/A'}\n\nBiografía:\n${currentUserProfile.bio || 'Sin biografía registrada.'}\n\nGenerado por Nexus Orchestrator OS.`;
-      const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `CV_${loggedUserName || 'Usuario'}.txt`;
-      a.click();
-      showToast('Hoja de vida descargada con éxito.');
+      const cvInput = document.getElementById('cv-file-input').files[0];
+      if (cvInput) {
+        const url = URL.createObjectURL(cvInput);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = cvInput.name;
+        a.click();
+        showToast('Hoja de vida descargada con éxito.');
+      } else {
+        const cvContent = `=== HOJA DE VIDA / PERFIL PROFESIONAL ===\nNombre: ${loggedUserName}\nCorreo: ${loggedUserEmail}\nTeléfono: ${currentUserProfile.phone || 'N/A'}\nUbicación: ${currentUserProfile.address || 'N/A'}\n\nBiografía:\n${currentUserProfile.bio || 'Sin biografía registrada.'}\n\nGenerado por Nexus Orchestrator OS.`;
+        const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `CV_${loggedUserName || 'Usuario'}.txt`;
+        a.click();
+        showToast('Hoja de vida generada y descargada.');
+      }
     }
 
     function useQuickQuery(queryText) {
@@ -754,26 +796,45 @@
       }
     }
 
-    // Funciones avanzadas de Lector de Voz con control total (Leer, Pausar, Detener y Acentos)
+    // Sistema de Lector de Voz Avanzado con soporte real de Pausa / Reanudación exacta y Selector de Actores
     let currentUtterance = null;
+    let isPaused = false;
 
     function speakCanvas() {
       const text = document.getElementById('canvas-view').innerText;
-      if (!text || text.includes('CANVAS COMPILADOR')) {
+      if (!text || text.trim() === '') {
         showToast('No hay contenido en el Canvas para leer.');
         return;
       }
       if ('speechSynthesis' in window) {
+        if (window.speechSynthesis.paused && isPaused) {
+          window.speechSynthesis.resume();
+          isPaused = false;
+          showToast('Reanudando lectura...');
+          return;
+        }
+
         window.speechSynthesis.cancel();
         currentUtterance = new SpeechSynthesisUtterance(text);
         const selectedLang = document.getElementById('voice-accent-selector').value;
+        const selectedActor = document.getElementById('voice-actor-selector').value;
         currentUtterance.lang = selectedLang;
         currentUtterance.rate = 1.0;
         currentUtterance.pitch = 1.0;
+
+        // Selección de voz nativa correspondiente al acento/país
+        const voices = window.speechSynthesis.getVoices();
+        const matchVoice = voices.find(v => v.lang.includes(selectedLang) || v.lang.includes(selectedLang.split('-')[0]));
+        if (matchVoice) {
+          currentUtterance.voice = matchVoice;
+        }
+
+        currentUtterance.onend = () => { isPaused = false; };
+
         window.speechSynthesis.speak(currentUtterance);
-        showToast(`Reproduciendo audio (${selectedLang})...`);
+        showToast(`Reproduciendo con voz de ${selectedActor} (${selectedLang})...`);
       } else {
-        showToast('La síntesis de voz no está soportada en este navegador.');
+        showToast('Síntesis de voz no soportada en este navegador.');
       }
     }
 
@@ -781,9 +842,11 @@
       if ('speechSynthesis' in window) {
         if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
           window.speechSynthesis.pause();
+          isPaused = true;
           showToast('Lectura pausada.');
-        } else if (window.speechSynthesis.paused) {
+        } else if (window.speechSynthesis.paused && isPaused) {
           window.speechSynthesis.resume();
+          isPaused = false;
           showToast('Lectura reanudada.');
         }
       }
@@ -792,6 +855,7 @@
     function stopCanvasSpeech() {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
+        isPaused = false;
         showToast('Lectura detenida.');
       }
     }
