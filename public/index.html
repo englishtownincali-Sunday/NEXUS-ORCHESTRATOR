@@ -11,19 +11,18 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     :root {
       --bg-light: #f0f4f8;
-      --glass-bg: rgba(255, 255, 255, 0.75);
-      --glass-panel: rgba(255, 255, 255, 0.65);
-      --border-color: rgba(14, 165, 233, 0.25);
+      --glass-bg: rgba(255, 255, 255, 0.85);
+      --glass-panel: rgba(255, 255, 255, 0.75);
+      --border-color: rgba(14, 165, 233, 0.3);
       --accent-primary: #0284c7;
       --accent-secondary: #7c3aed;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --theme-glow: rgba(2, 132, 199, 0.2);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --theme-glow: rgba(2, 132, 199, 0.25);
       --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
     }
 
@@ -51,7 +50,14 @@
       transition: background 0.6s ease, color 0.3s ease;
     }
 
-    /* Navbar Superior con Radar y Credencial */
+    /* Radar Animado */
+    @keyframes radarPulse {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(2.2); opacity: 0; }
+      100% { transform: scale(0.9); opacity: 0; }
+    }
+
+    /* Header */
     header {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
       margin-bottom: 1rem; padding: 0.75rem 1.25rem;
@@ -73,22 +79,22 @@
 
     .header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
     .select-custom {
-      background: rgba(255,255,255,0.85); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.4rem 0.75rem; border-radius: 10px;
       font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
     }
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff; border: none; padding: 0.5rem 1.1rem; border-radius: 10px;
+      color: #fff !important; border: none; padding: 0.55rem 1.2rem; border-radius: 10px;
       font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s;
+      box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s; display: inline-block;
     }
-    .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
-      color: var(--text-main); padding: 0.4rem 0.85rem; border-radius: 10px;
+      background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
+      color: var(--text-main) !important; padding: 0.4rem 0.85rem; border-radius: 10px;
       font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
     }
 
@@ -108,7 +114,7 @@
       border: 1px solid var(--border-color);
       border-radius: 20px; padding: 1.25rem; backdrop-filter: blur(14px);
       box-shadow: 0 15px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column;
-      height: 100%; min-height: 500px; overflow: hidden;
+      height: 100%; min-height: 480px; overflow: hidden;
     }
 
     .panel-header {
@@ -118,7 +124,7 @@
     .panel-title { font-size: 0.88rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; }
 
     .env-badge-box {
-      background: rgba(255,255,255,0.7); border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.85); border: 1px solid var(--border-color);
       border-radius: 14px; padding: 0.85rem; margin-bottom: 0.85rem; text-align: center;
     }
     .env-badge-box h3 { font-size: 0.88rem; color: var(--accent-primary); margin-bottom: 0.2rem; font-weight: 700; }
@@ -136,7 +142,7 @@
       .workspace-grid { grid-template-columns: 1fr; height: auto; }
     }
 
-    .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; min-height: 400px; }
+    .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; min-height: 380px; }
     
     .hero-welcome-area {
       display: flex; flex-direction: column; padding: 0.4rem; text-align: left;
@@ -151,8 +157,8 @@
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 0.75rem;
     }
     .purpose-card {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color); border-radius: 12px;
-      padding: 0.7rem; cursor: pointer; transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: 12px;
+      padding: 0.75rem; cursor: pointer; transition: all 0.2s ease;
     }
     .purpose-card:hover { border-color: var(--accent-primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px var(--theme-glow); }
     .purpose-card h4 { font-size: 0.78rem; color: #0f172a; margin-bottom: 0.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.35rem; }
@@ -187,8 +193,6 @@
       50% { transform: rotate(180deg) scale(1.08); }
       100% { transform: rotate(360deg) scale(1); }
     }
-    .loading-title { font-size: 0.78rem; font-weight: 700; color: #0f172a; }
-    .loading-sub { font-size: 0.68rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 
     .file-badge-card {
       display: flex; align-items: center; gap: 0.6rem; background: rgba(2, 132, 199, 0.1);
@@ -196,9 +200,9 @@
       font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary);
     }
 
-    /* Área de Entrada y Ampersand Neón */
+    /* Entrada e Icono Ampersand */
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(255,255,255,0.92); border: 1px solid var(--border-color);
+      display: flex; gap: 0.5rem; background: rgba(255,255,255,0.95); border: 1px solid var(--border-color);
       border-radius: 16px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-top: auto; position: relative;
     }
     .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.85rem; outline: none; }
@@ -211,10 +215,9 @@
     }
     .ampersand-btn:hover { background: var(--accent-primary); color: #fff; transform: scale(1.08); }
 
-    /* Menú Desplegable Estilo Referencia */
     .media-dropdown-menu {
-      position: absolute; bottom: 120%; left: 0; margin-bottom: 0.3rem; width: 230px;
-      background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px);
+      position: absolute; bottom: 125%; left: 0; width: 230px;
+      background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px);
       border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12);
       display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
     }
@@ -224,9 +227,9 @@
     }
     .media-dropdown-item:hover { background: rgba(2, 132, 199, 0.1); color: var(--accent-primary); }
 
-    /* Canvas con Pestañas Vista Previa y Código Raw */
-    .canvas-column { display: flex; flex-direction: column; height: 100%; min-height: 400px; }
-    .canvas-tabs { display: flex; background: rgba(255,255,255,0.7); padding: 0.2rem; border-radius: 8px; border: 1px solid var(--border-color); gap: 0.2rem; }
+    /* Canvas */
+    .canvas-column { display: flex; flex-direction: column; height: 100%; min-height: 380px; }
+    .canvas-tabs { display: flex; background: rgba(255,255,255,0.8); padding: 0.2rem; border-radius: 8px; border: 1px solid var(--border-color); gap: 0.2rem; }
     .canvas-tab { background: transparent; border: none; padding: 0.25rem 0.6rem; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); cursor: pointer; border-radius: 6px; font-weight: 600; }
     .canvas-tab.active { background: #fff; color: var(--accent-primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
@@ -264,8 +267,6 @@
 
     .divider { display: flex; align-items: center; text-align: center; margin: 0.8rem 0; color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; }
     .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
-    .divider::before { margin-right: .5em; }
-    .divider::after { margin-left: .5em; }
 
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.7rem; }
     .form-group { margin-bottom: 0.7rem; }
@@ -280,12 +281,11 @@
 
   <div id="toast-container"></div>
 
-  <!-- Navbar Superior -->
+  <!-- Header Superior -->
   <header>
     <div class="brand-container">
-      <!-- Punto con radar en la esquina superior izquierda -->
       <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-        <span style="position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-primary); opacity: 0.7; animation: radarPulse 2s infinite;"></span>
+        <span style="position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-primary); opacity: 0.8; animation: radarPulse 2s infinite;"></span>
         <div class="brand-logo">💎</div>
       </div>
       <div class="brand-title">
@@ -308,21 +308,21 @@
         <option value="en-US">🇺🇸 EN (US)</option>
       </select>
 
-      <div id="auth-actions">
-        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
-        <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
+      <div id="auth-actions" style="display:flex; gap:0.5rem;">
+        <button class="btn-secondary" id="btn-login-open">🔑 Iniciar Sesión</button>
+        <button class="btn-neon" id="btn-register-open">✨ Registrarse</button>
       </div>
 
-      <!-- Indicador de Correo con Punto Verde (Derecha Superior) -->
-      <div id="user-session-container" style="display:none; align-items: center; gap: 0.6rem; cursor: pointer; background: rgba(255,255,255,0.85); padding: 0.3rem 0.7rem; border-radius: 9999px; border: 1px solid var(--border-color);" onclick="openProfileModal()" title="Mi Perfil y Credenciales">
+      <!-- Indicador Verde y Correo de Sesión -->
+      <div id="user-session-container" style="display:none; align-items: center; gap: 0.6rem; cursor: pointer; background: rgba(255,255,255,0.85); padding: 0.3rem 0.7rem; border-radius: 9999px; border: 1px solid var(--border-color);" title="Mi Perfil">
         <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
         <span id="user-email-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary); font-weight:700;"></span>
-        <button class="btn-secondary" onclick="event.stopPropagation(); handleLogout()" style="padding: 0.15rem 0.4rem; font-size: 0.65rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión">🚪 Salir</button>
+        <button class="btn-secondary" id="btn-logout" style="padding: 0.15rem 0.4rem; font-size: 0.65rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión">🚪 Salir</button>
       </div>
     </div>
   </header>
 
-  <!-- Layout Principal Adaptable -->
+  <!-- Layout Principal -->
   <div class="main-layout">
     <!-- Panel Izquierdo: Entornos -->
     <div class="glass-panel">
@@ -337,12 +337,12 @@
 
       <div style="margin-bottom: 0.85rem;">
         <label style="display:block; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.35rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
-        <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
+        <select class="select-custom" style="width:100%;" id="global-env-switcher">
         </select>
       </div>
     </div>
 
-    <!-- Panel Derecho: Chat & Canvas -->
+    <!-- Panel Derecho: Chat + Canvas -->
     <div class="glass-panel">
       <div class="workspace-grid">
         <!-- Chat Inteligente -->
@@ -358,19 +358,19 @@
             
             <div class="section-label">🎯 Elige tu propósito</div>
             <div class="purposes-grid">
-              <div class="purpose-card" onclick="useQuickQuery('Diseñar un plan de aula, DBA, EBC y rúbricas de evaluación pedagógica')">
+              <div class="purpose-card" data-query="Diseñar un plan de aula, DBA, EBC y rúbricas de evaluación pedagógica">
                 <h4>📚 Pedagogía y Lenguas</h4>
                 <p>Planes de aula, DBA, EBC y rúbricas.</p>
               </div>
-              <div class="purpose-card" onclick="useQuickQuery('Analizar teasers, dossiers, debida diligencia y búsqueda de compradores de activos')">
+              <div class="purpose-card" data-query="Analizar teasers, dossiers, debida diligencia y búsqueda de compradores de activos">
                 <h4>⛏️ Negocios y Minería</h4>
                 <p>Teasers, dossiers y debida diligencia.</p>
               </div>
-              <div class="purpose-card" onclick="useQuickQuery('Realizar análisis normativo, jurisprudencia, contratos y conceptos jurídicos')">
+              <div class="purpose-card" data-query="Realizar análisis normativo, jurisprudencia, contratos y conceptos jurídicos">
                 <h4>⚖️ Derecho y Normativa</h4>
                 <p>Análisis normativo y contratos.</p>
               </div>
-              <div class="purpose-card" onclick="useQuickQuery('Desarrollar conceptos estéticos, composición, notas de programa y curaduría')">
+              <div class="purpose-card" data-query="Desarrollar conceptos estéticos, composición, notas de programa y curaduría">
                 <h4>🎵 Música y Arte</h4>
                 <p>Conceptos estéticos y composición.</p>
               </div>
@@ -378,11 +378,11 @@
 
             <div class="section-label" style="margin-top: 0.3rem;">⚡ Inicios rápidos</div>
             <div class="quick-starts-grid">
-              <div class="quick-start-card" onclick="useQuickQuery('Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.')">
+              <div class="quick-start-card" data-query="Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.">
                 <h5>Plan de aula (DBA/EBC)</h5>
                 <p>Elabora un plan de aula para Práctica Pedagógica I...</p>
               </div>
-              <div class="quick-start-card" onclick="useQuickQuery('Redactar el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel.')">
+              <div class="quick-start-card" data-query="Redactar el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel.">
                 <h5>Informe reflexivo de práctica</h5>
                 <p>Redacta el informe reflexivo de Práctica Pedagógica I...</p>
               </div>
@@ -393,41 +393,40 @@
 
           <div id="file-indicator" style="display:none;"></div>
 
-          <!-- Barra de Entrada y Ampersand Neón -->
+          <!-- Barra de Entrada e Ícono Ampersand & -->
           <div class="chat-input-area">
             <div class="media-dropdown-menu" id="media-dropdown">
-              <button class="media-dropdown-item" onclick="triggerFileInput('application/pdf,application/msword,.docx')">📎 Subir archivos (PDF / Word)</button>
-              <button class="media-dropdown-item" onclick="showToast('Conectando con Google Drive...')">☁️ Agregar desde Drive</button>
+              <button class="media-dropdown-item" id="btn-file-doc">📎 Subir archivos (PDF / Word)</button>
+              <button class="media-dropdown-item" id="btn-file-drive">☁️ Agregar desde Drive</button>
               <div style="border-top: 1px solid var(--border-color); margin: 2px 0;"></div>
-              <button class="media-dropdown-item" onclick="triggerFileInput('image/*')">🎨 Crear imagen (AI)</button>
-              <button class="media-dropdown-item" onclick="triggerFileInput('audio/*')">🎵 Crear música / Audio</button>
+              <button class="media-dropdown-item" id="btn-file-img">🎨 Crear imagen (AI)</button>
+              <button class="media-dropdown-item" id="btn-file-audio">🎵 Crear música / Audio</button>
             </div>
 
-            <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
+            <input type="file" id="hidden-file-input" style="display:none">
             
-            <!-- Botón Ampersand Neón Elegante -->
-            <button class="ampersand-btn" onclick="toggleMediaDropdown(event)" title="Medios y Herramientas (&)">&</button>
+            <button class="ampersand-btn" id="btn-ampersand" title="Medios y Herramientas (&)">&</button>
             
-            <input type="text" id="chat-input" placeholder="Escribe tu instrucción aquí..." onkeypress="if(event.key==='Enter') sendUserQuery()">
-            <button class="btn-neon" onclick="sendUserQuery()" id="send-btn">Ejecutar Orquestación</button>
+            <input type="text" id="chat-input" placeholder="Escribe tu instrucción aquí...">
+            <button class="btn-neon" id="btn-send">Ejecutar Orquestación</button>
           </div>
         </div>
 
-        <!-- Canvas Compilador con Pestañas -->
+        <!-- Canvas Compilador -->
         <div class="canvas-column">
           <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="panel-title">📄 Canvas Compilador</div>
             
             <div style="display:flex; align-items:center; gap:0.5rem;">
               <div class="canvas-tabs">
-                <button class="canvas-tab active" id="tab-preview" onclick="switchCanvasTab('preview')">Vista Previa</button>
-                <button class="canvas-tab" id="tab-raw" onclick="switchCanvasTab('raw')">Código Raw</button>
+                <button class="canvas-tab active" id="tab-preview">Vista Previa</button>
+                <button class="canvas-tab" id="tab-raw">Código Raw</button>
               </div>
               <div style="display:flex; gap:0.25rem;">
-                <button class="btn-secondary" style="font-size:0.68rem; padding: 0.2rem 0.45rem;" onclick="exportCanvas('txt')">.txt</button>
-                <button class="btn-secondary" style="font-size:0.68rem; padding: 0.2rem 0.45rem;" onclick="exportCanvas('html')">.html</button>
-                <button class="btn-secondary" style="font-size:0.68rem; padding: 0.2rem 0.45rem;" onclick="speakCanvas()">▶️</button>
-                <button class="btn-secondary" style="font-size:0.68rem; padding: 0.2rem 0.45rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️</button>
+                <button class="btn-secondary" id="btn-export-txt">.txt</button>
+                <button class="btn-secondary" id="btn-export-html">.html</button>
+                <button class="btn-secondary" id="btn-speak">▶️</button>
+                <button class="btn-secondary" id="btn-stop-speak" style="color:#ef4444;">⏹️</button>
               </div>
             </div>
           </div>
@@ -437,30 +436,30 @@
     </div>
   </div>
 
-  <!-- Modal de Autenticación -->
+  <!-- Modal Autenticación -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+      <button class="modal-close" id="btn-close-auth">✕</button>
       
       <div id="auth-view-main">
         <div class="auth-tabs">
-          <button class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Iniciar Sesión</button>
-          <button class="auth-tab" id="tab-register" onclick="switchAuthMode('register')">Registrarse</button>
+          <button class="auth-tab active" id="tab-login">Iniciar Sesión</button>
+          <button class="auth-tab" id="tab-register">Registrarse</button>
         </div>
 
         <div id="social-auth-section">
-          <button class="social-btn" onclick="startOAuthConfirmation('Google')">
+          <button class="social-btn" id="btn-oauth-google">
             <div class="social-icon-box">🌐</div>
             <div class="social-text">Continuar con Google</div>
           </button>
-          <button class="social-btn" onclick="startOAuthConfirmation('Microsoft')">
+          <button class="social-btn" id="btn-oauth-microsoft">
             <div class="social-icon-box">🪟</div>
             <div class="social-text">Continuar con Microsoft (SSO)</div>
           </button>
           <div class="divider">o accede con correo y contraseña</div>
         </div>
 
-        <form id="auth-form-main" onsubmit="handleAuthSubmit(event)" autocomplete="off">
+        <form id="auth-form-main" autocomplete="off">
           <div class="form-grid" id="names-grid" style="display:none;">
             <div class="form-group">
               <label>NOMBRE</label>
@@ -496,7 +495,7 @@
             <label>CONTRASEÑA</label>
             <div style="display:flex; align-items:center; position:relative;">
               <input type="password" id="auth-password" required placeholder="••••••••" style="padding-right: 2.2rem;">
-              <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:8px; background:transparent; border:none; cursor:pointer; font-size:0.9rem;" id="eye-btn">👁️</button>
+              <button type="button" id="btn-toggle-eye" style="position:absolute; right:8px; background:transparent; border:none; cursor:pointer; font-size:0.9rem;">👁️</button>
             </div>
           </div>
 
@@ -517,17 +516,17 @@
           <input type="email" id="oauth-custom-email-input" placeholder="correo@ejemplo.com" style="width:100%; padding:0.6rem;">
         </div>
         <div style="display:flex; gap: 0.7rem; margin-top: 1rem;">
-          <button class="btn-secondary" style="flex:1;" onclick="cancelOAuthConsent()">Cancelar</button>
-          <button class="btn-neon" style="flex:1;" onclick="confirmCustomOAuthConsent()">Continuar</button>
+          <button class="btn-secondary" id="btn-oauth-cancel" style="flex:1;">Cancelar</button>
+          <button class="btn-neon" id="btn-oauth-confirm" style="flex:1;">Continuar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Perfil -->
+  <!-- Modal Perfil -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-card" style="max-width: 580px;">
-      <button class="modal-close" onclick="closeProfileModal()">✕</button>
+      <button class="modal-close" id="btn-close-profile">✕</button>
       <div style="text-align: center; margin-bottom: 1.2rem;">
         <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">Mi Perfil y Credenciales</h2>
         <p style="font-size: 0.75rem; color: var(--text-muted);">Sincronizado permanentemente con la base de datos de Neon</p>
@@ -538,12 +537,8 @@
           <div id="profile-avatar-preview" style="width: 85px; height: 85px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.6rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             JG
           </div>
-          <input type="file" id="avatar-file-input" style="display:none" accept="image/*" onchange="handleAvatarSelected(event)">
-          <button class="btn-secondary" style="font-size: 0.7rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto</button>
-          <div class="form-group" style="width: 100%; margin-top: 0.1rem;">
-            <label>HOJA DE VIDA / CV</label>
-            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.68rem; padding: 0.3rem;">
-          </div>
+          <input type="file" id="avatar-file-input" style="display:none" accept="image/*">
+          <button class="btn-secondary" id="btn-avatar-upload" style="font-size: 0.7rem; width: 100%;">📷 Subir Foto</button>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.7rem; flex: 2; min-width: 250px; width: 100%;">
@@ -558,10 +553,6 @@
             </div>
           </div>
           <div class="form-group">
-            <label>NUEVA CONTRASEÑA (OPCIONAL)</label>
-            <input type="password" id="profile-new-password" placeholder="••••••••">
-          </div>
-          <div class="form-group">
             <label>BIOGRAFÍA / RESUMEN PROFESIONAL</label>
             <textarea id="profile-bio" rows="2" placeholder="Trayectoria o especialidad..."></textarea>
           </div>
@@ -569,14 +560,14 @@
       </div>
 
       <div style="display:flex; gap:0.7rem; margin-top: 1.2rem;">
-        <button class="btn-neon" style="flex:1;" onclick="saveProfileData()">Guardar Cambios</button>
-        <button class="btn-secondary" style="flex:1; border-color:#0284c7; color:#0284c7;" onclick="downloadCV()">📥 Descargar CV</button>
-        <button class="btn-secondary" style="border-color:#ef4444; color:#ef4444;" onclick="closeProfileModal()">🚪 Salir</button>
+        <button class="btn-neon" id="btn-save-profile" style="flex:1;">Guardar Cambios</button>
+        <button class="btn-secondary" id="btn-download-cv" style="flex:1; border-color:#0284c7; color:#0284c7;">📥 Descargar CV</button>
+        <button class="btn-secondary" id="btn-exit-profile" style="border-color:#ef4444; color:#ef4444;">🚪 Salir</button>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript del Sistema -->
+  <!-- JavaScript Global Corregido -->
   <script>
     let authMode = 'login';
     let activeEnvironment = 'general';
@@ -589,81 +580,76 @@
 
     const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
-    // Metadatos de Entornos con Colores e Imágenes Temáticas Luminosas
     const ENV_METADATA = {
       'admin': { 
-        icon: '🛡️', 
-        name: 'ADMIN CORPORATIVO', 
-        tag: 'ADMIN CORE',
-        primary: '#0f172a',
-        secondary: '#0284c7',
-        glow: 'rgba(15, 23, 42, 0.25)',
+        icon: '🛡️', name: 'ADMIN CORPORATIVO', tag: 'ADMIN CORE',
+        primary: '#0f172a', secondary: '#0284c7', glow: 'rgba(15, 23, 42, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop')"
       },
       'mining': { 
-        icon: '⛏️', 
-        name: 'MINERÍA Y ACTIVOS', 
-        tag: 'MINING CORE',
-        primary: '#b45309',
-        secondary: '#d97706',
-        glow: 'rgba(180, 83, 9, 0.25)',
+        icon: '⛏️', name: 'MINERÍA Y ACTIVOS', tag: 'MINING CORE',
+        primary: '#b45309', secondary: '#d97706', glow: 'rgba(180, 83, 9, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')"
       },
       'doctor': { 
-        icon: '🩺', 
-        name: 'CONSULTORIO MÉDICO', 
-        tag: 'MED OS',
-        primary: '#0d9488',
-        secondary: '#14b8a6',
-        glow: 'rgba(13, 148, 136, 0.25)',
+        icon: '🩺', name: 'CONSULTORIO MÉDICO', tag: 'MED OS',
+        primary: '#0d9488', secondary: '#14b8a6', glow: 'rgba(13, 148, 136, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1920&auto=format&fit=crop')"
       },
       'music': { 
-        icon: '🎵', 
-        name: 'ESTUDIO MUSICAL', 
-        tag: 'AUDIO LAB',
-        primary: '#9333ea',
-        secondary: '#c084fc',
-        glow: 'rgba(147, 51, 234, 0.25)',
+        icon: '🎵', name: 'ESTUDIO MUSICAL', tag: 'AUDIO LAB',
+        primary: '#9333ea', secondary: '#c084fc', glow: 'rgba(147, 51, 234, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop')"
       },
       'lawyer': { 
-        icon: '⚖️', 
-        name: 'BUFETE JURÍDICO', 
-        tag: 'LEGAL OS',
-        primary: '#1e3a8a',
-        secondary: '#3b82f6',
-        glow: 'rgba(30, 58, 138, 0.25)',
+        icon: '⚖️', name: 'BUFETE JURÍDICO', tag: 'LEGAL OS',
+        primary: '#1e3a8a', secondary: '#3b82f6', glow: 'rgba(30, 58, 138, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')"
       },
       'teaching': { 
-        icon: '📚', 
-        name: 'ACADEMIA / LENGUAS', 
-        tag: 'EDUTECH',
-        primary: '#15803d',
-        secondary: '#22c55e',
-        glow: 'rgba(21, 128, 61, 0.25)',
+        icon: '📚', name: 'ACADEMIA / LENGUAS', tag: 'EDUTECH',
+        primary: '#15803d', secondary: '#22c55e', glow: 'rgba(21, 128, 61, 0.25)',
         bgImage: "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1920&auto=format&fit=crop')"
       },
       'general': { 
-        icon: '✨', 
-        name: 'GENERAL', 
-        tag: 'GENERAL',
-        primary: '#0284c7',
-        secondary: '#7c3aed',
-        glow: 'rgba(2, 132, 199, 0.2)',
+        icon: '✨', name: 'GENERAL', tag: 'GENERAL',
+        primary: '#0284c7', secondary: '#7c3aed', glow: 'rgba(2, 132, 199, 0.2)',
         bgImage: "url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop')"
       }
     };
 
-    @keyframes radarPulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(2.2); opacity: 0; }
-      100% { transform: scale(1); opacity: 0; }
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function switchSystemEnvironment(envKey) {
+      activeEnvironment = envKey;
+      const meta = ENV_METADATA[envKey] || ENV_METADATA['general'];
+      
+      const root = document.documentElement;
+      root.style.setProperty('--accent-primary', meta.primary);
+      root.style.setProperty('--accent-secondary', meta.secondary);
+      root.style.setProperty('--theme-glow', meta.glow);
+      root.style.setProperty('--env-bg-image', meta.bgImage);
+
+      document.getElementById('env-display-name').innerText = `${meta.icon} ${meta.name}`;
+      document.getElementById('env-display-desc').innerText = `Entorno especializado para ${meta.name.toLowerCase()}`;
+      document.getElementById('chat-env-tag').innerText = meta.tag;
+      
+      const switcher = document.getElementById('global-env-switcher');
+      if (switcher) switcher.value = envKey;
+
+      showToast(`Entorno activado: ${meta.name}`);
     }
 
     function updateEnvironmentOptions() {
       const switcher = document.getElementById('global-env-switcher');
+      if (!switcher) return;
       switcher.innerHTML = '';
 
       if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
@@ -690,75 +676,6 @@
       });
 
       switcher.value = activeEnvironment;
-    }
-
-    function switchSystemEnvironment(envKey) {
-      activeEnvironment = envKey;
-      const meta = ENV_METADATA[envKey] || ENV_METADATA['general'];
-      
-      const root = document.documentElement;
-      root.style.setProperty('--accent-primary', meta.primary);
-      root.style.setProperty('--accent-secondary', meta.secondary);
-      root.style.setProperty('--theme-glow', meta.glow);
-      root.style.setProperty('--env-bg-image', meta.bgImage);
-
-      document.getElementById('env-display-name').innerText = `${meta.icon} ${meta.name}`;
-      document.getElementById('env-display-desc').innerText = `Entorno especializado para ${meta.name.toLowerCase()}`;
-      document.getElementById('chat-env-tag').innerText = meta.tag;
-      document.getElementById('global-env-switcher').value = envKey;
-
-      showToast(`Entorno activado: ${meta.name}`);
-    }
-
-    function toggleMediaDropdown(event) {
-      event.stopPropagation();
-      const menu = document.getElementById('media-dropdown');
-      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-    }
-
-    window.addEventListener('click', () => {
-      const menu = document.getElementById('media-dropdown');
-      if (menu) menu.style.display = 'none';
-    });
-
-    function triggerFileInput(acceptTypes) {
-      const input = document.getElementById('hidden-file-input');
-      input.accept = acceptTypes;
-      input.click();
-    }
-
-    function handleFileSelected(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      attachedFile = file;
-
-      const indicator = document.getElementById('file-indicator');
-      indicator.style.display = 'flex';
-      indicator.innerHTML = `<div class="file-badge-card">📎 ${file.name} (${(file.size/1024).toFixed(1)} KB) <span onclick="clearAttachedFile()" style="cursor:pointer; font-weight:bold; margin-left:5px;">✕</span></div>`;
-      showToast(`Archivo adjunto: ${file.name}`);
-    }
-
-    function clearAttachedFile() {
-      attachedFile = null;
-      document.getElementById('file-indicator').style.display = 'none';
-      document.getElementById('hidden-file-input').value = '';
-    }
-
-    function switchCanvasTab(tab) {
-      const view = document.getElementById('canvas-view');
-      const tabPrev = document.getElementById('tab-preview');
-      const tabRaw = document.getElementById('tab-raw');
-
-      if (tab === 'preview') {
-        tabPrev.classList.add('active');
-        tabRaw.classList.remove('active');
-        view.innerHTML = marked.parse(lastRawText || '');
-        if (window.hljs) hljs.highlightAll();
-      } else {
-        tabRaw.classList.add('active');
-        tabPrev.classList.remove('active');
-        view.innerText = lastRawText;
-      }
     }
 
     function openAuthModal(mode) {
@@ -792,66 +709,6 @@
     }
 
     function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
-    function switchAuthMode(mode) { openAuthModal(mode); }
-
-    function togglePasswordVisibility() {
-      const pwdInput = document.getElementById('auth-password');
-      const eyeBtn = document.getElementById('eye-btn');
-      if (pwdInput.type === 'password') { pwdInput.type = 'text'; eyeBtn.innerText = '🙈'; }
-      else { pwdInput.type = 'password'; eyeBtn.innerText = '👁️'; }
-    }
-
-    function startOAuthConfirmation(provider) {
-      pendingOAuthProvider = provider;
-      document.getElementById('auth-view-main').style.display = 'none';
-      document.getElementById('oauth-consent-view').style.display = 'block';
-      document.getElementById('oauth-provider-icon').innerText = provider === 'Google' ? '🌐' : '🪟';
-      document.getElementById('oauth-title-text').innerText = `Continuar con ${provider}`;
-    }
-
-    function cancelOAuthConsent() {
-      document.getElementById('oauth-consent-view').style.display = 'none';
-      document.getElementById('auth-view-main').style.display = 'block';
-    }
-
-    function confirmCustomOAuthConsent() {
-      const emailVal = document.getElementById('oauth-custom-email-input').value.trim();
-      if (!emailVal || !emailVal.includes('@')) { showToast('Introduce un correo válido.'); return; }
-      loggedUserEmail = emailVal;
-      loggedUserName = emailVal.split('@')[0];
-      closeAuthModal();
-      initUserSession();
-      showToast(`¡Sesión iniciada vía ${pendingOAuthProvider}!`);
-    }
-
-    async function handleAuthSubmit(event) {
-      event.preventDefault();
-      const email = document.getElementById('auth-email').value.trim();
-      const password = document.getElementById('auth-password').value.trim();
-
-      if (!email || !password) { showToast('Completa todos los campos.'); return; }
-
-      try {
-        const res = await fetch(`/api/auth/${authMode}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        loggedUserEmail = email;
-        loggedUserName = data.profile?.first_name ? `${data.profile.first_name} ${data.profile.last_name || ''}` : email.split('@')[0];
-        currentUserProfile = data.profile || {};
-        closeAuthModal();
-        initUserSession();
-        showToast(authMode === 'login' ? '¡Bienvenido de nuevo!' : '¡Cuenta creada con éxito!');
-      } catch (err) {
-        loggedUserEmail = email;
-        loggedUserName = email.split('@')[0];
-        closeAuthModal();
-        initUserSession();
-        showToast('Sesión establecida correctamente.');
-      }
-    }
 
     function initUserSession() {
       document.getElementById('auth-actions').style.display = 'none';
@@ -881,50 +738,6 @@
       showToast('Sesión cerrada correctamente.');
     }
 
-    function openProfileModal() {
-      document.getElementById('profile-modal').style.display = 'flex';
-      document.getElementById('profile-phone').value = currentUserProfile.phone || '';
-      document.getElementById('profile-address').value = currentUserProfile.address || 'Cali, Colombia';
-      document.getElementById('profile-bio').value = currentUserProfile.bio || 'Licenciatura en Lenguas Extranjeras & Broker de Minería.';
-    }
-
-    function closeProfileModal() { document.getElementById('profile-modal').style.display = 'none'; }
-
-    function handleAvatarSelected(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('profile-avatar-preview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-        showToast('Foto de perfil actualizada.');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function saveProfileData() {
-      currentUserProfile.phone = document.getElementById('profile-phone').value;
-      currentUserProfile.address = document.getElementById('profile-address').value;
-      currentUserProfile.bio = document.getElementById('profile-bio').value;
-      closeProfileModal();
-      showToast('Perfil guardado y sincronizado correctamente.');
-    }
-
-    function downloadCV() {
-      const cvContent = `CURRICULUM VITAE\nNombre: ${loggedUserName}\nCorreo: ${loggedUserEmail}\nTeléfono: ${document.getElementById('profile-phone').value}\nUbicación: ${document.getElementById('profile-address').value}\nBiografía: ${document.getElementById('profile-bio').value}`;
-      const blob = new Blob([cvContent], { type: 'text/plain' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `CV_${loggedUserName.replace(/\s+/g, '_')}.txt`;
-      a.click();
-      showToast('CV descargado con éxito.');
-    }
-
-    function useQuickQuery(queryText) {
-      if (!loggedUserEmail) { openAuthModal('login'); showToast('Por favor inicia sesión.'); return; }
-      document.getElementById('chat-input').value = queryText;
-      sendUserQuery();
-    }
-
     async function sendUserQuery() {
       if (!loggedUserEmail) { openAuthModal('login'); showToast('Debes iniciar sesión.'); return; }
       const inputEl = document.getElementById('chat-input');
@@ -949,8 +762,8 @@
         <div class="loading-container">
           <div class="spinning-globe"></div>
           <div>
-            <div class="loading-title">Nexus Orchestrator procesando</div>
-            <div class="loading-sub">Entorno: ${ENV_METADATA[activeEnvironment].name}</div>
+            <div style="font-size:0.78rem; font-weight:700; color:#0f172a;">Nexus Orchestrator procesando</div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-family:'JetBrains Mono';">Entorno: ${ENV_METADATA[activeEnvironment].name}</div>
           </div>
         </div>
       `;
@@ -984,7 +797,9 @@
 
         document.getElementById('canvas-view').innerHTML = marked.parse(lastRawText);
         if (window.hljs) hljs.highlightAll();
-        clearAttachedFile();
+        
+        attachedFile = null;
+        document.getElementById('file-indicator').style.display = 'none';
 
       } catch (err) {
         const node = document.getElementById('loading-response-node');
@@ -996,41 +811,150 @@
       }
     }
 
-    function exportCanvas(format) {
-      if (!lastRawText) { showToast('No hay contenido en el Canvas.'); return; }
-      const mime = format === 'html' ? 'text/html' : 'text/plain';
-      const blob = new Blob([lastRawText], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `nexus_output.${format}`;
-      a.click();
-      showToast(`Exportado como .${format}`);
-    }
-
-    function speakCanvas() {
-      if (!lastRawText) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(lastRawText);
-      utterance.lang = document.getElementById('voice-accent-selector').value;
-      window.speechSynthesis.speak(utterance);
-      showToast('Reproduciendo audio...');
-    }
-
-    function stopCanvasSpeech() { window.speechSynthesis.cancel(); }
-
-    function showToast(message) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3500);
-    }
-
-    window.onload = function() {
+    // Vinculación de Eventos al Cargar el DOM
+    document.addEventListener('DOMContentLoaded', function() {
       updateEnvironmentOptions();
-    };
+
+      // Botones del Header
+      document.getElementById('btn-login-open').addEventListener('click', () => openAuthModal('login'));
+      document.getElementById('btn-register-open').addEventListener('click', () => openAuthModal('register'));
+      document.getElementById('btn-logout').addEventListener('click', handleLogout);
+      document.getElementById('user-session-container').addEventListener('click', () => {
+        document.getElementById('profile-modal').style.display = 'flex';
+      });
+
+      // Modales Cierre
+      document.getElementById('btn-close-auth').addEventListener('click', closeAuthModal);
+      document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('profile-modal').style.display = 'none');
+      document.getElementById('btn-exit-profile').addEventListener('click', () => document.getElementById('profile-modal').style.display = 'none');
+
+      // Tabs Autenticación
+      document.getElementById('tab-login').addEventListener('click', () => openAuthModal('login'));
+      document.getElementById('tab-register').addEventListener('click', () => openAuthModal('register'));
+
+      // Formularios
+      document.getElementById('auth-form-main').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+
+        if (!email || !password) { showToast('Completa todos los campos.'); return; }
+
+        try {
+          const res = await fetch(`/api/auth/${authMode}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          loggedUserEmail = email;
+          loggedUserName = data.profile?.first_name ? `${data.profile.first_name} ${data.profile.last_name || ''}` : email.split('@')[0];
+          currentUserProfile = data.profile || {};
+          closeAuthModal();
+          initUserSession();
+          showToast(authMode === 'login' ? '¡Bienvenido de nuevo!' : '¡Cuenta creada con éxito!');
+        } catch (err) {
+          loggedUserEmail = email;
+          loggedUserName = email.split('@')[0];
+          closeAuthModal();
+          initUserSession();
+          showToast('Sesión establecida correctamente.');
+        }
+      });
+
+      // Switcher de Entorno
+      document.getElementById('global-env-switcher').addEventListener('change', (e) => switchSystemEnvironment(e.target.value));
+
+      // Menú Ampersand (&)
+      const btnAmp = document.getElementById('btn-ampersand');
+      const dropdown = document.getElementById('media-dropdown');
+      btnAmp.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+      });
+
+      window.addEventListener('click', () => {
+        dropdown.style.display = 'none';
+      });
+
+      // Entradas de Archivo
+      const fileInput = document.getElementById('hidden-file-input');
+      document.getElementById('btn-file-doc').addEventListener('click', () => { fileInput.accept = 'application/pdf,application/msword,.docx'; fileInput.click(); });
+      document.getElementById('btn-file-img').addEventListener('click', () => { fileInput.accept = 'image/*'; fileInput.click(); });
+      document.getElementById('btn-file-audio').addEventListener('click', () => { fileInput.accept = 'audio/*'; fileInput.click(); });
+      document.getElementById('btn-file-drive').addEventListener('click', () => showToast('Conectando con Google Drive...'));
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        attachedFile = file;
+        const indicator = document.getElementById('file-indicator');
+        indicator.style.display = 'flex';
+        indicator.innerHTML = `<div class="file-badge-card">📎 ${file.name} (${(file.size/1024).toFixed(1)} KB)</div>`;
+        showToast(`Adjunto: ${file.name}`);
+      });
+
+      // Ejecutar y Enviar
+      document.getElementById('btn-send').addEventListener('click', sendUserQuery);
+      document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserQuery(); });
+
+      // Tarjetas de Inicio Rápido y Propósitos
+      document.querySelectorAll('.purpose-card, .quick-start-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const q = card.getAttribute('data-query');
+          if (q) {
+            if (!loggedUserEmail) { openAuthModal('login'); showToast('Por favor inicia sesión.'); return; }
+            document.getElementById('chat-input').value = q;
+            sendUserQuery();
+          }
+        });
+      });
+
+      // Tabs de Canvas
+      document.getElementById('tab-preview').addEventListener('click', () => {
+        document.getElementById('tab-preview').classList.add('active');
+        document.getElementById('tab-raw').classList.remove('active');
+        const view = document.getElementById('canvas-view');
+        view.innerHTML = marked.parse(lastRawText || '');
+        if (window.hljs) hljs.highlightAll();
+      });
+
+      document.getElementById('tab-raw').addEventListener('click', () => {
+        document.getElementById('tab-raw').classList.add('active');
+        document.getElementById('tab-preview').classList.remove('active');
+        document.getElementById('canvas-view').innerText = lastRawText;
+      });
+
+      // Exportar y Voz
+      document.getElementById('btn-export-txt').addEventListener('click', () => {
+        if (!lastRawText) return showToast('No hay contenido en el Canvas.');
+        const blob = new Blob([lastRawText], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'nexus_output.txt';
+        a.click();
+      });
+
+      document.getElementById('btn-export-html').addEventListener('click', () => {
+        if (!lastRawText) return showToast('No hay contenido en el Canvas.');
+        const blob = new Blob([lastRawText], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'nexus_output.html';
+        a.click();
+      });
+
+      document.getElementById('btn-speak').addEventListener('click', () => {
+        if (!lastRawText) return;
+        window.speechSynthesis.cancel();
+        const ut = new SpeechSynthesisUtterance(lastRawText);
+        ut.lang = document.getElementById('voice-accent-selector').value;
+        window.speechSynthesis.speak(ut);
+        showToast('Reproduciendo audio...');
+      });
+
+      document.getElementById('btn-stop-speak').addEventListener('click', () => window.speechSynthesis.cancel());
+    });
   </script>
 </body>
 </html>
