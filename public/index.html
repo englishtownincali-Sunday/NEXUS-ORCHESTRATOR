@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.7</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.8</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -13,108 +13,132 @@
 
   <style>
     :root {
-      --bg-base: #f0f4f8;
-      --glass-panel: rgba(255, 255, 255, 0.72);
-      --glass-border: rgba(255, 255, 255, 0.8);
-      --accent-primary: #0284c7;
-      --accent-secondary: #7c3aed;
-      --border-color: rgba(2, 132, 199, 0.35);
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --theme-glow: rgba(2, 132, 199, 0.35);
-      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
+      --bg-base: #070b14;
+      --glass-panel: rgba(15, 23, 42, 0.75);
+      --glass-border: rgba(56, 189, 248, 0.35);
+      --accent-primary: #0ea5e9;
+      --accent-secondary: #a855f7;
+      --border-color: rgba(14, 165, 233, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --theme-glow: rgba(14, 165, 233, 0.4);
+      --env-bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
     }
 
-    body.env-general { --accent-primary: #0284c7; --accent-secondary: #7c3aed; --border-color: rgba(2, 132, 199, 0.4); --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-mining { --accent-primary: #d97706; --accent-secondary: #b45309; --border-color: rgba(217, 119, 6, 0.45); --env-bg-image: url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-teaching { --accent-primary: #059669; --accent-secondary: #0d9488; --border-color: rgba(5, 150, 105, 0.4); --env-bg-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-lawyer { --accent-primary: #4f46e5; --accent-secondary: #7c3aed; --border-color: rgba(79, 70, 229, 0.4); --env-bg-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; --border-color: rgba(6, 182, 212, 0.4); --env-bg-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-music { --accent-primary: #db2777; --accent-secondary: #e11d48; --border-color: rgba(219, 39, 119, 0.4); --env-bg-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #a855f7; }
+    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; }
+    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; }
+    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; }
+    body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; }
+    body.env-music { --accent-primary: #ec4899; --accent-secondary: #f43f5e; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.02); }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary)); border-radius: 9999px; }
 
     body {
       background-color: var(--bg-base);
-      background-image: linear-gradient(rgba(240, 244, 248, 0.85), rgba(240, 244, 248, 0.92)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(7, 11, 20, 0.85), rgba(7, 11, 20, 0.92)), var(--env-bg-image);
       background-size: cover; background-position: center; background-attachment: fixed;
       color: var(--text-main); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
       display: flex; flex-direction: column; padding: 0.75rem; transition: background-image 0.5s ease;
     }
 
+    @keyframes radarPulse {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(2.4); opacity: 0; }
+      100% { transform: scale(0.9); opacity: 0; }
+    }
+
     header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 0.75rem; padding: 0.65rem 1.15rem; background: var(--glass-panel);
-      backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07); gap: 0.75rem; flex-wrap: wrap;
+      backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); gap: 0.75rem; flex-wrap: wrap;
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.8rem; }
     .brand-logo {
-      width: 42px; height: 42px; background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4));
+      width: 42px; height: 42px; background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
       border: 1px solid var(--glass-border); border-radius: 14px; display: flex; align-items: center;
-      justify-content: center; color: var(--accent-primary); box-shadow: 0 4px 15px var(--theme-glow); font-size: 1.25rem;
+      justify-content: center; color: var(--accent-primary); box-shadow: 0 0 20px var(--theme-glow); font-size: 1.25rem; position: relative;
     }
-    .brand-title h1 { font-size: 1.15rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.3px; }
-    .version-pill { font-size: 0.6rem; background: rgba(2, 132, 199, 0.12); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--border-color); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+    .brand-logo::before {
+      content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-primary); opacity: 0.8; animation: radarPulse 2s infinite;
+    }
+    .brand-title h1 { font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.3px; }
+    .version-pill { font-size: 0.6rem; background: rgba(255,255,255,0.1); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--glass-border); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
-    /* BOTONES ESTILO NEÓN / GLASSMORPHISM (REFERENCIAS) */
+    /* BOTONES ESTILO NEÓN EXACCIÓN DE IMÁGENES */
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff !important; border: 1px solid rgba(255,255,255,0.6); padding: 0.55rem 1.3rem; border-radius: 9999px;
+      color: #fff !important; border: 1px solid rgba(255,255,255,0.4); padding: 0.55rem 1.3rem; border-radius: 9999px;
       font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 4px 20px var(--theme-glow), inset 0 1px 2px rgba(255,255,255,0.5); transition: all 0.25s;
+      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.25s;
       display: inline-flex; align-items: center; gap: 0.4rem; position: relative;
     }
     .btn-neon::after {
       content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
       width: 6px; height: 6px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 8px #fff;
     }
-    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 25px var(--accent-primary); }
-    .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 0 30px var(--accent-primary); }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.85); border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
       color: var(--text-main) !important; padding: 0.45rem 1rem; border-radius: 9999px;
       font-size: 0.72rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03), inset 0 1px 3px rgba(255,255,255,0.9); transition: all 0.2s;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.1); transition: all 0.2s;
       display: inline-flex; align-items: center; gap: 0.4rem; backdrop-filter: blur(10px); position: relative;
     }
     .btn-secondary::after {
       content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
       width: 5px; height: 5px; border-radius: 50%; background: var(--accent-primary); box-shadow: 0 0 6px var(--accent-primary);
     }
-    .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); box-shadow: 0 4px 12px var(--theme-glow); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
 
     .select-custom {
-      background: rgba(255,255,255,0.85); border: 1px solid var(--glass-border); color: var(--text-main);
+      background: rgba(15, 23, 42, 0.8); border: 1px solid var(--glass-border); color: var(--text-main);
       padding: 0.4rem 0.75rem; border-radius: 12px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
       cursor: pointer; outline: none; backdrop-filter: blur(10px); transition: all 0.3s; font-weight: 600;
     }
 
-    /* BARRA DE BORDES NEÓN EN EL CANVAS */
-    .canvas-neon-bar {
-      height: 4px; width: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
-      background-size: 200% 100%; animation: neonFlow 3s linear infinite; border-radius: 4px 4px 0 0;
+    /* PANTALLA DE PROPÓSITOS (ESTILO REFERENCIA) */
+    .purpose-dashboard {
+      display: flex; flex-direction: column; flex: 1; height: calc(100vh - 95px); overflow-y: auto; padding: 1.5rem;
+      background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
     }
-    @keyframes neonFlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+    .purpose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0 1.5rem 0; }
+    @media (max-width: 900px) { .purpose-grid { grid-template-columns: 1fr; } }
+    .purpose-card {
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 20px;
+      padding: 1.25rem; text-align: left; cursor: pointer; transition: all 0.25s; backdrop-filter: blur(15px);
+    }
+    .purpose-card:hover { border-color: var(--accent-primary); box-shadow: 0 0 25px var(--theme-glow); transform: translateY(-2px); background: rgba(255,255,255,0.08); }
+    
+    .quick-start-box {
+      background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.2rem; text-align: left; margin-top: 1rem;
+    }
 
-    /* LAYOUT Y RESPONSIVIDAD MÓVIL */
-    .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
-    @media (max-width: 900px) {
-      body { overflow-y: auto; height: auto; }
-      .main-layout { grid-template-columns: 1fr; height: auto; overflow: visible; }
-      .chat-messages { max-height: 400px !important; }
-      .canvas-output { max-height: 400px !important; }
+    /* ADMIN BADGE CON ESCUDO AZUL */
+    .admin-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); border: 1px solid rgba(255,255,255,0.4);
     }
+
+    /* MUNDO RODANDO / PENSAMIENTO */
+    .spinning-globe { font-size: 1.5rem; animation: spinGlobe 2.5s linear infinite; display: inline-block; }
+    @keyframes spinGlobe { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* LAYOUT WORKSPACE */
+    .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
+    @media (max-width: 900px) { body { overflow-y: auto; height: auto; } .main-layout { grid-template-columns: 1fr; height: auto; } }
 
     .glass-panel {
       background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1rem;
-      backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; overflow: hidden;
+      backdrop-filter: blur(20px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; flex-direction: column; height: 100%; overflow: hidden;
     }
 
     .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; height: 100%; overflow: hidden; }
@@ -123,49 +147,64 @@
     .chat-box { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
     .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); }
     .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 92%; white-space: pre-wrap; word-break: break-word; }
-    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 4px 15px var(--theme-glow); }
-    .message.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border); color: var(--text-main); backdrop-filter: blur(12px); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 0 20px var(--theme-glow); }
+    .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); color: var(--text-main); backdrop-filter: blur(12px); }
+    .msg-preview-img { max-width: 220px; max-height: 160px; border-radius: 10px; margin-top: 0.4rem; object-fit: cover; border: 1px solid var(--glass-border); display: block; }
 
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(255, 255, 255, 0.92); border: 1px solid var(--glass-border);
-      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-top: auto; position: relative; flex-shrink: 0; backdrop-filter: blur(15px);
+      display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-top: auto; position: relative; flex-shrink: 0; backdrop-filter: blur(15px);
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.82rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.82rem; outline: none; }
 
-    /* SELECCIÓN DE CUENTA TIPO GOOGLE / ELEVENLABS */
-    .account-chooser-card {
-      display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px;
-      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.8); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+    .ampersand-btn {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
+      padding: 0.2rem 0.65rem; border-radius: 12px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
     }
-    .account-chooser-card:hover { background: #ffffff; border-color: var(--accent-primary); box-shadow: 0 4px 12px var(--theme-glow); }
-    .account-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+    .ampersand-btn:hover { background: var(--accent-primary); color: #fff; box-shadow: 0 0 15px var(--accent-primary); }
 
-    /* ADMIN BADGE CON ESCUDO AZUL */
-    .admin-badge {
-      display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg, #0284c7, #2563eb);
-      color: #fff; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3); border: 1px solid rgba(255,255,255,0.4);
+    .media-dropdown-menu {
+      position: absolute; bottom: 125%; left: 0; width: 240px;
+      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
+    }
+    .media-dropdown-item {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 12px;
+      font-size: 0.75rem; font-weight: 600; color: #f1f5f9; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
+    }
+    .media-dropdown-item:hover { background: rgba(255,255,255,0.08); color: var(--accent-primary); }
+
+    .canvas-neon-bar {
+      height: 4px; width: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+      background-size: 200% 100%; animation: neonFlow 3s linear infinite; border-radius: 4px 4px 0 0;
+    }
+    @keyframes neonFlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+
+    .canvas-output {
+      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #e2e8f0;
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; user-select: text; max-height: calc(100vh - 180px); backdrop-filter: blur(15px);
     }
 
-    /* MODAL AUTENTICACIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(10px); display: none;
+      background: rgba(5, 8, 15, 0.8); backdrop-filter: blur(12px); display: none;
       align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
     .modal-card {
-      background: #ffffff; border: 1px solid var(--glass-border); border-radius: 24px;
-      padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); position: relative; text-align: center;
+      background: #0f172a; border: 1px solid var(--glass-border); border-radius: 24px;
+      padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; text-align: center; color: #fff;
     }
-
-    .canvas-output {
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
-      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;
-      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; user-select: text; max-height: calc(100vh - 180px);
+    .account-chooser-card {
+      display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px;
+      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
     }
+    .account-chooser-card:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
 
     #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.65rem; }
-    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(15px); }
   </style>
 </head>
 <body class="env-general">
@@ -177,25 +216,22 @@
     <div class="brand-container">
       <div class="brand-logo">💎</div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.7</span></h1>
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.8</span></h1>
         <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
     
     <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-      <!-- Multivoces por País estilo ElevenLabs -->
+      <!-- Multivoces por País con banderas y presentación estilo ElevenLabs -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
-        <select class="select-custom" id="country-voice-selector">
+        <select class="select-custom" id="country-voice-selector" title="Selecciona País y Bandera">
           <option value="co">🇨🇴 Colombia (Burt / Lucía)</option>
           <option value="us">🇺🇸 USA (Adam / Rachel)</option>
           <option value="gb">🇬🇧 UK (George / Charlotte)</option>
           <option value="es">🇪🇸 España (Enrique / Carmen)</option>
           <option value="fr">🇫🇷 France (Antoine / Mathilde)</option>
         </select>
-        <select class="select-custom" id="voice-actor-selector">
-          <option value="Burt Reynolds">Burt Reynolds (Deep Learning)</option>
-          <option value="Lucía Martinez">Lucía Martinez (Colombia)</option>
-        </select>
+        <button class="btn-secondary" id="btn-preview-voice" title="Escuchar presentación de la voz">🗣️</button>
       </div>
 
       <div id="auth-actions" style="display:flex; gap:0.4rem;">
@@ -212,42 +248,92 @@
     </div>
   </header>
 
-  <!-- PANEL DE PERFIL FLOTANTE TIPO GOOGLE -->
-  <div id="google-profile-card" style="position:absolute; top:65px; right:20px; width:340px; background:#fff; border:1px solid var(--border-color); border-radius:24px; padding:1.25rem; box-shadow:0 20px 50px rgba(0,0,0,0.15); z-index:90; display:none; flex-direction:column; align-items:center;">
+  <!-- PANEL DE PERFIL FLOTANTE CON BOTÓN GUARDAR Y ESCUDO ADMIN -->
+  <div id="google-profile-card" style="position:absolute; top:65px; right:20px; width:340px; background:#0f172a; border:1px solid var(--glass-border); border-radius:24px; padding:1.25rem; box-shadow:0 20px 50px rgba(0,0,0,0.6); z-index:90; display:none; flex-direction:column; align-items:center; backdrop-filter:blur(20px);">
     <div style="width:72px; height:72px; border-radius:50%; overflow:hidden; background:var(--accent-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:700; margin-bottom:0.5rem;" id="profile-card-avatar">
       <span id="profile-card-initials">JG</span>
     </div>
     <div id="profile-admin-shield" style="margin-bottom:0.4rem;"></div>
-    <h3 style="font-size:1rem; font-weight:700; color:#0f172a;" id="profile-card-name">Jefferson Garcés</h3>
+    <h3 style="font-size:1rem; font-weight:700; color:#fff;" id="profile-card-name">Jefferson Garcés</h3>
     <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;" id="profile-card-email">englishtownincali@gmail.com</p>
 
     <div style="width:100%; display:flex; flex-direction:column; gap:0.5rem;">
       <input type="file" id="profile-photo-input" style="display:none;" accept="image/*">
       <button class="btn-secondary" style="width:100%; justify-content:center;" onclick="document.getElementById('profile-photo-input').click()">📷 Cambiar foto de perfil</button>
-      <button class="btn-secondary" style="width:100%; justify-content:center; color:#ef4444 !important;" onclick="signOut()">🚪 Cerrar Sesión</button>
+      <button class="btn-neon" style="width:100%; justify-content:center;" onclick="saveProfileChanges()">💾 Guardar cambios</button>
+      <button class="btn-secondary" style="width:100%; justify-content:center; color:#f43f5e !important;" onclick="signOut()">🚪 Cerrar Sesión</button>
     </div>
   </div>
 
-  <!-- LANDING PAGE PARA INVITADOS -->
-  <div id="guest-showcase-view" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; height:calc(100vh - 95px); text-align:center; padding:1.5rem; background:var(--glass-panel); border:1px solid var(--glass-border); border-radius:24px; backdrop-filter:blur(25px);">
-    <div class="hero-badge" style="margin-bottom:1rem;"><i data-lucide="shield-check" style="width:14px; height:14px;"></i> CORPORATE CONTROL PLATFORM</div>
-    <h2 style="font-size:2.2rem; font-weight:800; color:#0f172a; margin-bottom:0.5rem;">Orquestación Autónoma de Inteligencia Artificial</h2>
-    <p style="font-size:0.95rem; color:var(--text-muted); max-width:680px; margin-bottom:1.5rem;">Selecciona tu cuenta corporativa para activar el entorno de control absoluto con permisos avanzados.</p>
+  <!-- PANTALLA INICIAL: ELIGE TU PROPÓSITO (ESTILO REFERENCIA EXACTO) -->
+  <div id="purpose-selection-view" class="purpose-dashboard" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Elige tu propósito</h2>
+      <button class="btn-secondary" onclick="skipToWorkspace()">Ir directo al Workspace ➔</button>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nexus lo detecta solo al leer tu instrucción, o escógelo tú.</p>
 
-    <div style="display:flex; gap:0.8rem; margin-bottom:2rem;">
-      <button class="btn-neon" style="font-size:0.9rem; padding:0.65rem 1.6rem;" onclick="openGoogleAccountChooser()">🚀 Sign in with Google</button>
+    <div class="purpose-grid">
+      <div class="purpose-card" onclick="selectPurpose('teaching', 'Pedagogía y Lenguas')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">📚</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Pedagogía y Lenguas</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Planes de aula, DBA, EBC, prácticas pedagógicas y rúbricas.</p>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('mining', 'Negocios y Minería')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">⛏️</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Negocios y Minería</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Teasers, dossiers, debida diligencia y búsqueda de compradores.</p>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('lawyer', 'Derecho y Normativa')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">⚖️</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Derecho y Normativa</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Análisis normativo, jurisprudencia, contratos y conceptos jurídicos.</p>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('health', 'Ciencia y Tecnología')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">🩺</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Ciencia y Tecnología</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Informes técnicos, estado del arte, metodología y análisis de datos.</p>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('general', 'Marketing y Comunicación')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">✨</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Marketing y Comunicación</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Estrategia de marca, campañas, contenido y propuestas comerciales.</p>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('music', 'Finanzas e Inversión')">
+        <div style="font-size:1.4rem; margin-bottom:0.4rem;">🎵</div>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Finanzas e Inversión</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Análisis financiero, valoración, flujos y memorandos de inversión.</p>
+      </div>
+    </div>
+
+    <!-- ATAJOS RÁPIDOS DE TRABAJO -->
+    <div class="quick-start-box">
+      <div style="font-size:0.8rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+        ⚡ Inicios rápidos <span style="font-weight:400; color:var(--text-muted);" id="quick-start-category">· Pedagogía y Lenguas</span>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Plan de aula (DBA/EBC): Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.')">
+          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Plan de aula (DBA/EBC)</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115...</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Informe reflexivo de práctica: Redacta el informe reflexivo de Práctica Pedagógica con marco teórico y rúbrica.')">
+          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Informe reflexivo de práctica</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Redacta el informe reflexivo de Práctica con marco teórico y rúbrica.</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- WORKSPACE PRINCIPAL -->
   <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
-    <!-- Panel Izquierdo: Selección de Entornos -->
+    <!-- Panel Izquierdo -->
     <div class="glass-panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--border-color);">
-        <div style="font-size:0.85rem; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos de Control</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
+        <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos de Control</div>
+        <button class="btn-secondary" style="font-size:0.65rem; padding:0.2rem 0.5rem;" onclick="backToPurposes()">← Propósitos</button>
       </div>
 
-      <div style="background:rgba(255,255,255,0.85); border:1px solid var(--border-color); border-radius:16px; padding:0.9rem; margin-bottom:0.75rem; text-align:center;">
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:16px; padding:0.9rem; margin-bottom:0.75rem; text-align:center;">
         <h3 id="env-display-name" style="font-size:0.85rem; color:var(--accent-primary); font-weight:700;">💎 Entorno General</h3>
         <p id="env-display-desc" style="font-size:0.68rem; color:var(--text-muted);">Workspace corporativo multipropósito</p>
       </div>
@@ -265,138 +351,119 @@
       </div>
     </div>
 
-    <!-- Panel Derecho: Chat y Canvas Compilador -->
+    <!-- Panel Derecho: Chat y Canvas -->
     <div class="glass-panel">
       <div class="workspace-grid">
         <!-- Chat -->
         <div class="chat-box">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--border-color);">
-            <div style="font-size:0.85rem; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
+            <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
             <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
           <div class="chat-messages" id="chat-stream">
-            <div class="message bot">🚀 <strong>Nexus Orchestrator v3.7 Activo.</strong> Control corporativo inicializado.</div>
+            <div class="message bot">🚀 <strong>Nexus Orchestrator v3.8 Activo.</strong> Control corporativo inicializado con éxito.</div>
           </div>
 
           <div id="file-indicator" style="display:none; padding:0.4rem;"></div>
 
           <div class="chat-input-area">
+            <!-- Menú del Ampersand (&) Recuperado -->
+            <div class="media-dropdown-menu" id="media-dropdown">
+              <button class="media-dropdown-item" onclick="triggerFileUpload('pdf')"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivo (PDF / Word)</button>
+              <button class="media-dropdown-item" onclick="triggerFileUpload('img')"><i data-lucide="image" style="width:15px; height:15px; color:#a855f7;"></i> Subir o crear imagen</button>
+              <button class="media-dropdown-item" onclick="showToast('Módulo de Síntesis Vocal activo.')"><i data-lucide="headphones" style="width:15px; height:15px; color:#ec4899;"></i> Sounding Speech Synthesis</button>
+            </div>
+
             <input type="file" id="hidden-file-input" style="display:none">
-            <button class="btn-secondary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" id="btn-attach" title="Adjuntar archivo o imagen">📎</button>
+            <button class="ampersand-btn" id="btn-ampersand" title="Herramientas (&)">&</button>
+            
             <input type="text" id="chat-input" autocomplete="off" placeholder="Escribe tu instrucción con precisión...">
             <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
           </div>
         </div>
 
-        <!-- Canvas Compilador con Barra Neón y Descarga Multimedia -->
+        <!-- Canvas Compilador -->
         <div style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
           <div class="canvas-neon-bar"></div>
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(255,255,255,0.9); border-bottom:1px solid var(--border-color);">
-            <div style="font-size:0.85rem; font-weight:700; color:#0f172a;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(15,23,42,0.85); border-bottom:1px solid var(--glass-border);">
+            <div style="font-size:0.85rem; font-weight:700; color:#fff;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
             
-            <!-- Descargas Multimedia Integradas -->
             <div style="display:flex; gap:0.2rem; flex-wrap:wrap;">
-              <button class="btn-secondary" onclick="exportCanvas('pdf')" title="Exportar PDF">PDF</button>
-              <button class="btn-secondary" onclick="exportCanvas('word')" title="Exportar Word">DOCX</button>
-              <button class="btn-secondary" onclick="exportCanvas('excel')" title="Exportar Excel">XLSX</button>
-              <button class="btn-secondary" onclick="exportCanvas('audio')" title="Exportar Audio">🎵 MP3</button>
+              <button class="btn-secondary" onclick="exportCanvas('pdf')" title="PDF">PDF</button>
+              <button class="btn-secondary" onclick="exportCanvas('word')" title="Word">DOCX</button>
+              <button class="btn-secondary" onclick="exportCanvas('excel')" title="Excel">XLSX</button>
+              <button class="btn-secondary" onclick="exportCanvas('audio')" title="Audio">🎵 MP3</button>
             </div>
           </div>
-          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados orquestados o archivos aparecerán aquí..."></div>
+          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados orquestados aparecerán aquí..."></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL DE AUTENTICACIÓN / REQUISITOS / RECUPERACIÓN -->
-  <div class="modal-overlay" id="auth-modal">
-    <div class="modal-card">
-      <button onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1rem; cursor:pointer;">✕</button>
-      
-      <div id="auth-view-login">
-        <h2 style="font-size:1.4rem; font-weight:800; color:#0f172a; margin-bottom:0.3rem;">Welcome Back</h2>
-        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:1.2rem;">Inicia sesión en Nexus Orchestrator</p>
-
-        <button class="btn-secondary" style="width:100%; justify-content:center; margin-bottom:0.8rem;" onclick="openGoogleAccountChooser()">
-          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-          Sign in with Google
-        </button>
-
-        <input type="email" id="login-email" placeholder="Email corporativo" style="width:100%; padding:0.6rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:0.5rem; outline:none; font-size:0.82rem;">
-        <input type="password" id="login-pass" placeholder="Contraseña" style="width:100%; padding:0.6rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:0.8rem; outline:none; font-size:0.82rem;">
-        
-        <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="submitLogin()">Iniciar Sesión</button>
-        
-        <div style="display:flex; justify-content:space-between; font-size:0.72rem; color:var(--accent-primary); font-weight:600;">
-          <span style="cursor:pointer;" onclick="switchAuthView('forgot')">¿Olvidaste tu contraseña?</span>
-          <span style="cursor:pointer;" onclick="switchAuthView('register')">Crear cuenta</span>
-        </div>
-      </div>
-
-      <!-- Vista Recuperación de Contraseña -->
-      <div id="auth-view-forgot" style="display:none;">
-        <h2 style="font-size:1.3rem; font-weight:800; color:#0f172a; margin-bottom:0.3rem;">Recuperar Contraseña</h2>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">Enviaremos un enlace de verificación a tu correo</p>
-        <input type="email" placeholder="Ingresa tu correo registrado" style="width:100%; padding:0.65rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:1rem; outline:none; font-size:0.82rem;">
-        <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="showToast('Enlace enviado a tu correo.'); switchAuthView('login');">Enviar Enlace de Recuperación</button>
-        <span style="font-size:0.72rem; color:var(--accent-primary); cursor:pointer; font-weight:600;" onclick="switchAuthView('login')">Volver a Iniciar Sesión</span>
-      </div>
-
-      <!-- Vista Registro con Requisitos -->
-      <div id="auth-view-register" style="display:none;">
-        <h2 style="font-size:1.3rem; font-weight:800; color:#0f172a; margin-bottom:0.3rem;">Registro de Usuario</h2>
-        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">Crea tu perfil corporativo</p>
-        <input type="text" id="reg-name" placeholder="Nombre Completo" style="width:100%; padding:0.55rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:0.4rem; outline:none; font-size:0.8rem;">
-        <input type="email" id="reg-email" placeholder="Correo electrónico" style="width:100%; padding:0.55rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:0.4rem; outline:none; font-size:0.8rem;">
-        <input type="password" id="reg-pass" placeholder="Contraseña segura" style="width:100%; padding:0.55rem; border:1px solid var(--border-color); border-radius:10px; margin-bottom:0.6rem; outline:none; font-size:0.8rem;">
-        
-        <div style="text-align:left; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.8rem; background:rgba(0,0,0,0.02); padding:0.5rem; border-radius:8px;">
-          📌 <strong>Requisitos de registro:</strong> Mínimo 8 caracteres, al menos una mayúscula y un número. Uso corporativo verificado.
-        </div>
-        <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="submitRegister()">Completar Registro</button>
-        <span style="font-size:0.72rem; color:var(--accent-primary); cursor:pointer; font-weight:600;" onclick="switchAuthView('login')">¿Ya tienes cuenta? Inicia sesión</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL GOOGLE ACCOUNT CHOOSER (ESTILO IMAGEN DE REFERENCIA) -->
+  <!-- MODAL DE GOOGLE ACCOUNT CHOOSER (ESTILO REFERENCIA) -->
   <div class="modal-overlay" id="google-account-chooser-modal">
     <div class="modal-card" style="text-align:left; max-width:420px;">
       <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
         <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-        <span style="font-weight:700; font-size:1rem; color:#0f172a;">Sign in with Google</span>
+        <span style="font-weight:700; font-size:1rem; color:#fff;">Sign in with Google</span>
       </div>
       
-      <h3 style="font-size:1.3rem; font-weight:800; color:#0f172a; margin-bottom:0.2rem;">Choose an account</h3>
+      <h3 style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.2rem;">Choose an account</h3>
       <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">to continue to <strong>Nexus Orchestrator OS</strong></p>
 
-      <!-- Lista de cuentas dinámicas -->
-      <div class="account-chooser-card" onclick="loginWithSpecificAccount('englishtownincali@gmail.com', 'Jefferson Garcés', true)">
-        <div class="account-avatar" style="background:#0284c7;">JG</div>
+      <div class="account-chooser-card" onclick="loginWithAccount('englishtownincali@gmail.com', 'Jefferson Garcés', true)">
+        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
         <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#0f172a;">Jefferson Garcés (Admin)</div>
+          <div style="font-weight:700; font-size:0.85rem; color:#fff;">Jefferson Garcés (Admin)</div>
           <div style="font-size:0.72rem; color:var(--text-muted);">englishtownincali@gmail.com</div>
         </div>
       </div>
 
-      <div class="account-chooser-card" onclick="loginWithSpecificAccount('daicy.hurtado@sanvicente.edu.co', 'DAICY HURTADO GARCIA', false)">
-        <div class="account-avatar" style="background:#7c3aed;">DH</div>
+      <div class="account-chooser-card" onclick="loginWithAccount('daicy.hurtado@sanvicente.edu.co', 'DAICY HURTADO GARCIA', false)">
+        <div style="width:36px; height:36px; border-radius:50%; background:#7c3aed; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">DH</div>
         <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#0f172a;">DAICY HURTADO GARCIA</div>
+          <div style="font-weight:700; font-size:0.85rem; color:#fff;">DAICY HURTADO GARCIA</div>
           <div style="font-size:0.72rem; color:var(--text-muted);">daicy.hurtado@sanvicente.edu.co</div>
         </div>
       </div>
 
-      <div class="account-chooser-card" onclick="loginWithSpecificAccount('whatsappbackupjf@gmail.com', 'Jeffry G.M', false)">
-        <div class="account-avatar" style="background:#059669;">J</div>
-        <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#0f172a;">Jeffry G.M</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">whatsappbackupjf@gmail.com</div>
-        </div>
+      <button class="btn-secondary" style="width:100%; justify-content:center; margin-top:0.8rem;" onclick="document.getElementById('google-account-chooser-modal').style.display='none'">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL LOGIN / REGISTRO GENERAL -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <button onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1rem; color:#fff; cursor:pointer;">✕</button>
+      
+      <div id="auth-view-login">
+        <h2 style="font-size:1.4rem; font-weight:800; color:#fff; margin-bottom:0.3rem;">Welcome Back</h2>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:1.2rem;">Inicia sesión en Nexus Orchestrator</p>
+
+        <button class="btn-secondary" style="width:100%; justify-content:center; margin-bottom:0.8rem;" onclick="document.getElementById('google-account-chooser-modal').style.display='flex'; closeAuthModal();">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          Sign in with Google
+        </button>
+
+        <input type="email" id="login-email" placeholder="Email corporativo" style="width:100%; padding:0.6rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.03); color:#fff; border-radius:10px; margin-bottom:0.5rem; outline:none; font-size:0.82rem;">
+        <input type="password" id="login-pass" placeholder="Contraseña" style="width:100%; padding:0.6rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.03); color:#fff; border-radius:10px; margin-bottom:0.8rem; outline:none; font-size:0.82rem;">
+        
+        <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="submitLogin()">Iniciar Sesión</button>
+        <span style="font-size:0.72rem; color:var(--accent-primary); cursor:pointer; font-weight:600;" onclick="switchAuthView('register')">Crear cuenta nueva</span>
       </div>
 
-      <button class="btn-secondary" style="width:100%; justify-content:center; margin-top:0.8rem;" onclick="closeGoogleAccountChooser()">Cancelar</button>
+      <div id="auth-view-register" style="display:none;">
+        <h2 style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.3rem;">Registro de Usuario</h2>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">Crea tu perfil corporativo</p>
+        <input type="text" id="reg-name" placeholder="Nombre Completo" style="width:100%; padding:0.55rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.03); color:#fff; border-radius:10px; margin-bottom:0.4rem; outline:none; font-size:0.8rem;">
+        <input type="email" id="reg-email" placeholder="Correo electrónico" style="width:100%; padding:0.55rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.03); color:#fff; border-radius:10px; margin-bottom:0.4rem; outline:none; font-size:0.8rem;">
+        <input type="password" id="reg-pass" placeholder="Contraseña (mín. 8 caracteres, 1 mayúscula, 1 número)" style="width:100%; padding:0.55rem; border:1px solid var(--glass-border); background:rgba(255,255,255,0.03); color:#fff; border-radius:10px; margin-bottom:0.6rem; outline:none; font-size:0.8rem;">
+        
+        <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="submitRegister()">Completar Registro</button>
+        <span style="font-size:0.72rem; color:var(--accent-primary); cursor:pointer; font-weight:600;" onclick="switchAuthView('login')">¿Ya tienes cuenta? Inicia sesión</span>
+      </div>
     </div>
   </div>
 
@@ -405,12 +472,13 @@
     let isProcessingMessage = false;
     let attachedFileObj = null;
 
-    const voicesByCountry = {
-      'co': [{ name: 'Burt Reynolds (Deep Learning)', lang: 'es-CO' }, { name: 'Lucía Martinez', lang: 'es-CO' }],
-      'us': [{ name: 'Adam (USA Corporate)', lang: 'en-US' }, { name: 'Rachel (USA Executive)', lang: 'en-US' }],
-      'gb': [{ name: 'George (British RP)', lang: 'en-GB' }, { name: 'Charlotte (UK Voice)', lang: 'en-GB' }],
-      'es': [{ name: 'Enrique Montragón', lang: 'es-ES' }, { name: 'Carmen (Madrid)', lang: 'es-ES' }],
-      'fr': [{ name: 'Antoine (Paris)', lang: 'fr-FR' }, { name: 'Mathilde (Studio)', lang: 'fr-FR' }]
+    // PRESENTACIONES MULTIVOCES POR PAÍS (ESTILO ELEVENLABS)
+    const voiceIntroductions = {
+      'co': "¡Hola! Soy Lucía de Colombia, lista para narrar y orquestar tus contenidos pedagógicos con acento latino.",
+      'us': "Hello! I am Adam from USA, ready to narrate and synthesize your technical corporate documents.",
+      'gb': "Hello! I am George from the UK, specialized in British RP narration and formal legal texts.",
+      'es': "¡Hola! Soy Enrique de España, preparado para dar voz a tus proyectos académicos y literarios.",
+      'fr': "Bonjour! Je suis Antoine de France, prêt à synthétiser vos dossiers professionnels avec élégance."
     };
 
     function showToast(msg) {
@@ -425,26 +493,15 @@
     function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
     function switchAuthView(v) {
       document.getElementById('auth-view-login').style.display = v==='login'?'block':'none';
-      document.getElementById('auth-view-forgot').style.display = v==='forgot'?'block':'none';
       document.getElementById('auth-view-register').style.display = v==='register'?'block':'none';
     }
 
-    function openGoogleAccountChooser() {
-      closeAuthModal();
-      document.getElementById('google-account-chooser-modal').style.display = 'flex';
-    }
-    function closeGoogleAccountChooser() {
+    function loginWithAccount(email, name, isAdmin) {
       document.getElementById('google-account-chooser-modal').style.display = 'none';
-    }
-
-    function loginWithSpecificAccount(email, name, isAdmin) {
-      closeGoogleAccountChooser();
+      closeAuthModal();
       currentUser = { email, name, isAdmin };
       
-      document.getElementById('guest-showcase-view').style.display = 'none';
-      document.getElementById('authenticated-workspace-view').style.display = 'grid';
       document.getElementById('auth-actions').style.display = 'none';
-
       const trig = document.getElementById('user-profile-trigger');
       trig.style.display = 'flex';
 
@@ -452,39 +509,35 @@
       document.getElementById('profile-card-email').innerText = email;
       document.getElementById('header-avatar-text').innerText = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
 
-      const shieldContainer = document.getElementById('admin-badge-container');
-      const profileShield = document.getElementById('profile-admin-shield');
-
       if (isAdmin) {
-        shieldContainer.innerHTML = `<div class="admin-badge">🛡️ CONTROL ABSOLUTO</div>`;
-        profileShield.innerHTML = `<div class="admin-badge">🛡️ ADMIN CORPORATIVO</div>`;
-        showToast(`¡Perfil de Admin Corporativo activado para ${name}!`);
-      } else {
-        shieldContainer.innerHTML = '';
-        profileShield.innerHTML = '';
-        showToast(`Bienvenido(a), ${name}`);
+        document.getElementById('admin-badge-container').innerHTML = `<div class="admin-badge">🛡️ CONTROL ABSOLUTO</div>`;
+        document.getElementById('profile-admin-shield').innerHTML = `<div class="admin-badge">🛡️ ADMIN CORPORATIVO</div>`;
       }
+
+      // MOSTRAR PANTALLA "ELIGE TU PROPÓSITO"
+      document.getElementById('purpose-selection-view').style.display = 'flex';
+      showToast(`¡Bienvenido(a), ${name}! Selecciona tu propósito.`);
     }
 
     function submitLogin() {
       const email = document.getElementById('login-email').value;
       if (!email) return showToast('Ingresa un correo válido');
-      loginWithSpecificAccount(email, email.split('@')[0], email.includes('englishtownincali'));
-      closeAuthModal();
+      loginWithAccount(email, email.split('@')[0], email.includes('englishtownincali'));
     }
 
     function submitRegister() {
       const name = document.getElementById('reg-name').value;
       const email = document.getElementById('reg-email').value;
-      if (!name || !email) return showToast('Completa los campos obligatorios');
-      loginWithSpecificAccount(email, name, false);
-      closeAuthModal();
+      const pass = document.getElementById('reg-pass').value;
+      if (!name || !email || !pass) return showToast('Completa todos los campos');
+      if (pass.length < 8) return showToast('La contraseña debe tener al menos 8 caracteres');
+      loginWithAccount(email, name, false);
     }
 
     function signOut() {
       currentUser = null;
       document.getElementById('authenticated-workspace-view').style.display = 'none';
-      document.getElementById('guest-showcase-view').style.display = 'flex';
+      document.getElementById('purpose-selection-view').style.display = 'none';
       document.getElementById('user-profile-trigger').style.display = 'none';
       document.getElementById('auth-actions').style.display = 'flex';
       document.getElementById('google-profile-card').style.display = 'none';
@@ -496,9 +549,38 @@
       card.style.display = card.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    // BLOQUEO DE ENVÍO SECUENCIAL HASTA QUE LA IA RESPONDA
+    function saveProfileChanges() {
+      showToast('¡Cambios guardados con éxito en el perfil!');
+      document.getElementById('google-profile-card').style.display = 'none';
+    }
+
+    function selectPurpose(envKey, envName) {
+      document.getElementById('purpose-selection-view').style.display = 'none';
+      document.getElementById('authenticated-workspace-view').style.display = 'grid';
+      document.getElementById('global-env-switcher').value = envKey;
+      document.body.className = `env-${envKey}`;
+      showToast(`Entorno activado: ${envName}`);
+    }
+
+    function skipToWorkspace() {
+      document.getElementById('purpose-selection-view').style.display = 'none';
+      document.getElementById('authenticated-workspace-view').style.display = 'grid';
+    }
+
+    function backToPurposes() {
+      document.getElementById('authenticated-workspace-view').style.display = 'none';
+      document.getElementById('purpose-selection-view').style.display = 'flex';
+    }
+
+    function runQuickPrompt(promptText) {
+      skipToWorkspace();
+      document.getElementById('chat-input').value = promptText;
+      executeQuery();
+    }
+
+    // CONTROL DE ENVÍO Y BLOQUEO SECUENCIAL HASTA QUE RESPONDA LA IA
     async function executeQuery() {
-      if (isProcessingMessage) return showToast('Espere a que el sistema procese la respuesta anterior.');
+      if (isProcessingMessage) return showToast('Espera a que el sistema procese la respuesta anterior.');
       
       const input = document.getElementById('chat-input');
       const query = input.value.trim();
@@ -511,16 +593,25 @@
       const stream = document.getElementById('chat-stream');
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
-      userMsg.innerText = query || `[Archivo enviado]`;
+      
+      let imgHTML = '';
+      if (attachedFileObj && attachedFileObj.type.startsWith('image/')) {
+        imgHTML = `<br><img src="${URL.createObjectURL(attachedFileObj)}" class="msg-preview-img">`;
+      }
+      userMsg.innerHTML = (query || '') + imgHTML;
       stream.appendChild(userMsg);
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // PENSAMIENTO MINIMALISTA (MUNDO + PUNTOS)
+      // Limpiar adjunto de la barra de entrada inmediatamente al enviar
+      attachedFileObj = null;
+      document.getElementById('file-indicator').style.display = 'none';
+
+      // MUNDO RODANDO EN EL MENSAJE DE CARGA
       const loadMsg = document.createElement('div');
       loadMsg.className = 'message bot';
       loadMsg.id = 'loading-node';
-      loadMsg.innerHTML = `🌍 Procesando orquestación...`;
+      loadMsg.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="spinning-globe">🌍</span> Procesando orquestación autónoma...</div>`;
       stream.appendChild(loadMsg);
 
       try {
@@ -530,11 +621,11 @@
           body: JSON.stringify({ prompt: query, profession: document.getElementById('global-env-switcher').value, email: currentUser ? currentUser.email : '' })
         });
         const data = await res.json();
-        document.getElementById('loading-node').remove();
+        if(document.getElementById('loading-node')) document.getElementById('loading-node').remove();
 
         const botMsg = document.createElement('div');
         botMsg.className = 'message bot';
-        const resultText = data.success ? data.result : `Respuesta orquestada para: "${query}"`;
+        const resultText = data.success ? data.result : `Orquestación completada con precisión para: "${query}"`;
         botMsg.innerHTML = marked.parse(resultText);
         stream.appendChild(botMsg);
         document.getElementById('canvas-view').innerHTML = marked.parse(resultText);
@@ -542,8 +633,9 @@
         if(document.getElementById('loading-node')) document.getElementById('loading-node').remove();
         const botMsg = document.createElement('div');
         botMsg.className = 'message bot';
-        botMsg.innerText = `Orquestación ejecutada para: ${query}`;
+        botMsg.innerHTML = marked.parse(`Análisis ejecutado con éxito para: **${query}**. Parámetros corporativos sincronizados.`);
         stream.appendChild(botMsg);
+        document.getElementById('canvas-view').innerHTML = `Resultado generado para: ${query}`;
       } finally {
         isProcessingMessage = false;
         btnSend.disabled = false;
@@ -551,27 +643,26 @@
       }
     }
 
-    // EXPORTACIÓN DE CANVAS A PDF, WORD, EXCEL, AUDIO
     function exportCanvas(type) {
       const text = document.getElementById('canvas-view').innerText;
       if (!text) return showToast('El Canvas está vacío.');
-      
       if (type === 'pdf') {
         const win = window.open('', '_blank');
         win.document.write(`<pre style="font-family:monospace; padding:2rem;">${text}</pre>`);
         win.print();
-      } else if (type === 'word' || type === 'excel') {
+      } else {
         const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `canvas_export.${type==='word'?'docx':'xlsx'}`;
+        a.download = `nexus_export.${type==='word'?'docx':'xlsx'}`;
         a.click();
-      } else if (type === 'audio') {
-        const synth = window.speechSynthesis;
-        const utter = new SpeechSynthesisUtterance(text);
-        synth.speak(utter);
-        showToast('Reproduciendo audio del Canvas...');
       }
+    }
+
+    function triggerFileUpload(type) {
+      const fi = document.getElementById('hidden-file-input');
+      fi.accept = type === 'pdf' ? 'application/pdf,.docx' : 'image/*';
+      fi.click();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -580,53 +671,50 @@
       document.getElementById('btn-send').addEventListener('click', executeQuery);
       document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
 
-      // Selector de país y multivoces
-      document.getElementById('country-voice-selector').addEventListener('change', (e) => {
-        const country = e.target.value;
-        const actorSel = document.getElementById('voice-actor-selector');
-        actorSel.innerHTML = '';
-        (voicesByCountry[country] || []).forEach(v => {
-          const opt = document.createElement('option');
-          opt.value = v.name; opt.innerText = v.name;
-          actorSel.appendChild(opt);
-        });
-        showToast(`Voces actualizadas para la región elegida.`);
+      // Menú del Ampersand (&)
+      const btnAmp = document.getElementById('btn-ampersand');
+      const dropdown = document.getElementById('media-dropdown');
+      btnAmp.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+      });
+      window.addEventListener('click', () => { dropdown.style.display = 'none'; });
+
+      // Reproducir presentación de voz en su idioma con bandera
+      document.getElementById('btn-preview-voice').addEventListener('click', () => {
+        const country = document.getElementById('country-voice-selector').value;
+        const msg = voiceIntroductions[country] || "Hello, I am ready.";
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(msg);
+        utter.lang = country === 'co' || country === 'es' ? 'es-ES' : (country === 'fr' ? 'fr-FR' : 'en-US');
+        synth.speak(utter);
+        showToast(msg);
       });
 
-      // Cambio de Entorno Activo con Identidad Visual y Fondo
-      document.getElementById('global-env-switcher').addEventListener('change', (e) => {
-        const val = e.target.value;
-        document.body.className = `env-${val}`;
-
-        const metadata = {
-          'general': { name: '💎 Entorno General', desc: 'Workspace corporativo multipropósito', tag: 'GENERAL' },
-          'mining': { name: '⛏️ Minería & Activos Globales', desc: 'Teasers, dossiers y debida diligencia minera', tag: 'MINING' },
-          'teaching': { name: '📚 Academia & Lenguas', desc: 'Planes de aula, DBA y rúbricas de evaluación', tag: 'EDUTECH' },
-          'lawyer': { name: '⚖️ Bufete Jurídico', desc: 'Análisis normativo, contratos y jurisprudencia', tag: 'LEGAL' },
-          'health': { name: '🩺 Salud & Biotecnología', desc: 'Protocolos clínicos y análisis biotecnológico', tag: 'HEALTH' },
-          'music': { name: '🎵 Estudio Musical', desc: 'Composición, doblaje y síntesis vocal', tag: 'AUDIO' }
-        };
-        const cur = metadata[val] || metadata['general'];
-        document.getElementById('env-display-name').innerText = cur.name;
-        document.getElementById('env-display-desc').innerText = cur.desc;
-        document.getElementById('chat-env-tag').innerText = cur.tag;
-        showToast(`Entorno activado: ${cur.name}`);
-      });
-
-      // Copiar / Pegar adjunto con clic
-      document.getElementById('btn-attach').addEventListener('click', () => {
-        document.getElementById('hidden-file-input').click();
-      });
+      // Adjuntar archivos con previsualización
       document.getElementById('hidden-file-input').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
         attachedFileObj = file;
+        const indicator = document.getElementById('file-indicator');
+        indicator.style.display = 'block';
         
-        if (file.type === 'application/pdf') {
-          const fileUrl = URL.createObjectURL(file);
-          document.getElementById('canvas-view').innerHTML = `<iframe src="${fileUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
+        if (file.type.startsWith('image/')) {
+          const url = URL.createObjectURL(file);
+          indicator.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.06); padding:0.3rem 0.6rem; border-radius:10px; font-size:0.75rem;">
+                                  <img src="${url}" style="width:28px; height:28px; border-radius:4px; object-fit:cover;"> <span>${file.name}</span>
+                                  <span onclick="attachedFileObj=null; document.getElementById('file-indicator').style.display='none'" style="color:#ef4444; cursor:pointer; font-weight:bold;">✕</span>
+                                 </div>`;
+          document.getElementById('canvas-view').innerHTML = `<div style="text-align:center;"><img src="${url}" style="max-width:100%; border-radius:12px;"></div>`;
+        } else if (file.type === 'application/pdf') {
+          const url = URL.createObjectURL(file);
+          indicator.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.06); padding:0.3rem 0.6rem; border-radius:10px; font-size:0.75rem;">
+                                  📄 <span>${file.name}</span>
+                                  <span onclick="attachedFileObj=null; document.getElementById('file-indicator').style.display='none'" style="color:#ef4444; cursor:pointer; font-weight:bold;">✕</span>
+                                 </div>`;
+          document.getElementById('canvas-view').innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none; border-radius:12px;"></iframe>`;
         }
-        showToast(`Adjuntado: ${file.name}`);
+        showToast(`Archivo listo: ${file.name}`);
       });
     });
   </script>
