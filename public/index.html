@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.3</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.4</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -97,7 +97,7 @@
     }
     .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); }
 
-    /* LANDING SHOWCASE PARA INVITADOS (ESTILO ELEVENLABS) */
+    /* LANDING PAGE DE BIENVENIDA PARA INVITADOS (ESTILO ELEVENLABS) */
     .guest-showcase-view {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: calc(100vh - 95px); overflow-y: auto; text-align: center; padding: 1.5rem;
@@ -252,7 +252,7 @@
         <div class="brand-logo">💎</div>
       </div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.3</span></h1>
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.4</span></h1>
         <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
@@ -310,7 +310,7 @@
 
   <!-- LANDING PAGE DE BIENVENIDA PARA INVITADOS (ESTILO ELEVENLABS) -->
   <div id="guest-showcase-view" class="guest-showcase-view">
-    <div class="hero-badge"><i data-lucide="sparkles" style="width:14px; height:14px;"></i> NEXUS ORCHESTRATOR OS v3.3</div>
+    <div class="hero-badge"><i data-lucide="sparkles" style="width:14px; height:14px;"></i> NEXUS ORCHESTRATOR OS v3.4</div>
     <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.8px;">
       Orquestación Autónoma de Inteligencia Artificial
     </h2>
@@ -344,7 +344,7 @@
 
   <!-- WORKSPACE PRIVADO (SE MUESTRA TRAS INICIAR SESIÓN) -->
   <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
-    <!-- Panel Izquierdo -->
+    <!-- Panel Izquierdo: Entornos -->
     <div class="glass-panel">
       <div class="panel-header">
         <div class="panel-title"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entorno Especializado</div>
@@ -379,10 +379,11 @@
 
           <div class="chat-messages" id="chat-stream">
             <div class="message bot">
-              🚀 <strong>Nexus Orchestrator v3.3 Activo.</strong> Escribe tu instrucción o adjunta tus documentos para comenzar la orquestación técnica.
+              🚀 <strong>Nexus Orchestrator v3.4 Activo.</strong> Escribe tu instrucción o adjunta tus documentos para comenzar la orquestación técnica.
             </div>
           </div>
 
+          <!-- Indicador de archivo adjunto (desaparece al enviar) -->
           <div id="file-indicator" style="display:none; padding: 0.4rem;"></div>
 
           <div class="chat-input-area">
@@ -424,7 +425,7 @@
     </div>
   </div>
 
-  <!-- MODAL AUTENTICACIÓN ELEVENLABS STYLE -->
+  <!-- MODAL AUTENTICACIÓN ESTILO ELEVENLABS[cite: 16] -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card-auth">
       <button class="modal-close" onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1rem; cursor:pointer;">✕</button>
@@ -522,7 +523,7 @@
       attachedFile = null;
       lastRawText = '';
 
-      document.getElementById('chat-stream').innerHTML = '<div class="message bot">🚀 <strong>Nexus Orchestrator v3.3 Activo.</strong> Escribe tu instrucción...</div>';
+      document.getElementById('chat-stream').innerHTML = '<div class="message bot">🚀 <strong>Nexus Orchestrator v3.4 Activo.</strong> Escribe tu instrucción...</div>';
       document.getElementById('canvas-view').innerHTML = '';
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('guest-showcase-view').style.display = 'flex';
@@ -561,7 +562,7 @@
       showToast('Archivo retirado.');
     };
 
-    // ENVÍO DE CONSULTA CON PENSAMIENTO MINIMALISTA (MUNDO + PUNTOS)
+    // ENVÍO DE CONSULTA Y LIMPIEZA DEL ARCHIVO ADJUNTO (YA NO SE QUEDA PEGADO)
     async function sendUserQuery() {
       const input = document.getElementById('chat-input');
       const query = input.value.trim();
@@ -570,12 +571,22 @@
       const stream = document.getElementById('chat-stream');
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
-      userMsg.innerText = query || `[Archivo adjunto: ${attachedFile.name}]`;
+      
+      let attachedLabel = '';
+      if (attachedFile) {
+        attachedLabel = `<br><span style="font-size:0.7rem; opacity:0.8;">📎 [Enviado: ${attachedFile.name}]</span>`;
+      }
+      userMsg.innerHTML = (query ? query : '') + attachedLabel;
       stream.appendChild(userMsg);
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // PENSAMIENTO MINIMALISTA
+      // LIMPIAR INMEDIATAMENTE EL ADJUNTO DE LA ZONA DE ENTRADA AL ENVIAR
+      attachedFile = null;
+      document.getElementById('file-indicator').style.display = 'none';
+      document.getElementById('hidden-file-input').value = '';
+
+      // PENSAMIENTO MINIMALISTA (MUNDO + PUNTOS)
       const loadMsg = document.createElement('div');
       loadMsg.className = 'message bot';
       loadMsg.id = 'loading-node';
@@ -604,9 +615,7 @@
         stream.appendChild(botMsg);
         stream.scrollTop = stream.scrollHeight;
 
-        if (!attachedFile || attachedFile.type !== 'application/pdf') {
-          document.getElementById('canvas-view').innerHTML = marked.parse(lastRawText);
-        }
+        document.getElementById('canvas-view').innerHTML = marked.parse(lastRawText);
       } catch (e) {
         document.getElementById('loading-node').remove();
         const botMsg = document.createElement('div');
@@ -621,6 +630,23 @@
 
       document.getElementById('btn-send').addEventListener('click', sendUserQuery);
       document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserQuery(); });
+
+      // Cambio de entornos activos
+      document.getElementById('global-env-switcher').addEventListener('change', (e) => {
+        const val = e.target.value;
+        const names = {
+          'general': { name: '💎 Entorno General', desc: 'Workspace corporativo multipropósito', tag: 'GENERAL' },
+          'mining': { name: '⛏️ Minería & Activos Globales', desc: 'Teasers, dossiers y debida diligencia', tag: 'MINING' },
+          'teaching': { name: '📚 Academia & Lenguas', desc: 'Planes de aula, DBA y rúbricas', tag: 'EDUTECH' },
+          'lawyer': { name: '⚖️ Bufete Jurídico', desc: 'Análisis normativo y contratos', tag: 'LEGAL' },
+          'music': { name: '🎵 Estudio Musical', desc: 'Conceptos estéticos y composición', tag: 'AUDIO' }
+        };
+        const cur = names[val] || names['general'];
+        document.getElementById('env-display-name').innerText = cur.name;
+        document.getElementById('env-display-desc').innerText = cur.desc;
+        document.getElementById('chat-env-tag').innerText = cur.tag;
+        showToast(`Entorno cambiado a: ${cur.name}`);
+      });
 
       const btnAmp = document.getElementById('btn-ampersand');
       const dropdown = document.getElementById('media-dropdown');
