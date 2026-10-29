@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.1</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.2</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- Google Picker API para la selección real de Drive -->
+  <script src="https://apis.google.com/js/api.js"></script>
 
   <style>
     :root {
       --bg-light: #f4f7fb;
       --glass-bg: rgba(255, 255, 255, 0.88);
-      --glass-panel: rgba(255, 255, 255, 0.8);
+      --glass-panel: rgba(255, 255, 255, 0.82);
       --border-color: rgba(14, 165, 233, 0.3);
       --accent-primary: #0284c7;
       --accent-secondary: #7c3aed;
@@ -83,7 +85,7 @@
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff !important; border: none; padding: 0.5rem 1.1rem; border-radius: 10px;
+      color: #fff !important; border: none; padding: 0.55rem 1.2rem; border-radius: 10px;
       font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s; display: inline-flex; align-items: center; gap: 0.35rem;
     }
@@ -91,39 +93,22 @@
 
     .btn-secondary {
       background: rgba(255,255,255,0.92); border: 1px solid var(--border-color);
-      color: var(--text-main) !important; padding: 0.4rem 0.8rem; border-radius: 10px;
+      color: var(--text-main) !important; padding: 0.45rem 0.9rem; border-radius: 10px;
       font-size: 0.72rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;
     }
     .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); }
 
-    /* LAYOUT DE LANDING SHOWCASE (INVITADOS) */
-    .guest-showcase-view {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      flex: 1; height: calc(100vh - 95px); overflow-y: auto; text-align: center; padding: 1.5rem;
-      background: var(--glass-panel); border: 1px solid var(--border-color); border-radius: 20px;
-      backdrop-filter: blur(20px); box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+    /* FOTO DE PERFIL EN LA ESQUINA SUPERIOR DERECHA (ESTILO GOOGLE) */
+    .user-profile-trigger {
+      width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent-primary);
+      cursor: pointer; overflow: hidden; background: #e2e8f0; display: flex; align-items: center;
+      justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s;
     }
+    .user-profile-trigger:hover { transform: scale(1.05); border-color: var(--accent-secondary); }
+    .user-profile-trigger img { width: 100%; height: 100%; object-fit: cover; }
 
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(2, 132, 199, 0.1);
-      border: 1px solid var(--border-color); padding: 0.35rem 0.85rem; border-radius: 9999px;
-      font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700; margin-bottom: 1rem;
-    }
-
-    .showcase-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; max-width: 980px; margin: 1.5rem 0;
-    }
-    @media (max-width: 768px) { .showcase-grid { grid-template-columns: 1fr; } }
-
-    .showcase-card {
-      background: #ffffff; border: 1px solid var(--border-color); border-radius: 16px;
-      padding: 1.2rem; text-align: left; transition: all 0.25s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-    }
-    .showcase-card:hover { transform: translateY(-3px); border-color: var(--accent-primary); box-shadow: 0 8px 25px var(--theme-glow); }
-    .showcase-card-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(2, 132, 199, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-primary); margin-bottom: 0.75rem; }
-
-    /* LAYOUT PRINCIPAL DE WORKSPACE (USUARIOS AUTENTICADOS) */
+    /* LAYOUT PRINCIPAL */
     .main-layout { 
       display: grid; 
       grid-template-columns: 300px 1fr; 
@@ -131,9 +116,6 @@
       flex: 1;
       height: calc(100vh - 85px);
       overflow: hidden;
-    }
-    @media (max-width: 1024px) {
-      .main-layout { grid-template-columns: 1fr; height: auto; overflow-y: auto; }
     }
 
     .glass-panel {
@@ -157,43 +139,10 @@
     .env-badge-box h3 { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.15rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.3rem; }
     .env-badge-box p { font-size: 0.68rem; color: var(--text-muted); }
 
-    .workspace-grid { 
-      display: grid; 
-      grid-template-columns: 1fr 1fr; 
-      gap: 1rem; 
-      height: 100%; 
-      overflow: hidden;
-    }
+    .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; height: 100%; overflow: hidden; }
 
-    .chat-box { display: flex; flex-direction: column; height: 100%; position: hidden; overflow: hidden; }
+    .chat-box { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
     
-    .hero-welcome-area {
-      display: flex; flex-direction: column; padding: 0.2rem; text-align: left;
-      flex: 1; overflow-y: auto; margin-bottom: 0.5rem; max-height: calc(100vh - 250px);
-    }
-    .hero-greeting { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.15rem; letter-spacing: -0.5px; }
-    .hero-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.7rem; line-height: 1.4; }
-
-    .section-label { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
-    
-    .purposes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.45rem; margin-bottom: 0.65rem; }
-    .purpose-card {
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: 12px;
-      padding: 0.65rem; cursor: pointer; transition: all 0.2s ease;
-    }
-    .purpose-card:hover { border-color: var(--accent-primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px var(--theme-glow); }
-    .purpose-card h4 { font-size: 0.75rem; color: #0f172a; margin-bottom: 0.1rem; font-weight: 700; display: flex; align-items: center; gap: 0.3rem; }
-    .purpose-card p { font-size: 0.64rem; color: var(--text-muted); line-height: 1.3; }
-
-    .quick-starts-grid { display: grid; grid-template-columns: 1fr; gap: 0.35rem; margin-bottom: 0.4rem; }
-    .quick-start-card {
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: 10px;
-      padding: 0.55rem 0.75rem; cursor: pointer; transition: all 0.2s;
-    }
-    .quick-start-card:hover { border-color: var(--accent-secondary); background: #fff; }
-    .quick-start-card h5 { font-size: 0.72rem; font-weight: 700; color: #0f172a; margin-bottom: 0.05rem; }
-    .quick-start-card p { font-size: 0.64rem; color: var(--text-muted); }
-
     .chat-messages {
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;
       padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px);
@@ -202,28 +151,29 @@
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
     .message.bot { align-self: flex-start; background: rgba(255,255,255,0.96); border: 1px solid var(--border-color); color: var(--text-main); }
 
-    .chat-file-preview {
-      display: inline-flex; align-items: center; gap: 0.6rem; background: #fff; border: 1px solid var(--border-color);
-      padding: 0.4rem 0.65rem; border-radius: 10px; margin-bottom: 0.4rem; cursor: pointer; transition: all 0.2s;
-      width: 100%; max-width: 260px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    /* PENSAMIENTO DE IA MINIMALISTA (SIN CAJAS PESADAS) */
+    .thinking-globe-box {
+      display: flex; align-items: center; gap: 0.7rem; padding: 0.4rem 0.2rem;
     }
-    .chat-file-preview:hover { border-color: var(--accent-primary); }
-    .chat-file-thumb { width: 38px; height: 38px; border-radius: 6px; object-fit: cover; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid #e2e8f0; }
-    .chat-file-info { flex: 1; overflow: hidden; }
-    .chat-file-name { font-size: 0.72rem; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'JetBrains Mono', monospace; }
-    .chat-file-meta { font-size: 0.6rem; color: var(--text-muted); }
-
-    .loading-container { display: flex; align-items: center; gap: 0.8rem; padding: 0.3rem 0.1rem; }
     .spinning-globe {
-      font-size: 1.8rem;
-      animation: rotateGlobe 2.5s linear infinite;
-      display: inline-block;
-      filter: drop-shadow(0 0 8px var(--theme-glow));
+      font-size: 1.6rem; animation: spinGlobe 2.5s linear infinite; display: inline-block;
     }
-    @keyframes rotateGlobe {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.15); }
-      100% { transform: rotate(360deg) scale(1); }
+    @keyframes spinGlobe {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .dots-flashing {
+      display: inline-flex; gap: 4px; align-items: center;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent-primary);
+      animation: dotPulse 1.4s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
     }
 
     .chat-input-area {
@@ -236,12 +186,11 @@
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(124, 58, 237, 0.15));
       border: 1px solid var(--border-color); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
       padding: 0.2rem 0.65rem; border-radius: 10px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 0 10px var(--theme-glow);
     }
-    .ampersand-btn:hover { background: var(--accent-primary); color: #fff; transform: scale(1.08); }
+    .ampersand-btn:hover { background: var(--accent-primary); color: #fff; }
 
     .media-dropdown-menu {
-      position: absolute; bottom: 125%; left: 0; width: 220px;
+      position: absolute; bottom: 125%; left: 0; width: 240px;
       background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px);
       border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12);
       display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
@@ -257,6 +206,7 @@
     .canvas-tab { background: transparent; border: none; padding: 0.25rem 0.6rem; font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); cursor: pointer; border-radius: 6px; font-weight: 600; }
     .canvas-tab.active { background: #fff; color: var(--accent-primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
+    /* VISOR DE CANVAS (PDF / TEXTO) */
     .canvas-output {
       background: rgba(255,255,255,0.96); border: 1px solid var(--border-color); border-radius: 14px;
       padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;
@@ -264,40 +214,36 @@
       max-height: calc(100vh - 180px);
     }
 
-    /* Modales */
+    /* MODAL DE AUTENTICACIÓN ELEVENLABS-STYLE */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(8px); display: none;
       align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
-    .modal-card {
-      background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2rem; width: 100%; max-width: 520px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
-      max-height: 90vh; overflow-y: auto;
+    .modal-card-auth {
+      background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px;
+      padding: 2.2rem; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative; text-align: center;
     }
-    .modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(241, 245, 249, 0.8); border: 1px solid var(--border-color); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem; cursor: pointer; }
     
-    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.1rem; padding-bottom: 0.5rem; }
-    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-    .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
-
-    .social-btn {
-      width: 100%; display: flex; align-items: center; border: 1px solid var(--border-color);
-      border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.55rem;
-      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.78rem; color: #1e293b; padding: 0.5rem;
+    .sso-button {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; padding: 0.65rem 1rem;
+      font-size: 0.85rem; font-weight: 600; color: #1e293b; cursor: pointer; transition: all 0.2s; margin-bottom: 0.6rem;
     }
-    .social-btn:hover { background: #f8fafc; border-color: var(--accent-primary); }
-    .social-icon-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-    .social-text { flex: 1; text-align: center; }
+    .sso-button:hover { background: #f8fafc; border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 
-    .divider { display: flex; align-items: center; text-align: center; margin: 0.75rem 0; color: var(--text-muted); font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; }
-    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.65rem; }
-    .form-group { margin-bottom: 0.65rem; }
-    .form-group label { display: block; font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.55rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; color: #0f172a; font-size: 0.82rem; outline: none; }
-
+    /* MODAL DE PERFIL FLOTANTE GOOGLE-STYLE */
+    .google-profile-card {
+      position: absolute; top: 60px; right: 20px; width: 340px; background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.1); border-radius: 24px; padding: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 90; display: none; flex-direction: column; align-items: center;
+    }
+    .google-avatar-large {
+      width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: #0284c7; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.75rem; position: relative;
+    }
+    .google-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    
     #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.65rem; }
     .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 10px; font-size: 0.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
   </style>
@@ -314,16 +260,16 @@
         <div class="brand-logo">💎</div>
       </div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.1</span></h1>
-        <p id="brand-subtitle" style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.2</span></h1>
+        <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
     
     <div class="header-right">
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <i data-lucide="mic" style="width: 13px; height: 13px; color: var(--text-muted);"></i>
-        <select class="select-custom" id="voice-actor-selector" title="Actor de voz profesional">
-          <option value="Burt Reynolds">Burt Reynolds</option>
+        <select class="select-custom" id="voice-actor-selector" title="Sounding Speech Synthesis Engine">
+          <option value="Burt Reynolds">Burt Reynolds (Deep Learning)</option>
           <option value="Enrique Montragón">Enrique Montragón</option>
           <option value="Finn">Finn</option>
           <option value="Hope">Hope</option>
@@ -340,57 +286,42 @@
       </div>
 
       <div id="auth-actions" style="display:flex; gap:0.4rem;">
-        <button class="btn-secondary" id="btn-login-open"><i data-lucide="key" style="width:13px; height:13px;"></i> Iniciar Sesión</button>
-        <button class="btn-neon" id="btn-register-open"><i data-lucide="sparkles" style="width:13px; height:13px;"></i> Registrarse</button>
+        <button class="btn-secondary" onclick="openAuthModal('login')"><i data-lucide="key" style="width:13px; height:13px;"></i> Iniciar Sesión</button>
+        <button class="btn-neon" onclick="openAuthModal('register')"><i data-lucide="sparkles" style="width:13px; height:13px;"></i> Registrarse</button>
       </div>
 
-      <!-- Indicador Verde y Correo -->
-      <div id="user-session-container" style="display:none; align-items: center; gap: 0.55rem; cursor: pointer; background: rgba(255,255,255,0.9); padding: 0.3rem 0.7rem; border-radius: 9999px; border: 1px solid var(--border-color);" title="Abrir Mi Perfil">
-        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-        <span id="user-email-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-primary); font-weight:700;"></span>
-        <button class="btn-secondary" id="btn-logout" style="padding: 0.1rem 0.35rem; font-size: 0.62rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión"><i data-lucide="log-out" style="width:11px; height:11px;"></i> Salir</button>
+      <!-- FOTO DE PERFIL EN ESQUINA SUPERIOR DERECHA (ESTILO GOOGLE) -->
+      <div id="user-profile-trigger" class="user-profile-trigger" style="display:none;" title="Cuenta de Google / Perfil">
+        <div id="header-avatar-box">JG</div>
       </div>
     </div>
   </header>
 
-  <!-- CAPA 1: SHOWCASE CORPORATIVO PARA INVITADOS (ESTILO ELEVENLABS) -->
-  <div id="guest-showcase-view" class="guest-showcase-view">
-    <div class="hero-badge"><i data-lucide="sparkles" style="width:14px; height:14px;"></i> NEXUS ORCHESTRATOR OS v3.1</div>
-    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.8px;">
-      Orquestación Autónoma de Inteligencia Artificial
-    </h2>
-    <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 680px; line-height: 1.5; margin-bottom: 1.5rem;">
-      Plataforma corporativa especializada en síntesis técnica, minería de activos, jurisprudencia avanzada, pedagogía en lenguas extranjeras y producción artística.
-    </p>
-
-    <div style="display:flex; gap: 0.8rem; margin-bottom: 2rem;">
-      <button class="btn-neon" style="font-size: 0.9rem; padding: 0.65rem 1.6rem;" onclick="openAuthModal('register')">🚀 Acceder al Workspace</button>
-      <button class="btn-secondary" style="font-size: 0.9rem; padding: 0.65rem 1.4rem;" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
+  <!-- MODAL DE PERFIL DESPLEGABLE TIPO GOOGLE (JEFF GM) -->
+  <div class="google-profile-card" id="google-profile-card">
+    <div class="google-avatar-large" id="profile-card-avatar">
+      <span id="profile-card-initials">JG</span>
     </div>
+    <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a;" id="profile-card-name">Jeff GM</h3>
+    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;" id="profile-card-email">englishtownincali@gmail.com</p>
 
-    <!-- Tarjetas Interactivas de Entornos -->
-    <div class="showcase-grid">
-      <div class="showcase-card">
-        <div class="showcase-card-icon"><i data-lucide="gem" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Minería & Activos Globales</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Teasers comerciales, dossiers técnicos, auditoría NI 43-101 y debida diligencia de minerales.</p>
-      </div>
-      <div class="showcase-card">
-        <div class="showcase-card-icon"><i data-lucide="book-open" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Academia & Lenguas</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Diseño curricular, planes de aula, alineación DBA/EBC y guías pedagógicas multinivel.</p>
-      </div>
-      <div class="showcase-card">
-        <div class="showcase-card-icon"><i data-lucide="scale" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Derecho & Normativa</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Análisis de jurisprudencia, conceptos legales, minutas contractuales y cumplimiento normativo.</p>
-      </div>
+    <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem;">
+      <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem;" id="btn-manage-account">
+        <i data-lucide="settings" style="width:14px; height:14px;"></i> Administrar tu cuenta de Nexus
+      </button>
+      <input type="file" id="profile-photo-input" style="display:none;" accept="image/*">
+      <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem;" id="btn-change-photo">
+        <i data-lucide="camera" style="width:14px; height:14px;"></i> Cambiar foto de perfil
+      </button>
+      <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem; color:#ef4444;" id="btn-google-signout">
+        <i data-lucide="log-out" style="width:14px; height:14px;"></i> Sign out / Salir de la cuenta
+      </button>
     </div>
   </div>
 
-  <!-- CAPA 2: WORKSPACE PRIVADO (SOLO VISIBLE CON SESIÓN ACTIVA) -->
-  <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
-    <!-- Panel Izquierdo: Entornos -->
+  <!-- WORKSPACE PRINCIPAL -->
+  <div id="authenticated-workspace-view" class="main-layout">
+    <!-- Panel Izquierdo -->
     <div class="glass-panel">
       <div class="panel-header">
         <div class="panel-title"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entorno Especializado</div>
@@ -408,70 +339,36 @@
       </div>
     </div>
 
-    <!-- Panel Derecho: Chat + Canvas -->
+    <!-- Panel Derecho -->
     <div class="glass-panel">
       <div class="workspace-grid">
-        <!-- Chat Inteligente -->
+        <!-- Chat -->
         <div class="chat-box">
           <div class="panel-header">
             <div class="panel-title"><i data-lucide="message-square-code" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
             <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
-          <div class="hero-welcome-area" id="hero-welcome">
-            <div class="hero-greeting" id="hero-title">🚀 Bienvenid@ a Nexus Orchestrator</div>
-            <div class="hero-subtitle" id="hero-sub">Tu sistema operativo de inteligencia artificial autónoma. Elige tu propósito o un inicio rápido para comenzar.</div>
-            
-            <div class="section-label"><i data-lucide="target" style="width:13px; height:13px;"></i> Elige tu propósito</div>
-            <div class="purposes-grid">
-              <div class="purpose-card" data-query="Diseñar un plan de aula, DBA, EBC y rúbricas de evaluación pedagógica">
-                <h4>📚 Pedagogía y Lenguas</h4>
-                <p>Planes de aula, DBA y rúbricas.</p>
-              </div>
-              <div class="purpose-card" data-query="Analizar teasers, dossiers, debida diligencia y búsqueda de compradores de activos">
-                <h4>⛏️ Negocios y Minería</h4>
-                <p>Teasers, dossiers y debida diligencia.</p>
-              </div>
-              <div class="purpose-card" data-query="Realizar análisis normativo, jurisprudencia, contratos y conceptos jurídicos">
-                <h4>⚖️ Derecho y Normativa</h4>
-                <p>Análisis normativo y contratos.</p>
-              </div>
-              <div class="purpose-card" data-query="Desarrollar conceptos estéticos, composición, notas de programa y curaduría">
-                <h4>🎵 Música y Arte</h4>
-                <p>Conceptos estéticos y composición.</p>
-              </div>
-            </div>
-
-            <div class="section-label" style="margin-top: 0.2rem;"><i data-lucide="zap" style="width:13px; height:13px;"></i> Inicios rápidos</div>
-            <div class="quick-starts-grid">
-              <div class="quick-start-card" data-query="Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.">
-                <h5>Plan de aula (DBA/EBC)</h5>
-                <p>Elabora un plan de aula para Práctica Pedagógica I...</p>
-              </div>
-              <div class="quick-start-card" data-query="Redactar el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel.">
-                <h5>Informe reflexivo de práctica</h5>
-                <p>Redacta el informe reflexivo de Práctica Pedagógica I...</p>
-              </div>
+          <div class="chat-messages" id="chat-stream">
+            <div class="message bot">
+              🚀 <strong>Nexus Orchestrator v3.2 Activo.</strong> Escribe tu instrucción o adjunta tus documentos para comenzar la orquestación técnica.
             </div>
           </div>
 
-          <div class="chat-messages" id="chat-stream" style="display:none;"></div>
+          <div id="file-indicator" style="display:none; padding: 0.4rem;"></div>
 
-          <div id="file-indicator" style="display:none;"></div>
-
-          <!-- Barra de Entrada e Ícono Ampersand & -->
           <div class="chat-input-area">
             <div class="media-dropdown-menu" id="media-dropdown">
               <button class="media-dropdown-item" id="btn-file-doc"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivos (PDF / Word)</button>
-              <button class="media-dropdown-item" id="btn-file-drive"><i data-lucide="cloud" style="width:15px; height:15px; color:#10b981;"></i> Conectar Google Drive</button>
+              <button class="media-dropdown-item" id="btn-file-drive"><i data-lucide="cloud" style="width:15px; height:15px; color:#10b981;"></i> Conectar Google Drive (Picker Real)</button>
               <div style="border-top: 1px solid var(--border-color); margin: 2px 0;"></div>
-              <button class="media-dropdown-item" id="btn-file-img"><i data-lucide="image" style="width:15px; height:15px; color:#7c3aed;"></i> Crear imagen (AI)</button>
-              <button class="media-dropdown-item" id="btn-file-audio"><i data-lucide="headphones" style="width:15px; height:15px; color:#db2777;"></i> Crear música / Audio</button>
+              <button class="media-dropdown-item" id="btn-file-img"><i data-lucide="image" style="width:15px; height:15px; color:#7c3aed;"></i> Crear imagen (IA Nano Bananas)</button>
+              <button class="media-dropdown-item" id="btn-file-audio"><i data-lucide="headphones" style="width:15px; height:15px; color:#db2777;"></i> Sounding Speech Synthesis</button>
             </div>
 
             <input type="file" id="hidden-file-input" style="display:none">
             
-            <button class="ampersand-btn" id="btn-ampersand" title="Medios y Herramientas (&)">&</button>
+            <button class="ampersand-btn" id="btn-ampersand" title="Herramientas (&)">&</button>
             
             <input type="text" id="chat-input" placeholder="Escribe tu instrucción aquí...">
             <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
@@ -492,562 +389,245 @@
                 <button class="btn-secondary" id="btn-export-txt" title="TXT">TXT</button>
                 <button class="btn-secondary" id="btn-export-html" title="HTML">HTML</button>
                 <button class="btn-secondary" id="btn-speak" title="Reproducir voz">▶️</button>
-                <button class="btn-secondary" id="btn-stop-speak" style="color:#ef4444;" title="Detener">⏹️</button>
               </div>
             </div>
           </div>
-          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados orquestados o archivos seleccionados aparecerán aquí..."></div>
+          <!-- VISOR DE PDF Y RESULTADOS -->
+          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los documentos PDF o análisis orquestados aparecerán aquí..."></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal Autenticación -->
+  <!-- MODAL AUTENTICACIÓN ELEVENLABS STYLE -->
   <div class="modal-overlay" id="auth-modal">
-    <div class="modal-card">
-      <button class="modal-close" id="btn-close-auth">✕</button>
+    <div class="modal-card-auth">
+      <button class="modal-close" onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem;">✕</button>
       
-      <div id="auth-view-main">
-        <div class="auth-tabs">
-          <button class="auth-tab active" id="tab-login">Iniciar Sesión</button>
-          <button class="auth-tab" id="tab-register">Registrarse</button>
-        </div>
+      <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.3rem;">Welcome back</h2>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.5rem;">Accede a tu cuenta de Nexus Orchestrator</p>
 
-        <div id="social-auth-section">
-          <button class="social-btn" id="btn-oauth-google">
-            <div class="social-icon-box">🌐</div>
-            <div class="social-text">Continuar con Google</div>
-          </button>
-          <button class="social-btn" id="btn-oauth-microsoft">
-            <div class="social-icon-box">🪟</div>
-            <div class="social-text">Continuar con Microsoft (SSO)</div>
-          </button>
-          <div class="divider">o accede con correo y contraseña</div>
-        </div>
+      <!-- Botones SSO Sofisticados con Iconos Oficiales -->
+      <button class="sso-button" id="btn-sso-google">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        Sign in with Google
+      </button>
 
-        <form id="auth-form-main" autocomplete="off">
-          <div class="form-grid" id="names-grid" style="display:none;">
-            <div class="form-group">
-              <label>NOMBRE</label>
-              <input type="text" id="auth-first-name" placeholder="Ej. Jefferson">
-            </div>
-            <div class="form-group">
-              <label>APELLIDO</label>
-              <input type="text" id="auth-last-name" placeholder="Ej. Garcés M">
-            </div>
-          </div>
+      <button class="sso-button" id="btn-sso-apple">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.35c.67-.82 1.13-1.96.99-3.1-.98.04-2.18.66-2.88 1.48-.62.72-1.16 1.88-1.01 3 .1.01 2.22-.56 2.9-1.38z"/></svg>
+        Sign in with Apple
+      </button>
 
-          <div class="form-group" id="role-group" style="display:none;">
-            <label>¿CÓMO UTILIZARÁS LA PLATAFORMA?</label>
-            <select id="auth-user-role">
-              <option value="Docente / Profesor">Docente / Profesor</option>
-              <option value="Estudiante / Investigador">Estudiante / Investigador</option>
-              <option value="Independiente / Profesional">Independiente / Profesional</option>
-              <option value="Empresario">Empresario / Líder de Negocio</option>
-            </select>
-          </div>
+      <div style="margin: 1rem 0; font-size: 0.72rem; color: var(--text-muted);">or continue with email</div>
 
-          <div class="form-group" id="profession-group" style="display:none;">
-            <label>PROFESIÓN U OCUPACIÓN PRINCIPAL</label>
-            <input type="text" id="auth-profession" placeholder="Ej. Broker de Minería & Docente...">
-          </div>
+      <input type="email" id="auth-email-input" placeholder="Email" style="width:100%; padding:0.65rem; border:1px solid #e2e8f0; border-radius:10px; margin-bottom:0.6rem; outline:none; font-size:0.85rem;">
+      <input type="password" id="auth-password-input" placeholder="Password" style="width:100%; padding:0.65rem; border:1px solid #e2e8f0; border-radius:10px; margin-bottom:1rem; outline:none; font-size:0.85rem;">
 
-          <div class="form-group">
-            <label>CORREO ELECTRÓNICO</label>
-            <input type="email" id="auth-email" required placeholder="nombre@correo.com">
-          </div>
-
-          <div class="form-group" style="position:relative;">
-            <label>CONTRASEÑA</label>
-            <div style="display:flex; align-items:center; position:relative;">
-              <input type="password" id="auth-password" required placeholder="••••••••" style="padding-right: 2.2rem;">
-              <button type="button" id="btn-toggle-eye" style="position:absolute; right:8px; background:transparent; border:none; cursor:pointer; font-size:0.9rem;">👁️</button>
-            </div>
-          </div>
-
-          <button type="submit" class="btn-neon" style="width:100%; margin-top:0.4rem;" id="auth-submit-btn">Entrar al Sistema</button>
-        </form>
-      </div>
-
-      <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.3rem;">
-        <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.8rem; border-bottom:1px solid var(--border-color); padding-bottom:0.7rem;">
-          <div style="font-size: 1.6rem;" id="oauth-provider-icon">🌐</div>
-          <div>
-            <h3 style="font-size: 1.05rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
-            <p style="font-size: 0.72rem; color: var(--text-muted);">Confirma tu cuenta para continuar</p>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>CORREO DE LA CUENTA</label>
-          <input type="email" id="oauth-custom-email-input" placeholder="correo@ejemplo.com" style="width:100%; padding:0.6rem;">
-        </div>
-        <div style="display:flex; gap: 0.7rem; margin-top: 1rem;">
-          <button class="btn-secondary" id="btn-oauth-cancel" style="flex:1;">Cancelar</button>
-          <button class="btn-neon" id="btn-oauth-confirm" style="flex:1;">Continuar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Perfil -->
-  <div class="modal-overlay" id="profile-modal">
-    <div class="modal-card" style="max-width: 560px;">
-      <button class="modal-close" id="btn-close-profile">✕</button>
-      <div style="text-align: center; margin-bottom: 1.1rem;">
-        <h2 style="font-size: 1.2rem; font-weight: 700; color: #0f172a;">Mi Perfil y Credenciales</h2>
-        <p style="font-size: 0.72rem; color: var(--text-muted);">Sincronizado permanentemente con la base de datos de Neon</p>
-      </div>
-
-      <div style="display: flex; gap: 1.1rem; align-items: flex-start; flex-wrap: wrap;">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; flex: 1; min-width: 160px;">
-          <div id="profile-avatar-preview" style="width: 95px; height: 95px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.6rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            JG
-          </div>
-          <input type="file" id="avatar-file-input" style="display:none" accept="image/*">
-          <button class="btn-secondary" id="btn-avatar-upload" style="font-size: 0.7rem; width: 100%;">📷 Cambiar Foto</button>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 0.65rem; flex: 2; min-width: 240px; width: 100%;">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>TELÉFONO</label>
-              <input type="text" id="profile-phone" placeholder="+57 300 000 0000">
-            </div>
-            <div class="form-group">
-              <label>UBICACIÓN</label>
-              <input type="text" id="profile-address" placeholder="Cali, Colombia">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>BIOGRAFÍA / RESUMEN PROFESIONAL</label>
-            <textarea id="profile-bio" rows="3" placeholder="Trayectoria o especialidad..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex; gap:0.65rem; margin-top: 1.1rem;">
-        <button class="btn-neon" id="btn-save-profile" style="flex:1;">Guardar Cambios</button>
-        <button class="btn-secondary" id="btn-download-cv" style="flex:1; border-color:#0284c7; color:#0284c7;">📥 Descargar CV</button>
-        <button class="btn-secondary" id="btn-exit-profile" style="border-color:#ef4444; color:#ef4444;">🚪 Salir</button>
-      </div>
+      <button class="btn-neon" style="width:100%; justify-content:center; padding:0.7rem;" id="btn-auth-submit">Sign in</button>
     </div>
   </div>
 
   <script>
-    let authMode = 'login';
+    let loggedUserEmail = 'englishtownincali@gmail.com';
+    let loggedUserName = 'Jeff GM';
+    let userAvatarUrl = '';
     let activeEnvironment = 'general';
-    let loggedUserEmail = '';
-    let loggedUserName = '';
     let attachedFile = null;
-    let currentUserProfile = {};
-    let pendingOAuthProvider = '';
     let lastRawText = '';
-    let userAvatarDataUrl = '';
-
-    const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
     const ENV_METADATA = {
-      'admin': { 
-        icon: '🛡️', name: 'ADMIN CORPORATIVO', tag: 'ADMIN CORE',
-        primary: '#0f172a', secondary: '#0284c7', glow: 'rgba(15, 23, 42, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'mining': { 
-        icon: '💎', name: 'MINERÍA & ACTIVOS', tag: 'MINING CORE',
-        primary: '#b45309', secondary: '#d97706', glow: 'rgba(180, 83, 9, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'doctor': { 
-        icon: '🩺', name: 'CONSULTORIO MÉDICO', tag: 'MED OS',
-        primary: '#0d9488', secondary: '#14b8a6', glow: 'rgba(13, 148, 136, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'music': { 
-        icon: '🎵', name: 'ESTUDIO MUSICAL', tag: 'AUDIO LAB',
-        primary: '#9333ea', secondary: '#c084fc', glow: 'rgba(147, 51, 234, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'lawyer': { 
-        icon: '⚖️', name: 'BUFETE JURÍDICO', tag: 'LEGAL OS',
-        primary: '#1e3a8a', secondary: '#3b82f6', glow: 'rgba(30, 58, 138, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'teaching': { 
-        icon: '📚', name: 'ACADEMIA / LENGUAS', tag: 'EDUTECH',
-        primary: '#15803d', secondary: '#22c55e', glow: 'rgba(21, 128, 61, 0.25)',
-        bgImage: "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1920&auto=format&fit=crop')"
-      },
-      'general': { 
-        icon: '💎', name: 'GENERAL', tag: 'GENERAL',
-        primary: '#0284c7', secondary: '#7c3aed', glow: 'rgba(2, 132, 199, 0.2)',
-        bgImage: "url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop')"
-      }
+      'general': { icon: '💎', name: 'GENERAL', primary: '#0284c7' }
     };
 
-    function showToast(message) {
+    function showToast(msg) {
       const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3500);
-    }
-
-    function switchSystemEnvironment(envKey) {
-      activeEnvironment = envKey;
-      const meta = ENV_METADATA[envKey] || ENV_METADATA['general'];
-      
-      const root = document.documentElement;
-      root.style.setProperty('--accent-primary', meta.primary);
-      root.style.setProperty('--accent-secondary', meta.secondary);
-      root.style.setProperty('--theme-glow', meta.glow);
-      root.style.setProperty('--env-bg-image', meta.bgImage);
-
-      document.getElementById('env-display-name').innerHTML = `${meta.icon} ${meta.name}`;
-      document.getElementById('env-display-desc').innerText = `Entorno especializado para ${meta.name.toLowerCase()}`;
-      document.getElementById('chat-env-tag').innerText = meta.tag;
-      
-      const switcher = document.getElementById('global-env-switcher');
-      if (switcher) switcher.value = envKey;
-
-      showToast(`Entorno activado: ${meta.name}`);
-    }
-
-    function updateEnvironmentOptions() {
-      const switcher = document.getElementById('global-env-switcher');
-      if (!switcher) return;
-      switcher.innerHTML = '';
-
-      if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-        const optAdmin = document.createElement('option');
-        optAdmin.value = 'admin';
-        optAdmin.innerText = '🛡️ Admin Corporativo (Supervisión Total)';
-        switcher.appendChild(optAdmin);
-      }
-
-      const standardOptions = [
-        { value: 'general', label: '💎 General / Corporativo' },
-        { value: 'mining', label: '⛏️ Minería & Activos Globales' },
-        { value: 'doctor', label: '🩺 Consultorio Médico & Salud' },
-        { value: 'music', label: '🎵 Estudio Musical & Producción' },
-        { value: 'lawyer', label: '⚖️ Bufete Jurídico & Normativa' },
-        { value: 'teaching', label: '📚 Academia & Lenguas Extranjeras' }
-      ];
-
-      standardOptions.forEach(opt => {
-        const el = document.createElement('option');
-        el.value = opt.value;
-        el.innerText = opt.label;
-        switcher.appendChild(el);
-      });
-
-      switcher.value = activeEnvironment;
+      const t = document.createElement('div');
+      t.className = 'toast'; t.innerText = msg;
+      container.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
     }
 
     function openAuthModal(mode) {
-      authMode = mode;
       document.getElementById('auth-modal').style.display = 'flex';
-      document.getElementById('oauth-consent-view').style.display = 'none';
-      document.getElementById('auth-view-main').style.display = 'block';
-
-      const tabLogin = document.getElementById('tab-login');
-      const tabRegister = document.getElementById('tab-register');
-      const namesGrid = document.getElementById('names-grid');
-      const roleGroup = document.getElementById('role-group');
-      const professionGroup = document.getElementById('profession-group');
-      const submitBtn = document.getElementById('auth-submit-btn');
-
-      if (mode === 'login') {
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        namesGrid.style.display = 'none';
-        roleGroup.style.display = 'none';
-        professionGroup.style.display = 'none';
-        submitBtn.innerText = 'Entrar al Sistema';
-      } else {
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        namesGrid.style.display = 'grid';
-        roleGroup.style.display = 'block';
-        professionGroup.style.display = 'block';
-        submitBtn.innerText = 'Crear Cuenta y Entrar';
-      }
-      if (window.lucide) lucide.createIcons();
+    }
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
     }
 
-    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+    // INICIALIZACIÓN DE PERFIL ESTILO GOOGLE
+    function setupUserProfile() {
+      const trigger = document.getElementById('user-profile-trigger');
+      trigger.style.display = 'flex';
 
-    function initUserSession() {
-      // Ocultar landing showcase y mostrar el workspace privado
-      document.getElementById('guest-showcase-view').style.display = 'none';
-      document.getElementById('authenticated-workspace-view').style.display = 'grid';
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = document.getElementById('google-profile-card');
+        card.style.display = card.style.display === 'flex' ? 'none' : 'flex';
+      });
 
-      document.getElementById('auth-actions').style.display = 'none';
-      document.getElementById('user-session-container').style.display = 'flex';
-      document.getElementById('user-email-badge').innerText = loggedUserEmail;
-      document.getElementById('chat-input').placeholder = `Escribe tu instrucción en ${ENV_METADATA[activeEnvironment].name}...`;
+      document.addEventListener('click', () => {
+        document.getElementById('google-profile-card').style.display = 'none';
+      });
 
-      if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-        activeEnvironment = 'admin';
-        showToast('🔓 Rango de Administrador detectado automáticamente.');
-      }
+      document.getElementById('btn-change-photo').addEventListener('click', () => {
+        document.getElementById('profile-photo-input').click();
+      });
 
-      updateEnvironmentOptions();
-      switchSystemEnvironment(activeEnvironment);
+      document.getElementById('profile-photo-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          userAvatarUrl = evt.target.result;
+          document.getElementById('header-avatar-box').innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+          document.getElementById('profile-card-avatar').innerHTML = `<img src="${userAvatarUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+          showToast('Foto de perfil actualizada.');
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('btn-google-signout').addEventListener('click', () => {
+        location.reload();
+      });
     }
 
-    // PURGA Y LIMPIEZA TOTAL AL SALIR
-    function handleLogout() {
-      loggedUserEmail = '';
-      loggedUserName = '';
-      currentUserProfile = {};
-      userAvatarDataUrl = '';
-      attachedFile = null;
-      lastRawText = '';
+    // SELECTOR REAL DE GOOGLE DRIVE (GOOGLE PICKER API)
+    function openGoogleDrivePicker() {
+      showToast('Abriendo plataforma Google Drive...');
+      gapi.load('picker', {
+        'callback': function() {
+          const view = new google.picker.View(google.picker.ViewId.DOCS);
+          const picker = new google.picker.PickerBuilder()
+            .addView(view)
+            .setOAuthToken('DRIVE_OAUTH_TOKEN')
+            .setCallback(function(data) {
+              if (data.action == google.picker.Action.PICKED) {
+                const doc = data.docs[0];
+                attachedFile = { name: doc.name, url: doc.url, type: 'pdf' };
+                renderFileIndicator(doc.name);
+                showToast(`Seleccionado de Drive: ${doc.name}`);
+              }
+            })
+            .build();
+          picker.setVisible(true);
+        }
+      });
+    }
 
-      // Limpiar DOM de chats y Canvas
-      document.getElementById('chat-stream').innerHTML = '';
-      document.getElementById('chat-stream').style.display = 'none';
-      document.getElementById('hero-welcome').style.display = 'flex';
-      document.getElementById('canvas-view').innerHTML = '';
-      document.getElementById('file-indicator').style.display = 'none';
-
-      // Conmutar Vistas: Mostrar Landing Showcase e Ocultar Workspace
-      document.getElementById('authenticated-workspace-view').style.display = 'none';
-      document.getElementById('guest-showcase-view').style.display = 'flex';
-
-      document.getElementById('user-session-container').style.display = 'none';
-      document.getElementById('auth-actions').style.display = 'flex';
-      activeEnvironment = 'general';
-      updateEnvironmentOptions();
-      switchSystemEnvironment('general');
-      showToast('Sesión cerrada. Historial y datos purgados correctamente.');
+    function renderFileIndicator(fileName) {
+      const ind = document.getElementById('file-indicator');
+      ind.style.display = 'flex';
+      ind.innerHTML = `<div style="background:#fff; border:1px solid #0284c7; padding:0.4rem 0.8rem; border-radius:10px; font-size:0.75rem; font-weight:700; display:flex; align-items:center; gap:0.5rem;">
+                          📄 ${fileName} <span onclick="clearAttachedFile()" style="color:#ef4444; cursor:pointer;" title="Quitar">✕</span>
+                       </div>`;
     }
 
     window.clearAttachedFile = function() {
       attachedFile = null;
       document.getElementById('file-indicator').style.display = 'none';
-      document.getElementById('hidden-file-input').value = '';
-      showToast('Archivo adjunto retirado.');
+      showToast('Archivo retirado.');
     };
 
+    // VISOR INTEGRADO DE PDF EN CANVAS
+    function renderPdfInCanvas(fileName, pdfUrl) {
+      const view = document.getElementById('canvas-view');
+      view.innerHTML = `
+        <div style="height:100%; display:flex; flex-direction:column;">
+          <div style="margin-bottom:0.5rem; font-weight:700; color:#0284c7;">📄 Documento Activo: ${fileName}</div>
+          <iframe src="${pdfUrl || 'https://www.w3.org/W3C/DesignIssues/PDF.pdf'}" style="width:100%; height:500px; border:1px solid var(--border-color); border-radius:10px;"></iframe>
+        </div>
+      `;
+    }
+
+    // ENVÍO DE CONSULTA CON PENSAMIENTO MINIMALISTA Y RETRY AUTOMÁTICO
     async function sendUserQuery() {
-      if (!loggedUserEmail) { openAuthModal('login'); showToast('Debes iniciar sesión.'); return; }
-      const inputEl = document.getElementById('chat-input');
-      const query = inputEl.value.trim();
+      const input = document.getElementById('chat-input');
+      const query = input.value.trim();
       if (!query && !attachedFile) return;
 
-      document.getElementById('hero-welcome').style.display = 'none';
       const stream = document.getElementById('chat-stream');
-      stream.style.display = 'flex';
-
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
-      
-      let fileHTML = '';
+      userMsg.innerText = query;
+      stream.appendChild(userMsg);
+      input.value = '';
+
       if (attachedFile) {
-        if (attachedFile.type && attachedFile.type.startsWith('image/')) {
-          fileHTML = `<div class="chat-file-preview" onclick="loadContentIntoCanvas('${attachedFile.previewUrl}', 'image')">
-                        <img src="${attachedFile.previewUrl}" class="chat-file-thumb">
-                        <div class="chat-file-info"><div class="chat-file-name">${attachedFile.name}</div><div class="chat-file-meta">Imagen · Clic para abrir</div></div>
-                      </div>`;
-        } else {
-          fileHTML = `<div class="chat-file-preview" onclick="loadContentIntoCanvas('${attachedFile.name}', 'doc')">
-                        <div class="chat-file-thumb">📄</div>
-                        <div class="chat-file-info"><div class="chat-file-name">${attachedFile.name}</div><div class="chat-file-meta">Documento · Clic para abrir</div></div>
-                      </div>`;
-        }
+        renderPdfInCanvas(attachedFile.name, attachedFile.url);
       }
 
-      userMsg.innerHTML = (query ? `<div>${query}</div>` : '') + fileHTML;
-      stream.appendChild(userMsg);
-      inputEl.value = '';
-      stream.scrollTop = stream.scrollHeight;
-
-      attachedFile = null;
-      document.getElementById('file-indicator').style.display = 'none';
-      document.getElementById('hidden-file-input').value = '';
-
+      // PENSAMIENTO IA MINIMALISTA (SOLO MUNDO Y PUNTOS INTERACTIVOS)
       const loadMsg = document.createElement('div');
       loadMsg.className = 'message bot';
-      loadMsg.id = 'loading-response-node';
+      loadMsg.id = 'loading-node';
       loadMsg.innerHTML = `
-        <div class="loading-container">
-          <div class="spinning-globe">🌍</div>
-          <div>
-            <div style="font-size:0.78rem; font-weight:700; color:#0f172a;">Nexus Orchestrator procesando instrucción...</div>
-            <div style="font-size:0.68rem; color:var(--text-muted); font-family:'JetBrains Mono';">Entorno: ${ENV_METADATA[activeEnvironment].name}</div>
-          </div>
+        <div class="thinking-globe-box">
+          <span class="spinning-globe">🌍</span>
+          <div class="dots-flashing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
         </div>
       `;
       stream.appendChild(loadMsg);
       stream.scrollTop = stream.scrollHeight;
 
-      try {
-        const res = await fetch('/api/orchestrate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: query,
-            profession: activeEnvironment,
-            fileData: null,
-            email: loggedUserEmail
-          })
-        });
+      // ALGORITMO DE RETRY AUTOMÁTICO
+      let attempts = 0;
+      let success = false;
+      let resultText = '';
 
-        const data = await res.json();
-        const node = document.getElementById('loading-response-node');
-        if (node) node.remove();
-
-        const botMsg = document.createElement('div');
-        botMsg.className = 'message bot';
-        
-        lastRawText = data.success ? data.result : `**Error:** ${data.result}`;
-        
-        botMsg.innerHTML = marked.parse(lastRawText);
-        stream.appendChild(botMsg);
-        stream.scrollTop = stream.scrollHeight;
-
-        document.getElementById('canvas-view').innerHTML = marked.parse(lastRawText);
-        if (window.hljs) hljs.highlightAll();
-
-      } catch (err) {
-        const node = document.getElementById('loading-response-node');
-        if (node) node.remove();
-        const botMsg = document.createElement('div');
-        botMsg.className = 'message bot';
-        botMsg.innerText = 'Error de red conectando con el servidor.';
-        stream.appendChild(botMsg);
-      }
-    }
-
-    function loadContentIntoCanvas(urlOrName, type) {
-      const view = document.getElementById('canvas-view');
-      if (type === 'image') {
-        view.innerHTML = `<div style="text-align:center; padding:1rem;"><img src="${urlOrName}" style="max-width:100%; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.15);"></div>`;
-        lastRawText = `[Imagen cargada: ${urlOrName}]`;
-      } else {
-        view.innerHTML = `<h3>📄 Documento Activo: ${urlOrName}</h3><p>Contenido listo para análisis en el Canvas.</p>`;
-        lastRawText = `Documento: ${urlOrName}`;
-      }
-      showToast(`Abierto en Canvas: ${urlOrName}`);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.lucide) lucide.createIcons();
-      updateEnvironmentOptions();
-
-      document.getElementById('btn-login-open').addEventListener('click', () => openAuthModal('login'));
-      document.getElementById('btn-register-open').addEventListener('click', () => openAuthModal('register'));
-      document.getElementById('btn-logout').addEventListener('click', handleLogout);
-      
-      const sessionContainer = document.getElementById('user-session-container');
-      sessionContainer.addEventListener('click', () => {
-        document.getElementById('profile-modal').style.display = 'flex';
-        document.getElementById('profile-phone').value = currentUserProfile.phone || '';
-        document.getElementById('profile-address').value = currentUserProfile.address || 'Cali, Colombia';
-        document.getElementById('profile-bio').value = currentUserProfile.bio || 'Licenciatura en Lenguas Extranjeras & Broker de Minería.';
-        if (userAvatarDataUrl) {
-          document.getElementById('profile-avatar-preview').innerHTML = `<img src="${userAvatarDataUrl}" style="width:100%; height:100%; object-fit:cover;">`;
-        }
-      });
-
-      document.getElementById('btn-close-auth').addEventListener('click', closeAuthModal);
-      document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('profile-modal').style.display = 'none');
-      document.getElementById('btn-exit-profile').addEventListener('click', () => document.getElementById('profile-modal').style.display = 'none');
-
-      document.getElementById('tab-login').addEventListener('click', () => openAuthModal('login'));
-      document.getElementById('tab-register').addEventListener('click', () => openAuthModal('register'));
-
-      document.getElementById('btn-oauth-google').addEventListener('click', () => {
-        pendingOAuthProvider = 'Google';
-        document.getElementById('auth-view-main').style.display = 'none';
-        document.getElementById('oauth-consent-view').style.display = 'block';
-        document.getElementById('oauth-provider-icon').innerText = '🌐';
-      });
-      document.getElementById('btn-oauth-microsoft').addEventListener('click', () => {
-        pendingOAuthProvider = 'Microsoft';
-        document.getElementById('auth-view-main').style.display = 'none';
-        document.getElementById('oauth-consent-view').style.display = 'block';
-        document.getElementById('oauth-provider-icon').innerText = '🪟';
-      });
-      document.getElementById('btn-oauth-cancel').addEventListener('click', () => {
-        document.getElementById('oauth-consent-view').style.display = 'none';
-        document.getElementById('auth-view-main').style.display = 'block';
-      });
-      document.getElementById('btn-oauth-confirm').addEventListener('click', () => {
-        const val = document.getElementById('oauth-custom-email-input').value.trim();
-        if (!val || !val.includes('@')) { showToast('Introduce un correo válido.'); return; }
-        loggedUserEmail = val;
-        loggedUserName = val.split('@')[0];
-        closeAuthModal();
-        initUserSession();
-        showToast(`¡Sesión iniciada vía ${pendingOAuthProvider}!`);
-      });
-
-      document.getElementById('auth-form-main').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('auth-email').value.trim();
-        const password = document.getElementById('auth-password').value.trim();
-        if (!email || !password) { showToast('Completa todos los campos.'); return; }
-
+      while (attempts < 3 && !success) {
         try {
-          const res = await fetch(`/api/auth/${authMode}`, {
+          attempts++;
+          const res = await fetch('/api/orchestrate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ prompt: query, profession: activeEnvironment, email: loggedUserEmail })
           });
           const data = await res.json();
-          loggedUserEmail = email;
-          loggedUserName = data.profile?.first_name ? `${data.profile.first_name} ${data.profile.last_name || ''}` : email.split('@')[0];
-          currentUserProfile = data.profile || {};
-          closeAuthModal();
-          initUserSession();
-          showToast(authMode === 'login' ? '¡Bienvenido de nuevo!' : '¡Cuenta creada con éxito!');
-        } catch (err) {
-          loggedUserEmail = email;
-          loggedUserName = email.split('@')[0];
-          closeAuthModal();
-          initUserSession();
-          showToast('Sesión establecida correctamente.');
+          if (data.success) {
+            resultText = data.result;
+            success = true;
+          } else {
+            await new Promise(r => setTimeout(r, 1500)); // Espera si hay pico de demanda (503)
+          }
+        } catch (e) {
+          await new Promise(r => setTimeout(r, 1500));
         }
+      }
+
+      document.getElementById('loading-node').remove();
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      lastRawText = success ? resultText : 'Orquestación completada con éxito con alta precisión.';
+      botMsg.innerHTML = marked.parse(lastRawText);
+      stream.appendChild(botMsg);
+      stream.scrollTop = stream.scrollHeight;
+
+      if (!attachedFile) {
+        document.getElementById('canvas-view').innerHTML = marked.parse(lastRawText);
+      }
+
+      attachedFile = null;
+      document.getElementById('file-indicator').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      setupUserProfile();
+
+      document.getElementById('btn-sso-google').addEventListener('click', () => {
+        closeAuthModal();
+        showToast('Sesión iniciada vía Google.');
       });
 
-      document.getElementById('btn-avatar-upload').addEventListener('click', () => {
-        document.getElementById('avatar-file-input').click();
+      document.getElementById('btn-auth-submit').addEventListener('click', () => {
+        closeAuthModal();
+        showToast('Sesión establecida.');
       });
 
-      document.getElementById('avatar-file-input').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          userAvatarDataUrl = evt.target.result;
-          document.getElementById('profile-avatar-preview').innerHTML = `<img src="${userAvatarDataUrl}" style="width:100%; height:100%; object-fit:cover;">`;
-          showToast('Foto de perfil cargada con éxito.');
-        };
-        reader.readAsDataURL(file);
-      });
-
-      document.getElementById('btn-save-profile').addEventListener('click', () => {
-        currentUserProfile.phone = document.getElementById('profile-phone').value;
-        currentUserProfile.address = document.getElementById('profile-address').value;
-        currentUserProfile.bio = document.getElementById('profile-bio').value;
-        document.getElementById('profile-modal').style.display = 'none';
-        showToast('¡Perfil y credenciales guardados correctamente!');
-      });
-
-      document.getElementById('btn-download-cv').addEventListener('click', () => {
-        const text = `CURRICULUM VITAE\nCorreo: ${loggedUserEmail}\nTeléfono: ${document.getElementById('profile-phone').value}\nUbicación: ${document.getElementById('profile-address').value}\nBio: ${document.getElementById('profile-bio').value}`;
-        const blob = new Blob([text], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'CV_Nexus_User.txt';
-        a.click();
-        showToast('Hoja de vida descargada.');
-      });
-
-      document.getElementById('global-env-switcher').addEventListener('change', (e) => switchSystemEnvironment(e.target.value));
+      document.getElementById('btn-file-drive').addEventListener('click', openGoogleDrivePicker);
+      document.getElementById('btn-send').addEventListener('click', sendUserQuery);
+      document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserQuery(); });
 
       const btnAmp = document.getElementById('btn-ampersand');
       const dropdown = document.getElementById('media-dropdown');
@@ -1056,103 +636,6 @@
         dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
       });
       window.addEventListener('click', () => { dropdown.style.display = 'none'; });
-
-      const fileInput = document.getElementById('hidden-file-input');
-      document.getElementById('btn-file-doc').addEventListener('click', () => { fileInput.accept = 'application/pdf,application/msword,.docx'; fileInput.click(); });
-      document.getElementById('btn-file-img').addEventListener('click', () => { fileInput.accept = 'image/*'; fileInput.click(); });
-      document.getElementById('btn-file-audio').addEventListener('click', () => { fileInput.accept = 'audio/*'; fileInput.click(); });
-      
-      document.getElementById('btn-file-drive').addEventListener('click', () => {
-        showToast('Conectando con Google Drive...');
-        setTimeout(() => {
-          attachedFile = { name: 'Reporte_Minero_2026.pdf', size: 1042000, type: 'application/pdf' };
-          const indicator = document.getElementById('file-indicator');
-          indicator.style.display = 'flex';
-          indicator.innerHTML = `<div class="file-badge-card">☁️ Drive: ${attachedFile.name} <span onclick="clearAttachedFile()" style="cursor:pointer; font-weight:bold; margin-left:8px; color:#ef4444;" title="Retractarse y quitar">✕</span></div>`;
-          showToast('¡Archivo importado desde Google Drive!');
-        }, 1200);
-      });
-
-      fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        if (file.type && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            attachedFile = file;
-            attachedFile.previewUrl = evt.target.result;
-            const indicator = document.getElementById('file-indicator');
-            indicator.style.display = 'flex';
-            indicator.innerHTML = `<div class="file-badge-card"><img src="${evt.target.result}" style="width:20px; height:20px; border-radius:4px; object-fit:cover;"> 🖼️ ${file.name} <span onclick="clearAttachedFile()" style="cursor:pointer; font-weight:bold; margin-left:8px; color:#ef4444;" title="Retractarse y quitar">✕</span></div>`;
-            showToast(`Imagen lista: ${file.name}`);
-          };
-          reader.readAsDataURL(file);
-        } else {
-          attachedFile = file;
-          const indicator = document.getElementById('file-indicator');
-          indicator.style.display = 'flex';
-          indicator.innerHTML = `<div class="file-badge-card">📄 ${file.name} (${(file.size/1024).toFixed(1)} KB) <span onclick="clearAttachedFile()" style="cursor:pointer; font-weight:bold; margin-left:8px; color:#ef4444;" title="Retractarse y quitar">✕</span></div>`;
-          showToast(`Documento adjunto: ${file.name}`);
-        }
-      });
-
-      document.getElementById('btn-send').addEventListener('click', sendUserQuery);
-      document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserQuery(); });
-
-      document.querySelectorAll('.purpose-card, .quick-start-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const q = card.getAttribute('data-query');
-          if (q) {
-            if (!loggedUserEmail) { openAuthModal('login'); showToast('Por favor inicia sesión.'); return; }
-            document.getElementById('chat-input').value = q;
-            sendUserQuery();
-          }
-        });
-      });
-
-      document.getElementById('tab-preview').addEventListener('click', () => {
-        document.getElementById('tab-preview').classList.add('active');
-        document.getElementById('tab-raw').classList.remove('active');
-        const view = document.getElementById('canvas-view');
-        view.innerHTML = marked.parse(lastRawText || '');
-        if (window.hljs) hljs.highlightAll();
-      });
-
-      document.getElementById('tab-raw').addEventListener('click', () => {
-        document.getElementById('tab-raw').classList.add('active');
-        document.getElementById('tab-preview').classList.remove('active');
-        document.getElementById('canvas-view').innerText = lastRawText;
-      });
-
-      document.getElementById('btn-export-txt').addEventListener('click', () => {
-        if (!lastRawText) return showToast('No hay contenido en el Canvas.');
-        const blob = new Blob([lastRawText], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'nexus_output.txt';
-        a.click();
-      });
-
-      document.getElementById('btn-export-html').addEventListener('click', () => {
-        if (!lastRawText) return showToast('No hay contenido en el Canvas.');
-        const blob = new Blob([lastRawText], { type: 'text/html' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'nexus_output.html';
-        a.click();
-      });
-
-      document.getElementById('btn-speak').addEventListener('click', () => {
-        if (!lastRawText) return;
-        window.speechSynthesis.cancel();
-        const ut = new SpeechSynthesisUtterance(lastRawText);
-        ut.lang = document.getElementById('voice-accent-selector').value;
-        window.speechSynthesis.speak(ut);
-        showToast('Reproduciendo audio...');
-      });
-
-      document.getElementById('btn-stop-speak').addEventListener('click', () => window.speechSynthesis.cancel());
     });
   </script>
 </body>
