@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 
-// Configuración de la base de datos PostgreSQL (Neon / Render)
-const connectionString = process.env.DATABASE_URL || 'postgres://neondb_owner:npg_gY5mQ7CebKxL@ep-fancy-snowflake-a5h88e9o.us-east-2.aws.neon.tech/neondb?sslmode=require';
+// Configuración limpia y segura de la base de datos PostgreSQL
+const connectionString = process.env.DATABASE_URL;
 const sql = postgres(connectionString, { ssl: 'require' });
 
 // Inicialización de Google Gen AI (Gemini 3.8 / Flash)
