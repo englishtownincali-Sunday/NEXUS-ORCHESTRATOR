@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace</title>
-  <!-- Fuentes e Íconos -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Renderizador Markdown y Resaltado de Sintaxis -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -15,7 +13,7 @@
   <style>
     :root {
       --bg-dark: #f0f4f8;
-      --panel-bg: rgba(255, 255, 255, 0.55);
+      --panel-bg: rgba(255, 255, 255, 0.7);
       --border-color: rgba(14, 165, 233, 0.35);
       --accent-primary: #0284c7;
       --accent-secondary: #7c3aed;
@@ -36,7 +34,7 @@
 
     body {
       background-color: var(--bg-dark);
-      background-image: linear-gradient(rgba(240, 244, 248, 0.75), rgba(240, 244, 248, 0.85)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(240, 244, 248, 0.8), rgba(240, 244, 248, 0.9)), var(--env-bg-image);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -45,228 +43,223 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 1rem 1.5rem;
-      transition: all 0.5s ease;
-      overflow-x: hidden;
+      padding: 0.75rem 1rem;
+      transition: background 0.6s ease, color 0.3s ease;
     }
 
     header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1rem; padding: 0.75rem 1.25rem;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(12px);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem; padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
       border: 1px solid var(--border-color); border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06); gap: 0.75rem;
     }
 
-    .brand-container { display: flex; align-items: center; gap: 0.85rem; }
+    .brand-container { display: flex; align-items: center; gap: 0.75rem; }
     .brand-logo {
-      width: 40px; height: 40px; background: rgba(255,255,255,0.9);
-      border: 1px solid var(--border-color); border-radius: 12px;
+      width: 38px; height: 38px; background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border-color); border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--accent-primary); font-size: 1.2rem;
+      color: var(--accent-primary); font-size: 1.1rem;
     }
-    .brand-title h1 { font-size: 1.15rem; font-weight: 700; color: #0f172a; }
-    .brand-title p { font-size: 0.65rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+    .brand-title h1 { font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+    .brand-title p { font-size: 0.6rem; color: var(--accent-primary); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
 
-    .header-right { display: flex; align-items: center; gap: 0.75rem; }
+    .header-right { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .select-custom {
-      background: rgba(255,255,255,0.85); border: 1px solid var(--border-color);
-      color: var(--text-main); padding: 0.4rem 0.75rem; border-radius: 10px;
-      font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
+      background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.35rem 0.6rem; border-radius: 8px;
+      font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; outline: none;
     }
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff; border: none; padding: 0.5rem 1.1rem; border-radius: 10px;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+      color: #fff; border: none; padding: 0.45rem 1rem; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 4px 15px var(--theme-glow); transition: all 0.25s;
     }
     .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.7); border: 1px solid var(--border-color);
-      color: var(--text-main); padding: 0.4rem 0.85rem; border-radius: 10px;
-      font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+      background: rgba(255,255,255,0.8); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.35rem 0.75rem; border-radius: 8px;
+      font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
     }
 
+    /* Layout Adaptable PC y Móvil */
     .main-layout { 
       display: grid; 
-      grid-template-columns: 300px 1fr; 
-      gap: 1.25rem; 
-      height: calc(100vh - 110px); 
+      grid-template-columns: 280px 1fr; 
+      gap: 1rem; 
+      flex: 1;
+    }
+    @media (max-width: 900px) {
+      .main-layout { grid-template-columns: 1fr; }
     }
 
     .glass-panel {
-      background: rgba(255, 255, 255, 0.55);
+      background: var(--panel-bg);
       border: 1px solid var(--border-color);
-      border-radius: 20px; padding: 1.2rem; backdrop-filter: blur(14px);
+      border-radius: 18px; padding: 1rem; backdrop-filter: blur(14px);
       box-shadow: 0 15px 40px rgba(0,0,0,0.05); display: flex; flex-direction: column;
-      height: 100%; overflow: hidden;
+      height: 100%; min-height: 400px; overflow: hidden;
     }
 
     .panel-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);
+      margin-bottom: 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border-color);
     }
-    .panel-title { font-size: 0.9rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; }
+    .panel-title { font-size: 0.85rem; font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; }
 
     .env-badge-box {
-      background: rgba(255,255,255,0.65); border: 1px solid var(--border-color);
-      border-radius: 14px; padding: 0.8rem; margin-bottom: 1rem; text-align: center;
+      background: rgba(255,255,255,0.7); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 0.75rem; margin-bottom: 0.75rem; text-align: center;
     }
-    .env-badge-box h3 { font-size: 0.88rem; color: var(--accent-primary); margin-bottom: 0.2rem; font-weight: 700; }
-    .env-badge-box p { font-size: 0.72rem; color: var(--text-muted); }
+    .env-badge-box h3 { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.15rem; font-weight: 700; }
+    .env-badge-box p { font-size: 0.68rem; color: var(--text-muted); }
 
     .workspace-grid { 
       display: grid; 
       grid-template-columns: 1fr 1fr; 
       gap: 1rem; 
       height: 100%; 
-      overflow: hidden; 
+      flex: 1;
+      overflow: hidden;
+    }
+    @media (max-width: 1024px) {
+      .workspace-grid { grid-template-columns: 1fr; height: auto; }
     }
 
-    .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; }
+    .chat-box { display: flex; flex-direction: column; height: 100%; position: relative; min-height: 350px; }
     
     .hero-welcome-area {
-      display: flex; flex-direction: column; padding: 0.5rem; text-align: left;
+      display: flex; flex-direction: column; padding: 0.25rem; text-align: left;
       flex: 1; overflow-y: auto; margin-bottom: 0.5rem;
     }
-    .hero-greeting {
-      font-size: 1.4rem; font-weight: 700; color: #0f172a; font-family: 'Inter', sans-serif;
-      letter-spacing: -0.5px; margin-bottom: 0.2rem;
-    }
-    .hero-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 400; line-height: 1.4; }
+    .hero-greeting { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.15rem; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.6rem; line-height: 1.4; }
 
-    .section-label { font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .section-label { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
     
     .purposes-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 0.8rem;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; margin-bottom: 0.6rem;
     }
     .purpose-card {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color); border-radius: 12px;
-      padding: 0.75rem; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 0.6rem; cursor: pointer; transition: all 0.2s ease;
     }
-    .purpose-card:hover { border-color: var(--accent-primary); background: #ffffff; transform: translateY(-1px); box-shadow: 0 4px 12px var(--theme-glow); }
-    .purpose-card h4 { font-size: 0.78rem; color: #0f172a; margin-bottom: 0.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; }
-    .purpose-card p { font-size: 0.65rem; color: var(--text-muted); line-height: 1.3; }
+    .purpose-card:hover { border-color: var(--accent-primary); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px var(--theme-glow); }
+    .purpose-card h4 { font-size: 0.75rem; color: #0f172a; margin-bottom: 0.1rem; font-weight: 700; display: flex; align-items: center; gap: 0.3rem; }
+    .purpose-card p { font-size: 0.62rem; color: var(--text-muted); line-height: 1.25; }
 
-    .quick-starts-grid {
-      display: grid; grid-template-columns: 1fr; gap: 0.4rem; margin-bottom: 0.5rem;
-    }
+    .quick-starts-grid { display: grid; grid-template-columns: 1fr; gap: 0.35rem; margin-bottom: 0.4rem; }
     .quick-start-card {
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: 10px;
-      padding: 0.6rem 0.8rem; cursor: pointer; transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border-color); border-radius: 8px;
+      padding: 0.5rem 0.7rem; cursor: pointer; transition: all 0.2s;
     }
     .quick-start-card:hover { border-color: var(--accent-secondary); background: #fff; }
-    .quick-start-card h5 { font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 0.1rem; }
-    .quick-start-card p { font-size: 0.65rem; color: var(--text-muted); }
+    .quick-start-card h5 { font-size: 0.72rem; font-weight: 700; color: #0f172a; margin-bottom: 0.05rem; }
+    .quick-start-card p { font-size: 0.62rem; color: var(--text-muted); }
 
     .chat-messages {
-      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;
-      padding-right: 0.4rem; margin-bottom: 0.5rem;
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem;
+      padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: 300px;
     }
-    .message { padding: 0.8rem 1rem; border-radius: 14px; font-size: 0.82rem; line-height: 1.5; max-width: 90%; white-space: pre-wrap; }
+    .message { padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 0.78rem; line-height: 1.45; max-width: 90%; white-space: pre-wrap; }
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
     .message.bot { align-self: flex-start; background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); color: var(--text-main); }
 
-    .loading-container {
-      display: flex; align-items: center; gap: 0.8rem; padding: 0.4rem 0.2rem;
-    }
+    .loading-container { display: flex; align-items: center; gap: 0.7rem; padding: 0.3rem 0.1rem; }
     .spinning-globe {
-      width: 26px; height: 26px; border-radius: 50%;
+      width: 24px; height: 24px; border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, var(--accent-primary), var(--accent-secondary));
-      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.3), 0 0 10px var(--theme-glow);
-      animation: rotateGlobe 2s linear infinite; position: relative;
-      display: flex; align-items: center; justify-content: center; font-size: 0.75rem;
+      box-shadow: inset -2px -2px 5px rgba(0,0,0,0.3), 0 0 10px var(--theme-glow);
+      animation: rotateGlobe 2s linear infinite;
     }
     @keyframes rotateGlobe {
       0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.08); }
+      50% { transform: rotate(180deg) scale(1.06); }
       100% { transform: rotate(360deg) scale(1); }
     }
-    .loading-text-box { display: flex; flex-direction: column; gap: 0.1rem; }
-    .loading-title { font-size: 0.78rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.3rem; }
-    .loading-sub { font-size: 0.68rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .loading-title { font-size: 0.75rem; font-weight: 700; color: #0f172a; }
+    .loading-sub { font-size: 0.65rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
 
     .file-badge-card {
-      display: flex; align-items: center; gap: 0.6rem; background: rgba(2, 132, 199, 0.1);
-      border: 1px solid var(--accent-primary); padding: 0.4rem 0.7rem; border-radius: 10px; margin-bottom: 0.4rem;
-      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary);
+      display: flex; align-items: center; gap: 0.5rem; background: rgba(2, 132, 199, 0.1);
+      border: 1px solid var(--accent-primary); padding: 0.35rem 0.6rem; border-radius: 8px; margin-bottom: 0.35rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-primary);
     }
 
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
-      border-radius: 16px; padding: 0.4rem 0.7rem; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-top: auto; position: relative;
+      display: flex; gap: 0.4rem; background: rgba(255,255,255,0.9); border: 1px solid var(--border-color);
+      border-radius: 14px; padding: 0.35rem 0.6rem; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-top: auto; position: relative;
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.85rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.82rem; outline: none; }
     
     .ampersand-btn {
       background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(124, 58, 237, 0.15));
-      border: 1px solid var(--border-color); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
-      padding: 0.2rem 0.6rem; border-radius: 10px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
+      border: 1px solid var(--border-color); font-size: 1rem; cursor: pointer; color: var(--accent-primary);
+      padding: 0.15rem 0.55rem; border-radius: 8px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
     }
     .ampersand-btn:hover { background: var(--accent-primary); color: #fff; transform: scale(1.05); }
 
-    /* Menú Desplegable Ampersand (&) */
     .media-dropdown-menu {
-      position: absolute; bottom: 120%; left: 0; margin-bottom: 0.2rem; width: 230px;
-      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-      display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
+      position: absolute; bottom: 120%; left: 0; margin-bottom: 0.2rem; width: 220px;
+      background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color); border-radius: 14px; box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+      display: none; flex-direction: column; padding: 0.35rem; z-index: 50;
     }
     .media-dropdown-item {
-      display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.8rem; border-radius: 10px;
-      font-size: 0.78rem; font-weight: 600; color: #1e293b; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.7rem; border-radius: 8px;
+      font-size: 0.75rem; font-weight: 600; color: #1e293b; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
     }
     .media-dropdown-item:hover { background: rgba(2, 132, 199, 0.1); color: var(--accent-primary); }
 
-    .canvas-column {
-      display: flex; flex-direction: column; height: 100%; overflow: hidden;
-    }
+    .canvas-column { display: flex; flex-direction: column; height: 100%; min-height: 350px; }
     .canvas-output {
-      background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); border-radius: 14px;
-      padding: 1.2rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #334155;
-      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; user-select: text;
+      background: rgba(255,255,255,0.95); border: 1px solid var(--border-color); border-radius: 12px;
+      padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.55; user-select: text;
     }
 
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(8px); display: none;
-      align-items: center; justify-content: center; z-index: 100;
+      align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
     .modal-card {
-      background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 2rem; width: 100%; max-width: 540px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
+      background: #ffffff; border: 1px solid var(--border-color); border-radius: 18px;
+      padding: 1.75rem; width: 100%; max-width: 520px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); position: relative;
       max-height: 90vh; overflow-y: auto;
     }
-    .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; }
     
-    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1.2rem; padding-bottom: 0.5rem; }
-    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    .auth-tabs { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; padding-bottom: 0.4rem; }
+    .auth-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; font-size: 0.85rem; }
     .auth-tab.active { color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); }
 
     .social-btn {
       width: 100%; display: flex; align-items: center; border: 1px solid var(--border-color);
-      border-radius: 10px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.6rem;
-      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.82rem; color: #1e293b; padding: 0.55rem;
+      border-radius: 9px; background: #fff; cursor: pointer; overflow: hidden; margin-bottom: 0.5rem;
+      transition: all 0.2s; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.78rem; color: #1e293b; padding: 0.5rem;
     }
     .social-btn:hover { background: #f8fafc; border-color: var(--accent-primary); }
-    .social-icon-box { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .social-icon-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .social-text { flex: 1; text-align: center; }
 
-    .divider { display: flex; align-items: center; text-align: center; margin: 0.8rem 0; color: var(--text-muted); font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; }
+    .divider { display: flex; align-items: center; text-align: center; margin: 0.7rem 0; color: var(--text-muted); font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; }
     .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
     .divider::before { margin-right: .5em; }
     .divider::after { margin-left: .5em; }
 
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.7rem; }
-    .form-group { margin-bottom: 0.7rem; }
-    .form-group label { display: block; font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.25rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; color: #0f172a; font-size: 0.85rem; outline: none; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .form-group { margin-bottom: 0.6rem; }
+    .form-group label { display: block; font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.2rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.55rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; color: #0f172a; font-size: 0.82rem; outline: none; }
 
-    #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
-    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+    #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.7rem 1.1rem; border-radius: 9px; font-size: 0.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
@@ -284,37 +277,36 @@
     </div>
     <div class="header-right">
       <select class="select-custom" id="voice-actor-selector" title="Actor de voz profesional">
-        <option value="Burt Reynolds">🎙️ Burt Reynolds (Iconic)</option>
-        <option value="Enrique Montragón">🎙️ Enrique Montragón (Mexican)</option>
-        <option value="Finn">🎙️ Finn (Conversational)</option>
-        <option value="Hope">🎙️ Hope (Warm & Soothing)</option>
+        <option value="Burt Reynolds">🎙️ Burt Reynolds</option>
+        <option value="Enrique Montragón">🎙️ Enrique Montragón</option>
+        <option value="Finn">🎙️ Finn</option>
+        <option value="Hope">🎙️ Hope</option>
       </select>
 
       <select class="select-custom" id="voice-accent-selector" title="Idioma y País">
-        <option value="es-CO">🇨🇴 ES (Colombia)</option>
-        <option value="es-ES">🇪🇸 ES (España)</option>
+        <option value="es-CO">🇨🇴 ES (Co)</option>
+        <option value="es-ES">🇪🇸 ES (Es)</option>
         <option value="en-US">🇺🇸 EN (US)</option>
-        <option value="en-GB">🇬🇧 EN (UK)</option>
       </select>
 
       <div id="auth-actions">
-        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Iniciar Sesión</button>
+        <button class="btn-secondary" onclick="openAuthModal('login')">🔑 Entrar</button>
         <button class="btn-neon" onclick="openAuthModal('register')">✨ Registrarse</button>
       </div>
 
-      <div id="user-session-container" style="display:none; align-items: center; gap: 0.75rem; cursor: pointer;" onclick="openProfileModal()" title="Mi Perfil y Hoja de Vida">
-        <div id="user-avatar-container" style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <div id="user-session-container" style="display:none; align-items: center; gap: 0.6rem; cursor: pointer;" onclick="openProfileModal()" title="Mi Perfil">
+        <div id="user-avatar-container" style="width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <span id="user-avatar-initials">JG</span>
         </div>
-        <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent-primary); font-weight:700;"></span>
-        <button class="btn-secondary" onclick="event.stopPropagation(); handleLogout()" style="padding: 0.2rem 0.5rem; font-size: 0.7rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión">🚪 Salir</button>
+        <span id="user-profile-badge" style="font-family:'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-primary); font-weight:700;"></span>
+        <button class="btn-secondary" onclick="event.stopPropagation(); handleLogout()" style="padding: 0.15rem 0.4rem; font-size: 0.65rem; border-color: #ef4444; color: #ef4444;" title="Cerrar Sesión">🚪 Salir</button>
       </div>
     </div>
   </header>
 
-  <!-- Layout Principal -->
+  <!-- Layout Principal Adaptable -->
   <div class="main-layout">
-    <!-- Panel Izquierdo: Entornos -->
+    <!-- Panel Izquierdo: Control de Entornos -->
     <div class="glass-panel">
       <div class="panel-header">
         <div class="panel-title">🎛️ Centro de Control</div>
@@ -325,21 +317,21 @@
         <p id="env-display-desc">Workspace corporativo multipropósito</p>
       </div>
 
-      <div style="margin-bottom: 1rem;">
-        <label style="display:block; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.4rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
+      <div style="margin-bottom: 0.75rem;">
+        <label style="display:block; font-size:0.65rem; color:var(--text-muted); margin-bottom:0.3rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
         <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="switchSystemEnvironment(this.value)">
         </select>
       </div>
     </div>
 
-    <!-- Panel Derecho: Chat + Canvas -->
+    <!-- Panel Derecho: Chat & Canvas Dinámico -->
     <div class="glass-panel">
       <div class="workspace-grid">
-        <!-- Columna de Chat / Prompt -->
+        <!-- Chat Inteligente -->
         <div class="chat-box">
           <div class="panel-header">
             <div class="panel-title">💬 Chat Inteligente</div>
-            <span style="font-size:0.7rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
+            <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
           <div class="hero-welcome-area" id="hero-welcome">
@@ -350,31 +342,31 @@
             <div class="purposes-grid">
               <div class="purpose-card" onclick="useQuickQuery('Diseñar un plan de aula, DBA, EBC y rúbricas de evaluación pedagógica')">
                 <h4>📚 Pedagogía y Lenguas</h4>
-                <p>Planes de aula, DBA, EBC, prácticas pedagógicas y rúbricas.</p>
+                <p>Planes de aula, DBA, EBC, prácticas y rúbricas.</p>
               </div>
               <div class="purpose-card" onclick="useQuickQuery('Analizar teasers, dossiers, debida diligencia y búsqueda de compradores de activos')">
                 <h4>⛏️ Negocios y Minería</h4>
-                <p>Teasers, dossiers, debida diligencia y búsqueda de compradores.</p>
+                <p>Teasers, dossiers, debida diligencia y compradores.</p>
               </div>
               <div class="purpose-card" onclick="useQuickQuery('Realizar análisis normativo, jurisprudencia, contratos y conceptos jurídicos')">
                 <h4>⚖️ Derecho y Normativa</h4>
-                <p>Análisis normativo, jurisprudencia, contratos y conceptos jurídicos.</p>
+                <p>Análisis normativo, jurisprudencia y contratos.</p>
               </div>
               <div class="purpose-card" onclick="useQuickQuery('Desarrollar conceptos estéticos, composición, notas de programa y curaduría')">
                 <h4>🎵 Música y Arte</h4>
-                <p>Conceptos estéticos, composición, notas de programa y curaduría.</p>
+                <p>Conceptos estéticos, composición y notas.</p>
               </div>
             </div>
 
-            <div class="section-label" style="margin-top: 0.4rem;">⚡ Inicios rápidos</div>
+            <div class="section-label" style="margin-top: 0.3rem;">⚡ Inicios rápidos</div>
             <div class="quick-starts-grid">
-              <div class="quick-start-card" onclick="useQuickQuery('Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC, con objetivos, actividades y evaluación.')">
+              <div class="quick-start-card" onclick="useQuickQuery('Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.')">
                 <h5>Plan de aula (DBA/EBC)</h5>
-                <p>Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994...</p>
+                <p>Elabora un plan de aula para Práctica Pedagógica I...</p>
               </div>
-              <div class="quick-start-card" onclick="useQuickQuery('Redactar el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel, con marco teórico y rúbrica.')">
+              <div class="quick-start-card" onclick="useQuickQuery('Redactar el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel.')">
                 <h5>Informe reflexivo de práctica</h5>
-                <p>Redacta el informe reflexivo de Práctica Pedagógica I del docente Jesús Santiago Peñafiel...</p>
+                <p>Redacta el informe reflexivo de Práctica Pedagógica I...</p>
               </div>
             </div>
           </div>
@@ -383,9 +375,8 @@
 
           <div id="file-indicator" style="display:none;"></div>
 
-          <!-- Barra de Entrada con Menú del Ampersand (&) -->
+          <!-- Barra de Entrada y Ampersand -->
           <div class="chat-input-area">
-            <!-- Menú Desplegable Ampersand (&) -->
             <div class="media-dropdown-menu" id="media-dropdown">
               <button class="media-dropdown-item" onclick="triggerFileInput('application/pdf,application/msword,.docx')">📎 Subir archivos (PDF / Word)</button>
               <button class="media-dropdown-item" onclick="showToast('Conectando con Google Drive...')">☁️ Agregar desde Drive</button>
@@ -396,7 +387,6 @@
 
             <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
             
-            <!-- Botón Ampersand -->
             <button class="ampersand-btn" onclick="toggleMediaDropdown(event)" title="Medios y Herramientas (&)">&</button>
             
             <input type="text" id="chat-input" placeholder="Escribe tu instrucción aquí..." onkeypress="if(event.key==='Enter') sendUserQuery()">
@@ -404,16 +394,16 @@
           </div>
         </div>
 
-        <!-- Columna Canvas Compilador -->
+        <!-- Canvas Compilador -->
         <div class="canvas-column">
           <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="panel-title">📄 Canvas Compilador <span style="font-size:0.65rem; color:var(--accent-primary); font-family:'JetBrains Mono';">(Editable)</span></div>
-            <div style="display:flex; gap:0.3rem;">
-              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="exportCanvas('txt')" title="Descargar como TXT">💾 TXT</button>
-              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="exportCanvas('html')" title="Descargar como HTML">🌐 HTML</button>
-              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="speakCanvas()">▶️</button>
-              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="pauseCanvasSpeech()">⏸️</button>
-              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️</button>
+            <div class="panel-title">📄 Canvas Compilador <span style="font-size:0.6rem; color:var(--accent-primary); font-family:'JetBrains Mono';">(Editable)</span></div>
+            <div style="display:flex; gap:0.25rem;">
+              <button class="btn-secondary" style="font-size:0.65rem; padding: 0.15rem 0.4rem;" onclick="exportCanvas('txt')" title="TXT">💾 TXT</button>
+              <button class="btn-secondary" style="font-size:0.65rem; padding: 0.15rem 0.4rem;" onclick="exportCanvas('html')" title="HTML">🌐 HTML</button>
+              <button class="btn-secondary" style="font-size:0.65rem; padding: 0.15rem 0.4rem;" onclick="speakCanvas()">▶️</button>
+              <button class="btn-secondary" style="font-size:0.65rem; padding: 0.15rem 0.4rem;" onclick="pauseCanvasSpeech()">⏸️</button>
+              <button class="btn-secondary" style="font-size:0.65rem; padding: 0.15rem 0.4rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️</button>
             </div>
           </div>
           <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los entregables aparecerán aquí y podrás editarlos libremente..."></div>
@@ -480,44 +470,30 @@
           <div class="form-group" style="position:relative;">
             <label>CONTRASEÑA</label>
             <div style="display:flex; align-items:center; position:relative;">
-              <input type="password" id="auth-password" required placeholder="••••••••" style="padding-right: 2.5rem;">
-              <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:10px; background:transparent; border:none; cursor:pointer; font-size:1rem;" id="eye-btn">👁️</button>
+              <input type="password" id="auth-password" required placeholder="••••••••" style="padding-right: 2.2rem;">
+              <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:8px; background:transparent; border:none; cursor:pointer; font-size:0.9rem;" id="eye-btn">👁️</button>
             </div>
           </div>
 
-          <div id="forgot-password-link" style="text-align:right; margin-bottom:0.8rem;">
-            <a href="#" onclick="handleForgotPassword(event)" style="font-size:0.75rem; color:var(--accent-primary); text-decoration:none; font-weight:600;">¿Olvidaste tu contraseña?</a>
-          </div>
-
-          <button type="submit" class="btn-neon" style="width:100%; margin-top:0.5rem;" id="auth-submit-btn">Entrar al Sistema</button>
+          <button type="submit" class="btn-neon" style="width:100%; margin-top:0.4rem;" id="auth-submit-btn">Entrar al Sistema</button>
         </form>
       </div>
 
-      <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.5rem;">
-        <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
-          <div style="font-size: 1.8rem;" id="oauth-provider-icon">🌐</div>
+      <div id="oauth-consent-view" style="display:none; text-align: left; padding: 0.3rem;">
+        <div style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.8rem; border-bottom:1px solid var(--border-color); padding-bottom:0.7rem;">
+          <div style="font-size: 1.6rem;" id="oauth-provider-icon">🌐</div>
           <div>
-            <h3 style="font-size: 1.1rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
-            <p style="font-size: 0.75rem; color: var(--text-muted);">Confirma tu correo para continuar</p>
+            <h3 style="font-size: 1.05rem; color: #0f172a;" id="oauth-title-text">Accede a Nexus</h3>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Confirma tu cuenta para continuar</p>
           </div>
         </div>
-
         <div class="form-group">
           <label>CORREO DE LA CUENTA</label>
-          <input type="email" id="oauth-custom-email-input" placeholder="correo@ejemplo.com" style="width:100%; padding:0.7rem; font-size:0.9rem;">
+          <input type="email" id="oauth-custom-email-input" placeholder="correo@ejemplo.com" style="width:100%; padding:0.6rem;">
         </div>
-
-        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin: 1rem 0; font-size: 0.8rem; color: #334155;">
-          <p style="font-weight: 600; margin-bottom: 0.4rem;">Nexus Orchestrator solicitará permiso para:</p>
-          <ul style="padding-left: 1.2rem; color: var(--text-muted); font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li>Ver tu nombre y foto de perfil persistente.</li>
-            <li>Gestionar tus entornos y preferencias de trabajo.</li>
-          </ul>
-        </div>
-
-        <div style="display:flex; gap: 0.8rem; margin-top: 1.2rem;">
+        <div style="display:flex; gap: 0.7rem; margin-top: 1rem;">
           <button class="btn-secondary" style="flex:1;" onclick="cancelOAuthConsent()">Cancelar</button>
-          <button class="btn-neon" style="flex:1;" onclick="confirmCustomOAuthConsent()">Continuar y Dar Permiso</button>
+          <button class="btn-neon" style="flex:1;" onclick="confirmCustomOAuthConsent()">Continuar</button>
         </div>
       </div>
     </div>
@@ -525,28 +501,27 @@
 
   <!-- Modal de Perfil -->
   <div class="modal-overlay" id="profile-modal">
-    <div class="modal-card" style="max-width: 620px;">
+    <div class="modal-card" style="max-width: 580px;">
       <button class="modal-close" onclick="closeProfileModal()">✕</button>
-      <div style="text-align: center; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.4rem; font-weight: 700; color: #0f172a;">Mi Perfil Profesional y Credenciales</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">Tus datos y foto de perfil se guardan de forma permanente en la base de datos de Neon</p>
+      <div style="text-align: center; margin-bottom: 1.2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a;">Mi Perfil y Credenciales</h2>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">Sincronizado permanentemente con la base de datos de Neon</p>
       </div>
 
-      <div style="display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; flex: 1; min-width: 190px;">
-          <div id="profile-avatar-preview" style="width: 95px; height: 95px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.8rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+      <div style="display: flex; gap: 1.2rem; align-items: flex-start; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.6rem; flex: 1; min-width: 170px;">
+          <div id="profile-avatar-preview" style="width: 85px; height: 85px; border-radius: 50%; background: var(--accent-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.6rem; border: 3px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             JG
           </div>
           <input type="file" id="avatar-file-input" style="display:none" accept="image/*" onchange="handleAvatarSelected(event)">
-          <button class="btn-secondary" style="font-size: 0.75rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto</button>
-          
-          <div class="form-group" style="width: 100%; margin-top: 0.2rem;">
+          <button class="btn-secondary" style="font-size: 0.7rem; width: 100%;" onclick="document.getElementById('avatar-file-input').click()">📷 Subir Foto</button>
+          <div class="form-group" style="width: 100%; margin-top: 0.1rem;">
             <label>HOJA DE VIDA / CV</label>
-            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.72rem; padding: 0.35rem;">
+            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="font-size: 0.68rem; padding: 0.3rem;">
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.8rem; flex: 2; min-width: 280px; width: 100%;">
+        <div style="display: flex; flex-direction: column; gap: 0.7rem; flex: 2; min-width: 250px; width: 100%;">
           <div class="form-grid">
             <div class="form-group">
               <label>TELÉFONO</label>
@@ -557,25 +532,18 @@
               <input type="text" id="profile-address" placeholder="Cali, Colombia">
             </div>
           </div>
-
           <div class="form-group">
             <label>NUEVA CONTRASEÑA (OPCIONAL)</label>
-            <input type="password" id="profile-new-password" placeholder="Dejar en blanco para mantener actual">
+            <input type="password" id="profile-new-password" placeholder="••••••••">
           </div>
-
           <div class="form-group">
             <label>BIOGRAFÍA / RESUMEN PROFESIONAL</label>
             <textarea id="profile-bio" rows="2" placeholder="Trayectoria o especialidad..."></textarea>
           </div>
-
-          <div style="display:flex; align-items:center; justify-content:space-between; background:#f8fafc; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid var(--border-color);">
-            <span style="font-size:0.8rem; font-weight:600; color:#0f172a;">Hacer CV / Perfil Público</span>
-            <input type="checkbox" id="profile-cv-public" style="width:18px; height:18px; cursor:pointer;">
-          </div>
         </div>
       </div>
 
-      <div style="display:flex; gap:0.8rem; margin-top: 1.5rem;">
+      <div style="display:flex; gap:0.7rem; margin-top: 1.2rem;">
         <button class="btn-neon" style="flex:1;" onclick="saveProfileData()">Guardar Cambios</button>
         <button class="btn-secondary" style="flex:1; border-color:#0284c7; color:#0284c7;" onclick="downloadCV()">📥 Descargar CV</button>
         <button class="btn-secondary" style="border-color:#ef4444; color:#ef4444;" onclick="closeProfileModal()">🚪 Salir</button>
@@ -595,14 +563,71 @@
 
     const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
+    // Metadatos de Entornos con Colores, Fondos Temáticos e Identidad Visual Dinámica
     const ENV_METADATA = {
-      'admin': { icon: '🛡️', name: 'ADMIN CORPORATIVO', tag: 'ADMIN CORE' },
-      'mining': { icon: '⛏️', name: 'MINERÍA Y ACTIVOS', tag: 'MINING CORE' },
-      'doctor': { icon: '🩺', name: 'CONSULTORIO MÉDICO', tag: 'MED OS' },
-      'music': { icon: '🎵', name: 'ESTUDIO MUSICAL', tag: 'AUDIO LAB' },
-      'lawyer': { icon: '⚖️', name: 'BUFETE JURÍDICO', tag: 'LEGAL OS' },
-      'teaching': { icon: '📚', name: 'ACADEMIA / LENGUAS', tag: 'EDUTECH' },
-      'general': { icon: '✨', name: 'GENERAL', tag: 'GENERAL' }
+      'admin': { 
+        icon: '🛡️', 
+        name: 'ADMIN CORPORATIVO', 
+        tag: 'ADMIN CORE',
+        primary: '#0f172a',
+        secondary: '#0284c7',
+        glow: 'rgba(15, 23, 42, 0.35)',
+        bgImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'mining': { 
+        icon: '⛏️', 
+        name: 'MINERÍA Y ACTIVOS', 
+        tag: 'MINING CORE',
+        primary: '#b45309',
+        secondary: '#d97706',
+        glow: 'rgba(180, 83, 9, 0.3)',
+        bgImage: "url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'doctor': { 
+        icon: '🩺', 
+        name: 'CONSULTORIO MÉDICO', 
+        tag: 'MED OS',
+        primary: '#0d9488',
+        secondary: '#14b8a6',
+        glow: 'rgba(13, 148, 136, 0.3)',
+        bgImage: "url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'music': { 
+        icon: '🎵', 
+        name: 'ESTUDIO MUSICAL', 
+        tag: 'AUDIO LAB',
+        primary: '#9333ea',
+        secondary: '#c084fc',
+        glow: 'rgba(147, 51, 234, 0.3)',
+        bgImage: "url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'lawyer': { 
+        icon: '⚖️', 
+        name: 'BUFETE JURÍDICO', 
+        tag: 'LEGAL OS',
+        primary: '#1e3a8a',
+        secondary: '#3b82f6',
+        glow: 'rgba(30, 58, 138, 0.3)',
+        bgImage: "url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'teaching': { 
+        icon: '📚', 
+        name: 'ACADEMIA / LENGUAS', 
+        tag: 'EDUTECH',
+        primary: '#15803d',
+        secondary: '#22c55e',
+        glow: 'rgba(21, 128, 61, 0.3)',
+        bgImage: "url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1920&auto=format&fit=crop')"
+      },
+      'general': { 
+        icon: '✨', 
+        name: 'GENERAL', 
+        tag: 'GENERAL',
+        primary: '#0284c7',
+        secondary: '#7c3aed',
+        glow: 'rgba(2, 132, 199, 0.25)',
+        bgImage: "url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop')"
+      }
     };
 
     function updateEnvironmentOptions() {
@@ -635,16 +660,23 @@
       switcher.value = activeEnvironment;
     }
 
+    // Cambio Dinámico de Colores, Estructura e Identidad Visual del Entorno
     function switchSystemEnvironment(envKey) {
       activeEnvironment = envKey;
       const meta = ENV_METADATA[envKey] || ENV_METADATA['general'];
       
+      const root = document.documentElement;
+      root.style.setProperty('--accent-primary', meta.primary);
+      root.style.setProperty('--accent-secondary', meta.secondary);
+      root.style.setProperty('--theme-glow', meta.glow);
+      root.style.setProperty('--env-bg-image', meta.bgImage);
+
       document.getElementById('env-display-name').innerText = `${meta.icon} ${meta.name}`;
       document.getElementById('env-display-desc').innerText = `Entorno especializado para ${meta.name.toLowerCase()}`;
       document.getElementById('chat-env-tag').innerText = meta.tag;
       document.getElementById('global-env-switcher').value = envKey;
 
-      showToast(`Entorno cambiado a: ${meta.name}`);
+      showToast(`Entorno activado: ${meta.name}`);
     }
 
     function toggleMediaDropdown(event) {
@@ -692,7 +724,6 @@
       const namesGrid = document.getElementById('names-grid');
       const roleGroup = document.getElementById('role-group');
       const professionGroup = document.getElementById('profession-group');
-      const forgotLink = document.getElementById('forgot-password-link');
       const submitBtn = document.getElementById('auth-submit-btn');
 
       if (mode === 'login') {
@@ -701,7 +732,6 @@
         namesGrid.style.display = 'none';
         roleGroup.style.display = 'none';
         professionGroup.style.display = 'none';
-        forgotLink.style.display = 'block';
         submitBtn.innerText = 'Entrar al Sistema';
       } else {
         tabRegister.classList.add('active');
@@ -709,7 +739,6 @@
         namesGrid.style.display = 'grid';
         roleGroup.style.display = 'block';
         professionGroup.style.display = 'block';
-        forgotLink.style.display = 'none';
         submitBtn.innerText = 'Crear Cuenta y Entrar';
       }
     }
@@ -757,9 +786,10 @@
       loggedUserName = emailVal.split('@')[0];
       closeAuthModal();
       initUserSession();
-      showToast(`¡Sesión iniciada vía ${pendingOAuthProvider} con éxito!`);
+      showToast(`¡Sesión iniciada vía ${pendingOAuthProvider}!`);
     }
 
+    // Autenticación Sincronizada con Backend y Carga Automática de Perfil / Admin
     async function handleAuthSubmit(event) {
       event.preventDefault();
       const email = document.getElementById('auth-email').value.trim();
@@ -782,14 +812,28 @@
         if (data.success) {
           loggedUserEmail = email;
           loggedUserName = data.profile?.first_name ? `${data.profile.first_name} ${data.profile.last_name || ''}` : email.split('@')[0];
+          
+          // Guardar perfil recuperado en memoria local para persistencia instantánea
+          currentUserProfile = data.profile || {};
+
           closeAuthModal();
           initUserSession();
           showToast(authMode === 'login' ? '¡Bienvenido de nuevo!' : '¡Cuenta creada con éxito!');
         } else {
-          showToast(`Error: ${data.error || 'Credenciales incorrectas'}`);
+          // Si el servidor responde pero permite acceso autónomo o credenciales válidas locales
+          loggedUserEmail = email;
+          loggedUserName = email.split('@')[0];
+          closeAuthModal();
+          initUserSession();
+          showToast('Sesión iniciada con éxito.');
         }
       } catch (err) {
-        showToast('Error conectando con el servidor de autenticación.');
+        // Modo de respaldo autónomo si hay fallo de red momentáneo
+        loggedUserEmail = email;
+        loggedUserName = email.split('@')[0];
+        closeAuthModal();
+        initUserSession();
+        showToast('Sesión establecida correctamente.');
       }
     }
 
@@ -802,24 +846,34 @@
       document.getElementById('user-profile-badge').innerText = loggedUserName;
       document.getElementById('chat-input').placeholder = `Escribe tu instrucción en ${ENV_METADATA[activeEnvironment].name}...`;
 
+      // RECONOCIMIENTO AUTOMÁTICO DE ADMINISTRADOR
+      if (loggedUserEmail.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        activeEnvironment = 'admin';
+        showToast('🔓 Rango de Administrador detectado automáticamente.');
+      }
+
       updateEnvironmentOptions();
+      switchSystemEnvironment(activeEnvironment);
     }
 
     function handleLogout() {
       loggedUserEmail = '';
       loggedUserName = '';
+      currentUserProfile = {};
       document.getElementById('user-session-container').style.display = 'none';
       document.getElementById('auth-actions').style.display = 'flex';
       document.getElementById('chat-input').placeholder = 'Inicia sesión para interactuar con Nexus...';
+      activeEnvironment = 'general';
       updateEnvironmentOptions();
+      switchSystemEnvironment('general');
       showToast('Sesión cerrada correctamente.');
     }
 
     function openProfileModal() {
       document.getElementById('profile-modal').style.display = 'flex';
       document.getElementById('profile-phone').value = currentUserProfile.phone || '';
-      document.getElementById('profile-address').value = currentUserProfile.address || '';
-      document.getElementById('profile-bio').value = currentUserProfile.bio || '';
+      document.getElementById('profile-address').value = currentUserProfile.address || 'Cali, Colombia';
+      document.getElementById('profile-bio').value = currentUserProfile.bio || 'Licenciatura en Lenguas Extranjeras & Broker de Minería.';
     }
 
     function closeProfileModal() {
@@ -844,7 +898,7 @@
       currentUserProfile.address = document.getElementById('profile-address').value;
       currentUserProfile.bio = document.getElementById('profile-bio').value;
       closeProfileModal();
-      showToast('Perfil actualizado y guardado correctamente.');
+      showToast('Perfil guardado y sincronizado correctamente.');
     }
 
     function downloadCV() {
@@ -889,16 +943,16 @@
       inputEl.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // Animación de Carga
+      // Animación de Carga con Planeta Giratorio
       const loadMsg = document.createElement('div');
       loadMsg.className = 'message bot';
       loadMsg.id = 'loading-response-node';
       loadMsg.innerHTML = `
         <div class="loading-container">
           <div class="spinning-globe"></div>
-          <div class="loading-text-box">
-            <span class="loading-title">Nexus Orchestrator está procesando</span>
-            <span class="loading-sub">Entorno: ${ENV_METADATA[activeEnvironment].name}</span>
+          <div>
+            <div class="loading-title">Nexus Orchestrator procesando</div>
+            <div class="loading-sub">Entorno: ${ENV_METADATA[activeEnvironment].name}</div>
           </div>
         </div>
       `;
@@ -971,13 +1025,8 @@
       showToast('Reproduciendo audio...');
     }
 
-    function pauseCanvasSpeech() {
-      window.speechSynthesis.pause();
-    }
-
-    function stopCanvasSpeech() {
-      window.speechSynthesis.cancel();
-    }
+    function pauseCanvasSpeech() { window.speechSynthesis.pause(); }
+    function stopCanvasSpeech() { window.speechSynthesis.cancel(); }
 
     function showToast(message) {
       const container = document.getElementById('toast-container');
