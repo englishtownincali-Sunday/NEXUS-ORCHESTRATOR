@@ -1,51 +1,106 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Orchestrator - Autonomous Workspace</title>
+    <title>Nexus Orchestrator v2.0</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MarkedJS para renderizado de Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Highlight.js para resalte de sintaxis de código -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            900: '#0e374d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        .glass {
-            background: rgba(17, 24, 39, 0.7);
+        .glass-header {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .prose code {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.375rem;
+            font-size: 0.875em;
+            color: #38bdf8;
+        }
+        .prose pre {
+            background: #0f172a !important;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1rem;
         }
-        .glass-panel {
-            background: rgba(31, 41, 55, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500 selection:text-slate-950">
 
-    <!-- Header / Navbar -->
-    <header class="glass border-b border-slate-800 sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+    <!-- Header Principal -->
+    <header class="glass-header sticky top-0 z-50 px-6 py-3.5 flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_12px_#06b6d4]"></div>
-            <h1 class="text-xl font-bold tracking-wider bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">
-                NEXUS ORCHESTRATOR
-            </h1>
+            <div class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+            </div>
+            <span class="font-black text-lg tracking-wider bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 bg-clip-text text-transparent">
+                NEXUS ORCHESTRATOR <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800/50 ml-1">v2.0</span>
+            </span>
         </div>
         
-        <div class="flex items-center space-x-4">
-            <span id="user-badge" class="text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">Modo Invitado</span>
-            <button onclick="toggleModal('profile-modal')" class="text-xs bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg transition">Perfil</button>
+        <div class="flex items-center space-x-3">
+            <div id="status-pill" class="text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span id="user-badge">Modo Invitado</span>
+            </div>
+            <button onclick="toggleModal('profile-modal')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 shadow-sm">
+                <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                <span>Perfil</span>
+            </button>
         </div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Workspace Principal -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Panel Izquierdo: Controles y Entornos (4 Cols) -->
-        <section class="lg:col-span-4 flex flex-col space-y-6">
-            <!-- Selector de Entornos -->
-            <div class="glass-panel p-5 rounded-2xl shadow-xl">
-                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Entorno Profesional</h2>
-                <select id="profession-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-cyan-500 transition">
+        <!-- Panel Izquierdo: Controles & Prompt (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col space-y-5">
+            
+            <!-- Entorno Profesional -->
+            <div class="glass-card p-4 rounded-2xl">
+                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center space-x-2">
+                    <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                    <span>Entorno Especializado</span>
+                </label>
+                <select id="profession-select" class="w-full bg-slate-900/90 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 transition shadow-inner">
                     <option value="general">Nexus General (Core OS)</option>
                     <option value="mining">AuraX Global (Minería & ESG)</option>
                     <option value="teaching">Lingua Orchestrator (Pedagogía)</option>
@@ -56,114 +111,166 @@
                 </select>
             </div>
 
-            <!-- Panel de Entrada / Prompt -->
-            <div class="glass-panel p-5 rounded-2xl shadow-xl flex-1 flex flex-col">
-                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Centro de Comando</h2>
-                <textarea id="prompt-input" rows="5" placeholder="Escribe tu instrucción o consulta aquí..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 focus:outline-none focus:border-cyan-500 resize-none transition text-sm"></textarea>
-                
-                <div class="mt-4 flex items-center justify-between relative">
-                    <!-- Botón Interactivo con el Ampersand (&) para Adjuntar y Herramientas -->
-                    <div class="relative inline-block text-left">
-                        <button onclick="toggleMediaMenu()" type="button" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 px-3 py-2 rounded-lg transition flex items-center space-x-2 font-mono shadow-md">
-                            <span class="text-lg font-bold">&</span>
-                            <span class="text-xs">Medios ▾</span>
-                        </button>
-
-                        <!-- Menú Desplegable Flotante -->
-                        <div id="media-dropdown" class="hidden origin-bottom-left absolute left-0 bottom-full mb-2 w-56 rounded-2xl glass-panel border border-slate-700 shadow-2xl overflow-hidden z-50 bg-slate-900/95 backdrop-blur-md">
-                            <div class="p-1 space-y-1">
-                                <label class="flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl cursor-pointer transition">
-                                    <span>📎</span>
-                                    <span>Subir archivos (PDF / Word)</span>
-                                    <input type="file" id="file-input" class="hidden" onchange="handleMenuFile(event)">
-                                </label>
-                                <button onclick="triggerAction('drive')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                                    <span>☁️</span>
-                                    <span>Agregar desde Drive</span>
-                                </button>
-                                <div class="border-t border-slate-800 my-1"></div>
-                                <button onclick="triggerAction('image')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                                    <span>🎨</span>
-                                    <span>Crear imagen (AI)</span>
-                                </button>
-                                <button onclick="triggerAction('music')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                                    <span>🎵</span>
-                                    <span>Crear música / Audio</span>
-                                </button>
-                            </div>
-                        </div>
+            <!-- Centro de Comando / Prompt Box -->
+            <div class="glass-card p-5 rounded-2xl flex-1 flex flex-col justify-between shadow-xl relative">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center space-x-2">
+                            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Centro de Comando</span>
+                        </label>
+                        <span id="char-count" class="text-[10px] text-slate-500">0 caracteres</span>
                     </div>
 
-                    <span id="file-indicator" class="text-xs text-cyan-400 truncate max-w-[150px]"></span>
+                    <textarea id="prompt-input" rows="7" oninput="updateCharCount()" placeholder="Escribe tu instrucción, código o solicitud aquí..." class="w-full bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 text-slate-200 focus:outline-none focus:border-cyan-500/70 resize-none transition text-sm leading-relaxed placeholder-slate-600 shadow-inner"></textarea>
                 </div>
+                
+                <div class="mt-4 space-y-3">
+                    <!-- Botón de Medios Ampersand (&) -->
+                    <div class="flex items-center justify-between">
+                        <div class="relative inline-block text-left">
+                            <button onclick="toggleMediaMenu()" type="button" class="bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-slate-800 hover:border-cyan-500/40 px-3.5 py-2 rounded-xl transition flex items-center space-x-2 font-mono shadow-md group">
+                                <span class="text-lg font-black text-cyan-400 group-hover:scale-110 transition-transform">&</span>
+                                <span class="text-xs font-sans text-slate-300">Medios & Herramientas</span>
+                                <i data-lucide="chevron-up" class="w-3.5 h-3.5 text-slate-400"></i>
+                            </button>
 
-                <button onclick="sendPrompt()" id="send-btn" class="mt-4 w-full bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-medium py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
-                    <span>⚡ Ejecutar Orquestación</span>
-                </button>
+                            <!-- Desplegable Estilo Moderno -->
+                            <div id="media-dropdown" class="hidden origin-bottom-left absolute left-0 bottom-full mb-2 w-60 rounded-2xl glass-card border border-slate-700/80 shadow-2xl overflow-hidden z-50 bg-slate-900/95 backdrop-blur-xl">
+                                <div class="p-1.5 space-y-1">
+                                    <label class="flex items-center space-x-3 px-3 py-2.5 text-xs text-slate-300 hover:bg-slate-800/80 hover:text-white rounded-xl cursor-pointer transition">
+                                        <i data-lucide="paperclip" class="w-4 h-4 text-cyan-400"></i>
+                                        <span>Adjuntar Archivo (PDF / Doc)</span>
+                                        <input type="file" id="file-input" class="hidden" onchange="handleMenuFile(event)">
+                                    </label>
+                                    <button onclick="triggerAction('drive')" class="w-full flex items-center space-x-3 px-3 py-2.5 text-xs text-slate-300 hover:bg-slate-800/80 hover:text-white rounded-xl transition text-left">
+                                        <i data-lucide="hard-drive" class="w-4 h-4 text-amber-400"></i>
+                                        <span>Agregar desde Google Drive</span>
+                                    </button>
+                                    <div class="border-t border-slate-800 my-1"></div>
+                                    <button onclick="triggerAction('image')" class="w-full flex items-center space-x-3 px-3 py-2.5 text-xs text-slate-300 hover:bg-slate-800/80 hover:text-white rounded-xl transition text-left">
+                                        <i data-lucide="image" class="w-4 h-4 text-emerald-400"></i>
+                                        <span>Generar Imagen IA</span>
+                                    </button>
+                                    <button onclick="triggerAction('music')" class="w-full flex items-center space-x-3 px-3 py-2.5 text-xs text-slate-300 hover:bg-slate-800/80 hover:text-white rounded-xl transition text-left">
+                                        <i data-lucide="music" class="w-4 h-4 text-purple-400"></i>
+                                        <span>Generar Audio / Música</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <span id="file-indicator" class="text-xs text-cyan-400 font-mono truncate max-w-[140px]"></span>
+                    </div>
+
+                    <!-- Botón de Ejecución -->
+                    <button onclick="sendPrompt()" id="send-btn" class="w-full bg-gradient-to-r from-cyan-600 via-sky-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg shadow-cyan-950/50 transition flex items-center justify-center space-x-2 group">
+                        <i data-lucide="zap" class="w-4 h-4 fill-current group-hover:scale-110 transition-transform"></i>
+                        <span>Ejecutar Orquestación</span>
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Panel Derecho: Canvas Compilador & Resultados (8 Cols) -->
+        <!-- Panel Derecho: Canvas Compilador & Render (8 Cols) -->
         <section class="lg:col-span-8 flex flex-col space-y-6">
-            <div class="glass-panel p-5 rounded-2xl shadow-xl flex-1 flex flex-col min-h-[550px]">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Canvas Compilador</h2>
-                    <div class="flex space-x-2">
-                        <button onclick="speakCanvas()" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">🔊 Escuchar</button>
-                        <button onclick="exportFile('txt')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">Exportar .txt</button>
-                        <button onclick="exportFile('html')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">Exportar .html</button>
+            <div class="glass-card p-5 rounded-2xl flex-1 flex flex-col min-h-[600px] shadow-2xl">
+                
+                <!-- Barra Superior del Canvas -->
+                <div class="flex flex-wrap justify-between items-center pb-3 border-b border-slate-800/80 gap-2">
+                    <div class="flex items-center space-x-3">
+                        <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center space-x-2">
+                            <i data-lucide="layout" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Canvas Compilador</span>
+                        </h2>
+                        <!-- Switch Vista Render vs Raw -->
+                        <div class="bg-slate-900 p-0.5 rounded-lg border border-slate-800 flex text-xs">
+                            <button id="tab-render" onclick="switchCanvasView('render')" class="px-2.5 py-1 rounded-md bg-slate-800 text-cyan-400 font-medium transition">Vista Previa</button>
+                            <button id="tab-raw" onclick="switchCanvasView('raw')" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition">Código Raw</button>
+                        </div>
+                    </div>
+
+                    <!-- Herramientas del Canvas -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyCanvas()" title="Copiar" class="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-lg transition">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="speakCanvas()" title="Escuchar" class="p-1.5 bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-slate-800 rounded-lg transition">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="exportFile('txt')" class="text-xs bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1.5 rounded-lg transition">.txt</button>
+                        <button onclick="exportFile('html')" class="text-xs bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2.5 py-1.5 rounded-lg transition">.html</button>
                     </div>
                 </div>
 
-                <!-- Canvas Editable -->
-                <textarea id="canvas-output" placeholder="Los resultados de la IA y el código compilado aparecerán aquí para su edición..." class="w-full flex-1 bg-slate-900/80 border border-slate-800 rounded-xl p-4 text-slate-200 font-mono text-sm focus:outline-none focus:border-cyan-500/50 resize-none transition leading-relaxed"></textarea>
+                <!-- Modos de Vista del Canvas -->
+                <div class="relative flex-1 mt-4">
+                    <!-- Vista Renderizada Markdown -->
+                    <div id="canvas-render-view" class="w-full h-full min-h-[480px] p-4 bg-slate-900/60 border border-slate-800/80 rounded-xl overflow-y-auto prose prose-invert max-w-none text-sm text-slate-200 leading-relaxed">
+                        <p class="text-slate-500 italic">Los resultados orquestados, documentos formateados o componentes interactivos aparecerán visualmente en este panel...</p>
+                    </div>
+
+                    <!-- Vista Código Raw (Editable) -->
+                    <textarea id="canvas-raw-view" class="hidden w-full h-full min-h-[480px] bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-slate-200 font-mono text-xs focus:outline-none focus:border-cyan-500/50 resize-none leading-relaxed shadow-inner" placeholder="Código raw..."></textarea>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Modal de Perfil / Registro -->
-    <div id="profile-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-slate-700 shadow-2xl relative">
-            <button onclick="toggleModal('profile-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
-            <h3 class="text-lg font-bold text-slate-100 mb-4">Gestión de Cuenta / Perfil</h3>
+    <!-- Modal Perfil -->
+    <div id="profile-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center z-50 p-4">
+        <div class="glass-card p-6 rounded-2xl max-w-md w-full border border-slate-700/60 shadow-2xl relative bg-slate-900">
+            <button onclick="toggleModal('profile-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-base font-bold text-slate-100 mb-4 flex items-center space-x-2">
+                <i data-lucide="shield" class="w-5 h-5 text-cyan-400"></i>
+                <span>Gestión de Credenciales</span>
+            </h3>
             
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-slate-400">Correo Electrónico</label>
-                    <input type="email" id="modal-email" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 mt-1" placeholder="correo@ejemplo.com">
+                    <input type="email" id="modal-email" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-sm text-slate-200 mt-1 focus:border-cyan-500 outline-none" placeholder="usuario@nexus.com">
                 </div>
                 <div>
                     <label class="text-xs text-slate-400">Contraseña</label>
-                    <input type="password" id="modal-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 mt-1" placeholder="••••••••">
+                    <input type="password" id="modal-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-sm text-slate-200 mt-1 focus:border-cyan-500 outline-none" placeholder="••••••••">
                 </div>
                 <div class="flex space-x-3 pt-2">
-                    <button onclick="handleAuth('login')" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-2 rounded-lg text-sm transition font-medium">Iniciar Sesión</button>
-                    <button onclick="handleAuth('register')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-lg text-sm transition">Registrarse</button>
+                    <button onclick="handleAuth('login')" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-2.5 rounded-xl text-xs font-medium transition shadow-md">Iniciar Sesión</button>
+                    <button onclick="handleAuth('register')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2.5 rounded-xl text-xs transition">Registrarse</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script del Cliente completo -->
+    <!-- Script Lógico -->
     <script>
+        // Inicializar Lucide Icons
+        lucide.createIcons();
+
         let currentUserEmail = null;
         let selectedFile = null;
+        let rawContent = '';
 
         function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.toggle('hidden');
+            document.getElementById(modalId).classList.toggle('hidden');
         }
 
         function toggleMediaMenu() {
-            const menu = document.getElementById('media-dropdown');
-            menu.classList.toggle('hidden');
+            document.getElementById('media-dropdown').classList.toggle('hidden');
         }
 
-        // Cerrar el menú si se hace clic fuera
+        function updateCharCount() {
+            const val = document.getElementById('prompt-input').value;
+            document.getElementById('char-count').innerText = `${val.length} caracteres`;
+        }
+
         window.addEventListener('click', function(e) {
-            const btn = document.querySelector('button[onclick="toggleMediaMenu()"]');
+            const btn = e.target.closest('button[onclick="toggleMediaMenu()"]');
             const menu = document.getElementById('media-dropdown');
-            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+            if (!btn && menu && !menu.contains(e.target)) {
                 menu.classList.add('hidden');
             }
         });
@@ -178,59 +285,100 @@
         }
 
         function triggerAction(type) {
-            alert(`Módulo seleccionado: ${type}. Próximamente integrado con el orquestador.`);
+            alert(`Módulo [${type.toUpperCase()}] seleccionado. Conectando con API...`);
             toggleMediaMenu();
+        }
+
+        function switchCanvasView(view) {
+            const renderView = document.getElementById('canvas-render-view');
+            const rawView = document.getElementById('canvas-raw-view');
+            const tabRender = document.getElementById('tab-render');
+            const tabRaw = document.getElementById('tab-raw');
+
+            if (view === 'render') {
+                renderView.classList.remove('hidden');
+                rawView.classList.add('hidden');
+                tabRender.className = "px-2.5 py-1 rounded-md bg-slate-800 text-cyan-400 font-medium transition";
+                tabRaw.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
+                renderView.innerHTML = marked.parse(rawView.value || rawContent);
+                hljs.highlightAll();
+            } else {
+                renderView.classList.add('hidden');
+                rawView.classList.remove('hidden');
+                tabRaw.className = "px-2.5 py-1 rounded-md bg-slate-800 text-cyan-400 font-medium transition";
+                tabRender.className = "px-2.5 py-1 rounded-md text-slate-400 hover:text-slate-200 transition";
+            }
         }
 
         async function sendPrompt() {
             const prompt = document.getElementById('prompt-input').value.trim();
             const profession = document.getElementById('profession-select').value;
-            const canvas = document.getElementById('canvas-output');
+            const renderView = document.getElementById('canvas-render-view');
+            const rawView = document.getElementById('canvas-raw-view');
             const btn = document.getElementById('send-btn');
 
-            if (!prompt) {
-                alert('Por favor ingresa una instrucción.');
-                return;
-            }
+            if (!prompt) return alert('Ingresa una instrucción.');
 
             btn.disabled = true;
-            btn.innerText = 'Orquestando...';
-            canvas.value = '⏳ Procesando solicitud con Nexus Orchestrator...';
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Orquestando...</span>`;
+            lucide.createIcons();
+
+            renderView.innerHTML = `<div class="flex items-center space-x-2 text-cyan-400"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Procesando consulta...</span></div>`;
+            lucide.createIcons();
 
             try {
                 const res = await fetch('/api/orchestrate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        prompt,
-                        profession,
-                        fileData: selectedFile,
-                        email: currentUserEmail
-                    })
+                    body: JSON.stringify({ prompt, profession, fileData: selectedFile, email: currentUserEmail })
                 });
 
                 const data = await res.json();
-                if (data.success) {
-                    canvas.value = data.result;
-                } else {
-                    canvas.value = `[Error] ${data.result}`;
-                }
+                rawContent = data.success ? data.result : `**Error:** ${data.result}`;
+                
+                rawView.value = rawContent;
+                renderView.innerHTML = marked.parse(rawContent);
+                hljs.highlightAll();
+
             } catch (err) {
-                canvas.value = `[Error de Red] No se pudo conectar con el servidor: ${err.message}`;
+                rawContent = `**Error de Red:** No se pudo conectar con el servidor.`;
+                renderView.innerHTML = marked.parse(rawContent);
             } finally {
                 btn.disabled = false;
-                btn.innerText = '⚡ Ejecutar Orquestación';
+                btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4 fill-current"></i><span>Ejecutar Orquestación</span>`;
+                lucide.createIcons();
             }
+        }
+
+        function copyCanvas() {
+            const text = document.getElementById('canvas-raw-view').value || rawContent;
+            if (!text) return;
+            navigator.clipboard.writeText(text);
+            alert('Contenido copiado al portapapeles.');
+        }
+
+        function speakCanvas() {
+            const text = document.getElementById('canvas-raw-view').value || rawContent;
+            if (!text) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function exportFile(ext) {
+            const text = document.getElementById('canvas-raw-view').value || rawContent;
+            if (!text) return;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `nexus-export.${ext}`;
+            a.click();
         }
 
         async function handleAuth(type) {
             const email = document.getElementById('modal-email').value;
             const password = document.getElementById('modal-password').value;
-
-            if (!email || !password) {
-                alert('Completa todos los campos.');
-                return;
-            }
+            if (!email || !password) return alert('Completa los campos.');
 
             try {
                 const res = await fetch(`/api/auth/${type}`, {
@@ -238,50 +386,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-
                 const data = await res.json();
                 if (data.success) {
                     currentUserEmail = data.profile.email;
                     document.getElementById('user-badge').innerText = currentUserEmail;
                     toggleModal('profile-modal');
-                    alert(data.message);
-                } else {
-                    alert(data.error);
-                }
+                } else alert(data.error);
             } catch (err) {
-                alert('Error en la autenticación.');
+                alert('Error de autenticación.');
             }
-        }
-
-        function speakCanvas() {
-            const text = document.getElementById('canvas-output').value;
-            if (!text) return;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'es-ES';
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function exportFile(format) {
-            const text = document.getElementById('canvas-output').value;
-            if (!text) return;
-            
-            let mime = 'text/plain';
-            let ext = 'txt';
-            let content = text;
-
-            if (format === 'html') {
-                mime = 'text/html';
-                ext = 'html';
-                content = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Nexus Export</title></head><body style="font-family:sans-serif;padding:2rem;background:#0f172a;color:#f8fafc;"><pre>${text}</pre></body></html>`;
-            }
-
-            const blob = new Blob([content], { type: mime });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `nexus-export-${Date.now()}.${ext}`;
-            a.click();
-            URL.revokeObjectURL(url);
         }
     </script>
 </body>
