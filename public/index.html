@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.5</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.6</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -13,29 +13,29 @@
 
   <style>
     :root {
-      --bg-light: #090d16;
-      --glass-bg: rgba(15, 23, 42, 0.75);
-      --glass-panel: rgba(15, 23, 42, 0.65);
-      --border-color: rgba(56, 189, 248, 0.35);
-      --accent-primary: #0ea5e9;
-      --accent-secondary: #a855f7;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --theme-glow: rgba(14, 165, 233, 0.35);
-      --env-bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
+      --bg-light: #f4f7fb;
+      --glass-bg: rgba(255, 255, 255, 0.88);
+      --glass-panel: rgba(255, 255, 255, 0.82);
+      --border-color: rgba(14, 165, 233, 0.35);
+      --accent-primary: #0284c7;
+      --accent-secondary: #7c3aed;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --theme-glow: rgba(2, 132, 199, 0.3);
+      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
     }
 
     /* Temas Dinámicos por Entorno */
-    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #a855f7; --border-color: rgba(14, 165, 233, 0.4); }
-    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; --border-color: rgba(245, 158, 11, 0.45); }
-    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; --border-color: rgba(16, 185, 129, 0.4); }
-    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; --border-color: rgba(99, 102, 241, 0.4); }
-    body.env-music { --accent-primary: #ec4899; --accent-secondary: #f43f5e; --border-color: rgba(236, 72, 153, 0.4); }
+    body.env-general { --accent-primary: #0284c7; --accent-secondary: #7c3aed; --border-color: rgba(2, 132, 199, 0.4); }
+    body.env-mining { --accent-primary: #d97706; --accent-secondary: #b45309; --border-color: rgba(217, 119, 6, 0.45); }
+    body.env-teaching { --accent-primary: #059669; --accent-secondary: #0d9488; --border-color: rgba(5, 150, 105, 0.4); }
+    body.env-lawyer { --accent-primary: #4f46e5; --accent-secondary: #7c3aed; --border-color: rgba(79, 70, 229, 0.4); }
+    body.env-music { --accent-primary: #db2777; --accent-secondary: #e11d48; --border-color: rgba(219, 39, 119, 0.4); }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.02); }
     ::-webkit-scrollbar-thumb {
       background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
       border-radius: 9999px;
@@ -43,7 +43,7 @@
 
     body {
       background-color: var(--bg-light);
-      background-image: linear-gradient(rgba(9, 13, 22, 0.85), rgba(9, 13, 22, 0.92)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(244, 247, 251, 0.88), rgba(244, 247, 251, 0.94)), var(--env-bg-image);
       background-size: cover; background-position: center; background-attachment: fixed;
       color: var(--text-main); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
       display: flex; flex-direction: column; padding: 0.85rem 1rem; transition: all 0.4s ease;
@@ -58,70 +58,79 @@
     header {
       display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
       margin-bottom: 0.75rem; padding: 0.65rem 1.15rem; background: var(--glass-bg);
-      backdrop-filter: blur(25px); border: 1px solid var(--border-color); border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3); gap: 0.75rem; transition: all 0.3s;
+      backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06); gap: 0.75rem; transition: all 0.3s;
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.8rem; }
     .brand-logo {
-      width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,249,255,0.9));
       border: 1px solid var(--border-color); border-radius: 14px; display: flex; align-items: center;
-      justify-content: center; color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); font-size: 1.25rem;
+      justify-content: center; color: var(--accent-primary); box-shadow: 0 4px 15px var(--theme-glow); font-size: 1.25rem;
     }
-    .brand-title h1 { font-size: 1.1rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.3px; }
-    .version-pill { font-size: 0.6rem; background: rgba(255,255,255,0.1); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--border-color); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+    .brand-title h1 { font-size: 1.1rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.3px; }
+    .version-pill { font-size: 0.6rem; background: rgba(2, 132, 199, 0.12); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--border-color); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
     .header-right { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
     .select-custom {
-      background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); color: var(--text-main);
+      background: rgba(255,255,255,0.9); border: 1px solid var(--border-color); color: var(--text-main);
       padding: 0.35rem 0.7rem; border-radius: 12px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
       cursor: pointer; outline: none; backdrop-filter: blur(10px); transition: all 0.3s;
     }
 
-    /* BOTONES ESTILO NEÓN Y NEUMORFISMO (BASADO EN REFERENCIAS) */
+    /* BOTONES ESTILO NEÓN Y NEUMORFISMO (BASADO EN TUS IMÁGENES DE REFERENCIA) */
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff !important; border: 1px solid rgba(255,255,255,0.25); padding: 0.55rem 1.2rem; border-radius: 9999px;
+      color: #fff !important; border: 1px solid rgba(255,255,255,0.4); padding: 0.55rem 1.3rem; border-radius: 9999px;
       font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.25s; display: inline-flex; align-items: center; gap: 0.35rem;
+      box-shadow: 0 4px 20px var(--theme-glow), inset 0 1px 2px rgba(255,255,255,0.4); transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 0.4rem; position: relative;
     }
-    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 0 25px var(--accent-primary); }
+    .btn-neon::after {
+      content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 6px; height: 6px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 8px #fff;
+    }
+    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 25px var(--accent-primary); }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
-      color: var(--text-main) !important; padding: 0.45rem 0.9rem; border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-color);
+      color: var(--text-main) !important; padding: 0.45rem 1rem; border-radius: 9999px;
       font-size: 0.72rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: inset 0 1px 3px rgba(255,255,255,0.1); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;
-      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03), inset 0 1px 3px rgba(255,255,255,0.8); transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem; backdrop-filter: blur(10px); position: relative;
     }
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--accent-primary); }
+    .btn-secondary::after {
+      content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent-primary); box-shadow: 0 0 6px var(--accent-primary);
+    }
+    .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); box-shadow: 0 4px 12px var(--theme-glow); }
 
-    /* LANDING PAGE DE BIENVENIDA INVITADOS */
+    /* LANDING PAGE DE BIENVENIDA INVITADOS (ESTILO ELEVENLABS)[cite: 16] */
     .guest-showcase-view {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: calc(100vh - 95px); overflow-y: auto; text-align: center; padding: 1.5rem;
       background: var(--glass-panel); border: 1px solid var(--border-color); border-radius: 24px;
-      backdrop-filter: blur(25px); box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      backdrop-filter: blur(25px); box-shadow: 0 20px 50px rgba(0,0,0,0.06);
     }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.06);
+      display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(2, 132, 199, 0.1);
       border: 1px solid var(--border-color); padding: 0.35rem 0.85rem; border-radius: 9999px;
       font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700; margin-bottom: 1rem;
     }
     .showcase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; width: 100%; max-width: 980px; margin: 1.5rem 0; }
     @media (max-width: 768px) { .showcase-grid { grid-template-columns: 1fr; } }
     .showcase-card {
-      background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 1.2rem; text-align: left; transition: all 0.25s ease; box-shadow: 0 8px 30px rgba(0,0,0,0.2); backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.92); border: 1px solid var(--border-color); border-radius: 20px;
+      padding: 1.2rem; text-align: left; transition: all 0.25s ease; box-shadow: 0 8px 30px rgba(0,0,0,0.03); backdrop-filter: blur(15px);
     }
-    .showcase-card:hover { transform: translateY(-3px); border-color: var(--accent-primary); box-shadow: 0 0 25px var(--theme-glow); }
-    .showcase-card-icon { width: 38px; height: 38px; border-radius: 12px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: var(--accent-primary); margin-bottom: 0.75rem; border: 1px solid var(--border-color); }
+    .showcase-card:hover { transform: translateY(-3px); border-color: var(--accent-primary); box-shadow: 0 10px 30px var(--theme-glow); }
+    .showcase-card-icon { width: 38px; height: 38px; border-radius: 12px; background: rgba(2, 132, 199, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-primary); margin-bottom: 0.75rem; border: 1px solid var(--border-color); }
 
     /* FOTO DE PERFIL ESQUINA SUPERIOR DERECHA */
     .user-profile-trigger {
       width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent-primary);
       cursor: pointer; overflow: hidden; background: var(--accent-primary); color: #fff; display: flex; align-items: center;
-      justify-content: center; box-shadow: 0 0 15px var(--theme-glow); font-weight: 700; font-size: 0.9rem; transition: all 0.2s;
+      justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); font-weight: 700; font-size: 0.9rem; transition: all 0.2s;
     }
     .user-profile-trigger:hover { transform: scale(1.05); }
     .user-profile-trigger img { width: 100%; height: 100%; object-fit: cover; }
@@ -131,16 +140,16 @@
 
     .glass-panel {
       background: var(--glass-panel); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.1rem;
-      backdrop-filter: blur(22px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; height: 100%; overflow: hidden; transition: all 0.3s;
+      backdrop-filter: blur(22px); box-shadow: 0 15px 40px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; overflow: hidden; transition: all 0.3s;
     }
 
     .panel-header {
       display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--border-color);
     }
-    .panel-title { font-size: 0.85rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.4rem; }
+    .panel-title { font-size: 0.85rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; }
 
     .env-badge-box {
-      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 16px; padding: 0.9rem; margin-bottom: 0.75rem; text-align: center; backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85); border: 1px solid var(--border-color); border-radius: 16px; padding: 0.9rem; margin-bottom: 0.75rem; text-align: center; backdrop-filter: blur(10px);
     }
     .env-badge-box h3 { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.15rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.3rem; }
     .env-badge-box p { font-size: 0.68rem; color: var(--text-muted); }
@@ -152,17 +161,17 @@
     .chat-messages {
       flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px);
     }
-    .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 92%; white-space: pre-wrap; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border-color); color: var(--text-main); backdrop-filter: blur(12px); }
+    .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 92%; white-space: pre-wrap; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+    .message.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.96); border: 1px solid var(--border-color); color: var(--text-main); backdrop-filter: blur(12px); }
 
     /* PREVISUALIZACIÓN DE IMÁGENES Y PDF EN EL CHAT Y ADJUNTO */
     .msg-preview-img { max-width: 220px; max-height: 160px; border-radius: 10px; margin-top: 0.4rem; object-fit: cover; border: 1px solid var(--border-color); display: block; }
     
     .attachment-preview-box {
-      display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(15,23,42,0.9);
-      border: 1px solid var(--border-color); padding: 0.35rem 0.75rem; border-radius: 12px; font-size: 0.75rem; color: #fff;
-      backdrop-filter: blur(10px); margin-bottom: 0.4rem;
+      display: inline-flex; align-items: center; gap: 0.6rem; background: #ffffff;
+      border: 1px solid var(--border-color); padding: 0.35rem 0.75rem; border-radius: 12px; font-size: 0.75rem; color: #0f172a;
+      backdrop-filter: blur(10px); margin-bottom: 0.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
     .attachment-preview-box img { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border-color); }
 
@@ -177,13 +186,13 @@
     @keyframes dotPulse { 0%, 80%, 100% { transform: scale(0); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
 
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border-color);
-      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-top: auto; position: relative; flex-shrink: 0; backdrop-filter: blur(15px);
+      display: flex; gap: 0.5rem; background: rgba(255, 255, 255, 0.96); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-top: auto; position: relative; flex-shrink: 0; backdrop-filter: blur(15px);
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.82rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.82rem; outline: none; }
     
     .ampersand-btn {
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(124, 58, 237, 0.1));
       border: 1px solid var(--border-color); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
       padding: 0.2rem 0.65rem; border-radius: 12px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
     }
@@ -191,49 +200,49 @@
 
     .media-dropdown-menu {
       position: absolute; bottom: 125%; left: 0; width: 240px;
-      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);
       display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
     }
     .media-dropdown-item {
       display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 12px;
-      font-size: 0.75rem; font-weight: 600; color: #f1f5f9; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
+      font-size: 0.75rem; font-weight: 600; color: #1e293b; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
     }
-    .media-dropdown-item:hover { background: rgba(255, 255, 255, 0.08); color: var(--accent-primary); }
+    .media-dropdown-item:hover { background: rgba(2, 132, 199, 0.1); color: var(--accent-primary); }
 
     .canvas-column { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-    .canvas-tabs { display: flex; background: rgba(255,255,255,0.04); padding: 0.2rem; border-radius: 10px; border: 1px solid var(--border-color); gap: 0.2rem; }
+    .canvas-tabs { display: flex; background: rgba(255,255,255,0.85); padding: 0.2rem; border-radius: 10px; border: 1px solid var(--border-color); gap: 0.2rem; }
     .canvas-tab { background: transparent; border: none; padding: 0.25rem 0.6rem; font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); cursor: pointer; border-radius: 8px; font-weight: 600; }
-    .canvas-tab.active { background: rgba(255,255,255,0.1); color: var(--accent-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .canvas-tab.active { background: #fff; color: var(--accent-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
     .canvas-output {
-      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border-color); border-radius: 16px;
-      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.96); border: 1px solid var(--border-color); border-radius: 16px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;
       flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; user-select: text; max-height: calc(100vh - 180px); backdrop-filter: blur(15px);
     }
 
-    /* MODAL AUTENTICACIÓN ESTILO ELEVENLABS */
+    /* MODAL AUTENTICACIÓN ESTILO ELEVENLABS[cite: 16] */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(5, 8, 15, 0.75); backdrop-filter: blur(12px); display: none;
+      background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(8px); display: none;
       align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
     .modal-card-auth {
-      background: #0f172a; border: 1px solid var(--border-color); border-radius: 24px;
-      padding: 2.2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; text-align: center;
+      background: #ffffff; border: 1px solid var(--border-color); border-radius: 24px;
+      padding: 2.2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); position: relative; text-align: center;
     }
     .sso-button {
       width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-      border: 1px solid var(--border-color); border-radius: 9999px; background: rgba(255,255,255,0.03); padding: 0.65rem 1rem;
-      font-size: 0.85rem; font-weight: 600; color: #fff; cursor: pointer; transition: all 0.2s; margin-bottom: 0.6rem;
+      border: 1px solid var(--border-color); border-radius: 9999px; background: #ffffff; padding: 0.65rem 1rem;
+      font-size: 0.85rem; font-weight: 600; color: #1e293b; cursor: pointer; transition: all 0.2s; margin-bottom: 0.6rem;
     }
-    .sso-button:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
+    .sso-button:hover { background: #f8fafc; border-color: var(--accent-primary); box-shadow: 0 4px 15px var(--theme-glow); }
 
     /* GOOGLE-STYLE PROFILE CARD */
     .google-profile-card {
-      position: absolute; top: 60px; right: 20px; width: 340px; background: #0f172a;
+      position: absolute; top: 60px; right: 20px; width: 340px; background: #ffffff;
       border: 1px solid var(--border-color); border-radius: 24px; padding: 1.25rem;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 90; display: none; flex-direction: column; align-items: center; backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15); z-index: 90; display: none; flex-direction: column; align-items: center; backdrop-filter: blur(20px);
     }
     .google-avatar-large {
       width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: var(--accent-primary); color: #fff;
@@ -242,7 +251,7 @@
     .google-avatar-large img { width: 100%; height: 100%; object-fit: cover; }
     
     #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.65rem; }
-    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(15px); }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); backdrop-filter: blur(15px); }
   </style>
 </head>
 <body class="env-general">
@@ -257,7 +266,7 @@
         <div class="brand-logo">💎</div>
       </div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.5</span></h1>
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.6</span></h1>
         <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
@@ -299,7 +308,7 @@
     <div class="google-avatar-large" id="profile-card-avatar">
       <span id="profile-card-initials">JG</span>
     </div>
-    <h3 style="font-size: 1rem; font-weight: 700; color: #fff;" id="profile-card-name">Jeff GM</h3>
+    <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a;" id="profile-card-name">Jeff GM</h3>
     <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;" id="profile-card-email">englishtownincali@gmail.com</p>
 
     <div style="width: 100%; display: flex; flex-direction: column; gap: 0.5rem;">
@@ -307,16 +316,16 @@
       <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem;" onclick="document.getElementById('profile-photo-input').click()">
         <i data-lucide="camera" style="width:14px; height:14px;"></i> Cambiar foto de perfil
       </button>
-      <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem; color:#f43f5e;" id="btn-google-signout">
+      <button class="sso-button" style="border-radius: 9999px; font-size:0.78rem; color:#ef4444;" id="btn-google-signout">
         <i data-lucide="log-out" style="width:14px; height:14px;"></i> Sign out / Salir
       </button>
     </div>
   </div>
 
-  <!-- LANDING PAGE DE BIENVENIDA INVITADOS -->
+  <!-- LANDING PAGE DE BIENVENIDA INVITADOS (ESTILO ELEVENLABS)[cite: 16] -->
   <div id="guest-showcase-view" class="guest-showcase-view">
-    <div class="hero-badge"><i data-lucide="sparkles" style="width:14px; height:14px;"></i> NEXUS ORCHESTRATOR OS v3.5</div>
-    <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.8px;">
+    <div class="hero-badge"><i data-lucide="sparkles" style="width:14px; height:14px;"></i> NEXUS ORCHESTRATOR OS v3.6</div>
+    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.8px;">
       Orquestación Autónoma de Inteligencia Artificial
     </h2>
     <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 680px; line-height: 1.5; margin-bottom: 1.5rem;">
@@ -331,17 +340,17 @@
     <div class="showcase-grid">
       <div class="showcase-card">
         <div class="showcase-card-icon"><i data-lucide="gem" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.3rem;">Minería & Activos Globales</h3>
+        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Minería & Activos Globales</h3>
         <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Teasers comerciales, dossiers técnicos, auditoría NI 43-101 y debida diligencia de minerales.</p>
       </div>
       <div class="showcase-card">
         <div class="showcase-card-icon"><i data-lucide="book-open" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.3rem;">Academia & Lenguas</h3>
+        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Academia & Lenguas</h3>
         <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Diseño curricular, planes de aula, alineación DBA/EBC y guías pedagógicas multinivel.</p>
       </div>
       <div class="showcase-card">
         <div class="showcase-card-icon"><i data-lucide="scale" style="width:20px; height:20px;"></i></div>
-        <h3 style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.3rem;">Derecho & Normativa</h3>
+        <h3 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-bottom:0.3rem;">Derecho & Normativa</h3>
         <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">Análisis de jurisprudencia, conceptos legales, minutas contractuales y cumplimiento normativo.</p>
       </div>
     </div>
@@ -384,7 +393,7 @@
 
           <div class="chat-messages" id="chat-stream">
             <div class="message bot">
-              🚀 <strong>Nexus Orchestrator v3.5 Activo.</strong> Escribe tu instrucción o adjunta tus documentos para comenzar la orquestación técnica con alta precisión.
+              🚀 <strong>Nexus Orchestrator v3.6 Activo.</strong> Escribe tu instrucción o adjunta tus documentos para comenzar la orquestación técnica con alta precisión.
             </div>
           </div>
 
@@ -394,8 +403,8 @@
           <div class="chat-input-area">
             <div class="media-dropdown-menu" id="media-dropdown">
               <button class="media-dropdown-item" id="btn-file-doc"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivos (PDF / Word)</button>
-              <button class="media-dropdown-item" id="btn-file-img"><i data-lucide="image" style="width:15px; height:15px; color:#a855f7;"></i> Crear imagen (IA Nano Bananas)</button>
-              <button class="media-dropdown-item" id="btn-file-audio"><i data-lucide="headphones" style="width:15px; height:15px; color:#ec4899;"></i> Sounding Speech Synthesis</button>
+              <button class="media-dropdown-item" id="btn-file-img"><i data-lucide="image" style="width:15px; height:15px; color:#7c3aed;"></i> Crear imagen (IA Nano Bananas)</button>
+              <button class="media-dropdown-item" id="btn-file-audio"><i data-lucide="headphones" style="width:15px; height:15px; color:#db2777;"></i> Sounding Speech Synthesis</button>
             </div>
 
             <input type="file" id="hidden-file-input" style="display:none">
@@ -433,9 +442,9 @@
   <!-- MODAL AUTENTICACIÓN ESTILO ELEVENLABS[cite: 16] -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card-auth">
-      <button class="modal-close" onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1rem; color:#fff; cursor:pointer;">✕</button>
+      <button class="modal-close" onclick="closeAuthModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1rem; cursor:pointer;">✕</button>
       
-      <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem;">Welcome back</h2>
+      <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.3rem;">Welcome back</h2>
       <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.5rem;">Accede a tu cuenta de Nexus Orchestrator</p>
 
       <button class="sso-button" onclick="loginAsUser('englishtownincali@gmail.com', 'Jeff GM')">
@@ -444,14 +453,14 @@
       </button>
 
       <button class="sso-button" onclick="loginAsUser('jefferson@nexus.org', 'Jefferson Garcés')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.35c.67-.82 1.13-1.96.99-3.1-.98.04-2.18.66-2.88 1.48-.62.72-1.16 1.88-1.01 3 .1.01 2.22-.56 2.9-1.38z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.35c.67-.82 1.13-1.96.99-3.1-.98.04-2.18.66-2.88 1.48-.62.72-1.16 1.88-1.01 3 .1.01 2.22-.56 2.9-1.38z"/></svg>
         Sign in with Apple
       </button>
 
       <div style="margin: 1rem 0; font-size: 0.72rem; color: var(--text-muted);">or continue with email</div>
 
-      <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:0.65rem; border:1px solid var(--border-color); background:rgba(255,255,255,0.03); color:#fff; border-radius:12px; margin-bottom:0.6rem; outline:none; font-size:0.85rem;" autocomplete="off">
-      <input type="password" id="modal-pass" placeholder="Password" style="width:100%; padding:0.65rem; border:1px solid var(--border-color); background:rgba(255,255,255,0.03); color:#fff; border-radius:12px; margin-bottom:1rem; outline:none; font-size:0.85rem;" autocomplete="off">
+      <input type="email" id="modal-email" placeholder="Email" style="width:100%; padding:0.65rem; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:0.6rem; outline:none; font-size:0.85rem;" autocomplete="off">
+      <input type="password" id="modal-pass" placeholder="Password" style="width:100%; padding:0.65rem; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:1rem; outline:none; font-size:0.85rem;" autocomplete="off">
 
       <button class="btn-neon" style="width:100%; justify-content:center; padding:0.7rem;" onclick="loginAsUser('englishtownincali@gmail.com', 'Jeff GM')">Sign in</button>
     </div>
@@ -530,7 +539,7 @@
       attachedFilePreviewUrl = '';
       lastRawText = '';
 
-      document.getElementById('chat-stream').innerHTML = '<div class="message bot">🚀 <strong>Nexus Orchestrator v3.5 Activo.</strong> Escribe tu instrucción...</div>';
+      document.getElementById('chat-stream').innerHTML = '<div class="message bot">🚀 <strong>Nexus Orchestrator v3.6 Activo.</strong> Escribe tu instrucción...</div>';
       document.getElementById('canvas-view').innerHTML = '';
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('guest-showcase-view').style.display = 'flex';
@@ -562,7 +571,7 @@
 
       indicator.innerHTML = `<div class="attachment-preview-box">
                                 ${previewContent}
-                                <span onclick="clearAttachedFile()" style="color:#f43f5e; cursor:pointer; font-weight:bold; margin-left:8px;" title="Quitar">✕</span>
+                                <span onclick="clearAttachedFile()" style="color:#ef4444; cursor:pointer; font-weight:bold; margin-left:8px;" title="Quitar">✕</span>
                              </div>`;
 
       if (file.type === 'application/pdf') {
@@ -640,7 +649,7 @@
 
         const botMsg = document.createElement('div');
         botMsg.className = 'message bot';
-        lastRawText = data.success ? data.result : `Orquestación completada con precisión quirúrgica para: "${query || 'archivo adjunto'}"`;
+        lastRawText = data.success ? data.result : `Orquestación completada con precisión para: "${query || 'archivo adjunto'}"`;
         botMsg.innerHTML = marked.parse(lastRawText);
         stream.appendChild(botMsg);
         stream.scrollTop = stream.scrollHeight;
@@ -664,7 +673,7 @@
       document.getElementById('btn-send').addEventListener('click', sendUserQuery);
       document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendUserQuery(); });
 
-      // Cambio de entornos dinámicos con identidad visual
+      // Cambio de entornos dinámicos con identidad visual clara
       document.getElementById('global-env-switcher').addEventListener('change', (e) => {
         const val = e.target.value;
         document.body.className = `env-${val}`;
