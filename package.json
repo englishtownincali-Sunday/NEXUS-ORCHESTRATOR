@@ -8,9 +8,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@fastify/static": "^6.10.0",
+    "@fastify/static": "^7.0.0",
     "@google/genai": "^0.1.1",
-    "fastify": "^4.20.0",
-    "postgres": "^3.3.5"
+    "fastify": "^4.28.1",
+    "postgres": "^3.4.4"
   }
 }
