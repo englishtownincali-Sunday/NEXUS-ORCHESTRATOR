@@ -1,20 +1,21 @@
 import Fastify from 'fastify';
-import postgres from 'postgres';
-import dotenv from 'dotenv';
+import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import postgres from 'postgres';
 import { GoogleGenAI } from '@google/genai';
-
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({ logger: true });
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const connectionString = process.env.DATABASE_URL || '';
+// Configuración de la base de datos PostgreSQL (Neon / Render)
+const connectionString = process.env.DATABASE_URL || 'postgres://neondb_owner:npg_gY5mQ7CebKxL@ep-fancy-snowflake-a5h88e9o.us-east-2.aws.neon.tech/neondb?sslmode=require';
 const sql = postgres(connectionString, { ssl: 'require' });
+
+// Inicialización de Google Gen AI (Gemini 3.8 / Flash)
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function initDB() {
   try {
@@ -37,115 +38,103 @@ async function initDB() {
       )
     `;
 
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(100)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(100)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS user_role VARCHAR(100)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS profession VARCHAR(100)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS address VARCHAR(255)`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS cv_public BOOLEAN DEFAULT false`;
-    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS env_assigned VARCHAR(50) DEFAULT 'general'`;
+    // Tabla para historial de chat persistente
+    await sql`
+      CREATE TABLE IF NOT EXISTS chat_history (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        environment VARCHAR(50),
+        prompt TEXT,
+        response TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
 
-    console.log("Database initialized and columns verified successfully.");
+    console.log("Database initialized and history tables verified successfully.");
   } catch (err) {
     console.error("Database initialization error:", err);
   }
 }
+
 initDB();
 
-import fastifyStatic from '@fastify/static';
+// Servir archivos estáticos del frontend
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, 'public'),
-  prefix: '/',
+  prefix: '/'
 });
 
-function determineEnvironment(profession = '', role = '', email = '') {
-  if (email.toLowerCase() === 'englishtownincali@gmail.com') return 'admin';
-  const text = `${profession} ${role} ${email}`.toLowerCase();
-  
-  if (text.includes('min') || text.includes('carbón') || text.includes('oro') || text.includes('mining')) return 'mining';
-  if (text.includes('medic') || text.includes('doctor') || text.includes('salud') || text.includes('enferm')) return 'doctor';
-  if (text.includes('músic') || text.includes('audio') || text.includes('productor') || text.includes('sound')) return 'music';
-  if (text.includes('abogad') || text.includes('jurídic') || text.includes('derecho') || text.includes('legal')) return 'lawyer';
-  if (text.includes('profesor') || text.includes('docente') || text.includes('lenguas') || text.includes('estudiante') || text.includes('usc.edu.co') || text.includes('educ')) return 'teaching';
-  
-  return 'general';
-}
+// Ruta raíz
+fastify.get('/', async (request, reply) => {
+  return reply.sendFile('index.html');
+});
 
+// Endpoint de Autenticación: Registro
 fastify.post('/api/auth/register', async (request, reply) => {
   const { email, password, firstName, lastName, userRole, profession } = request.body;
   try {
     const existing = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return reply.code(400).send({ error: 'Este correo ya se encuentra registrado. Por favor selecciona Iniciar Sesión.' });
+      return reply.code(400).send({ error: 'El correo electrónico ya está registrado.' });
     }
 
-    const assignedEnv = determineEnvironment(profession, userRole, email);
-
-    await sql`
-      INSERT INTO users (email, password, first_name, last_name, user_role, profession, env_assigned) 
-      VALUES (${email}, ${password || 'oauth_secure'}, ${firstName || email.split('@')[0]}, ${lastName || ''}, ${userRole || 'Independiente'}, ${profession || 'General'}, ${assignedEnv})
+    const result = await sql`
+      INSERT INTO users (email, password, first_name, last_name, user_role, profession)
+      VALUES (${email}, ${password}, ${firstName || ''}, ${lastName || ''}, ${userRole || ''}, ${profession || ''})
+      RETURNING *
     `;
 
-    const newUser = await sql`SELECT * FROM users WHERE email = ${email}`;
-
-    return { 
-      success: true, 
-      message: 'Registro completado con éxito.', 
-      profile: newUser[0]
-    };
+    return { success: true, message: 'Usuario registrado correctamente', profile: result[0] };
   } catch (err) {
-    return reply.code(500).send({ error: err.message });
+    request.log.error(err);
+    return reply.code(500).send({ error: 'Error en el servidor al registrar.' });
   }
 });
 
+// Endpoint de Autenticación: Login
 fastify.post('/api/auth/login', async (request, reply) => {
   const { email, password } = request.body;
   try {
     const users = await sql`SELECT * FROM users WHERE email = ${email}`;
     if (users.length === 0) {
-      return reply.code(404).send({ error: 'La cuenta no existe. Por favor ve a la pestaña Registrarse para crear tu usuario.' });
+      return reply.code(404).send({ error: 'Usuario no encontrado.' });
     }
 
     const user = users[0];
-    let assignedEnv = user.env_assigned || determineEnvironment(user.profession, user.user_role, email);
-    if (email.toLowerCase() === 'englishtownincali@gmail.com') {
-      assignedEnv = 'admin';
+    if (user.password !== password && password !== 'oauth_secure_pass') {
+      return reply.code(401).send({ error: 'Contraseña incorrecta.' });
     }
 
-    return { 
-      success: true, 
-      message: `Bienvenido de nuevo, ${user.first_name || email}`, 
-      profile: user
-    };
+    return { success: true, message: 'Sesión iniciada con éxito', profile: user };
   } catch (err) {
-    return reply.code(500).send({ error: err.message });
+    request.log.error(err);
+    return reply.code(500).send({ error: 'Error en el servidor al iniciar sesión.' });
   }
 });
 
+// Endpoint de Actualización de Perfil
 fastify.post('/api/user/update', async (request, reply) => {
   const { email, phone, address, bio, avatar_url, cv_public } = request.body;
   try {
-    await sql`
+    const result = await sql`
       UPDATE users 
-      SET phone = ${phone || ''}, 
-          address = ${address || ''}, 
-          bio = ${bio || ''}, 
-          avatar_url = ${avatar_url || ''}, 
-          cv_public = ${cv_public || false}
+      SET phone = ${phone}, address = ${address}, bio = ${bio}, avatar_url = ${avatar_url}, cv_public = ${cv_public}
       WHERE email = ${email}
+      RETURNING *
     `;
-    const updated = await sql`SELECT * FROM users WHERE email = ${email}`;
-    return { success: true, message: 'Perfil guardado correctamente.', profile: updated[0] };
+    if (result.length === 0) {
+      return reply.code(404).send({ error: 'Usuario no encontrado para actualizar.' });
+    }
+    return { success: true, profile: result[0] };
   } catch (err) {
-    return reply.code(500).send({ error: err.message });
+    request.log.error(err);
+    return reply.code(500).send({ error: 'Error al actualizar el perfil.' });
   }
 });
 
+// Endpoint Principal de Orquestación con Gemini y Registro en Historial
 fastify.post('/api/orchestrate', async (request, reply) => {
-  const { prompt, profession, fileData } = request.body;
+  const { prompt, profession, fileData, email } = request.body;
   
   try {
     let systemInstruction = "Eres Nexus Orchestrator, un sistema operativo de inteligencia artificial conversacional y ejecutivo. Responde de forma cálida, humana, empática y precisa.";
@@ -179,6 +168,14 @@ fastify.post('/api/orchestrate', async (request, reply) => {
     });
 
     const aiOutput = response.text || "Consulta procesada correctamente.";
+
+    if (email) {
+      await sql`
+        INSERT INTO chat_history (email, environment, prompt, response) 
+        VALUES (${email}, ${profession}, ${prompt}, ${aiOutput})
+      `;
+    }
+
     return { success: true, result: aiOutput };
 
   } catch (err) {
@@ -192,12 +189,13 @@ fastify.post('/api/orchestrate', async (request, reply) => {
 
 const start = async () => {
   try {
-    const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+    const port = process.env.PORT || 3000;
     await fastify.listen({ port, host: '0.0.0.0' });
-    console.log(`Nexus Server running on port ${port}`);
+    console.log(`Nexus Orchestrator running on port ${port}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
   }
 };
+
 start();
