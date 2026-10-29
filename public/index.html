@@ -83,7 +83,6 @@
       font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Layout Ajustado para evitar deformación de pantalla */
     .main-layout { 
       display: grid; 
       grid-template-columns: 300px 1fr; 
@@ -202,7 +201,6 @@
     }
     .file-upload-btn:hover { color: var(--accent-primary); }
 
-    /* Contenedor con Scroll para el Canvas Compilador */
     .canvas-column {
       display: flex; flex-direction: column; height: 100%; overflow: hidden;
     }
@@ -371,14 +369,16 @@
 
         <div class="canvas-column">
           <div class="panel-header" style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="panel-title">📄 Canvas Compilador</div>
-            <div style="display:flex; gap:0.4rem;">
-              <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="speakCanvas()">▶️ Leer</button>
-              <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem;" onclick="pauseCanvasSpeech()">⏸️ Pausa</button>
-              <button class="btn-secondary" style="font-size:0.75rem; padding: 0.25rem 0.6rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️ Detener</button>
+            <div class="panel-title">📄 Canvas Compilador <span style="font-size:0.65rem; color:var(--accent-primary); font-family:'JetBrains Mono';">(Editable)</span></div>
+            <div style="display:flex; gap:0.3rem;">
+              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="exportCanvas('txt')" title="Descargar como TXT">💾 TXT</button>
+              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="exportCanvas('html')" title="Descargar como HTML">🌐 HTML</button>
+              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="speakCanvas()">▶️</button>
+              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem;" onclick="pauseCanvasSpeech()">⏸️</button>
+              <button class="btn-secondary" style="font-size:0.7rem; padding: 0.2rem 0.5rem; color:#ef4444;" onclick="stopCanvasSpeech()">⏹️</button>
             </div>
           </div>
-          <div class="canvas-output" id="canvas-view"></div>
+          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los entregables aparecerán aquí y podrás editarlos libremente..."></div>
         </div>
       </div>
     </div>
@@ -554,7 +554,6 @@
 
     const ADMIN_EMAIL = 'englishtownincali@gmail.com';
 
-    // Mapa de iconos y nombres por entorno
     const ENV_METADATA = {
       'admin': { icon: '🛡️', name: 'ADMIN CORPORATIVO', tag: 'ADMIN CORE' },
       'mining': { icon: '⛏️', name: 'MINERÍA Y ACTIVOS', tag: 'MINING CORE' },
@@ -972,6 +971,31 @@
       }
     }
 
+    function exportCanvas(format) {
+      const textContent = document.getElementById('canvas-view').innerText;
+      if (!textContent || textContent.trim() === '') {
+        showToast('El Canvas está vacío.');
+        return;
+      }
+
+      let blob, filename;
+      if (format === 'txt') {
+        blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        filename = `Entregable_${activeEnvironment}_${Date.now()}.txt`;
+      } else if (format === 'html') {
+        const htmlContent = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Entregable Nexus</title><style>body{font-family:Arial,sans-serif;padding:40px;line-height:1.6;color:#333;}</style></head><body>${textContent.replace(/\n/g, '<br>')}</body></html>`;
+        blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        filename = `Entregable_${activeEnvironment}_${Date.now()}.html`;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      showToast(`Entregable exportado como .${format.toUpperCase()}`);
+    }
+
     function useQuickQuery(queryText) {
       if (!loggedUserEmail) {
         showToast('Por favor inicia sesión para utilizar las herramientas del workspace.');
@@ -1007,7 +1031,6 @@
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
-      // Elemento de Carga Animado con Planeta Giratorio e Icono de Entorno
       const meta = ENV_METADATA[activeEnvironment] || ENV_METADATA['general'];
       const loading = document.createElement('div');
       loading.className = 'message bot';
@@ -1015,30 +1038,40 @@
         <div class="loading-container">
           <div class="spinning-globe">${meta.icon}</div>
           <div class="loading-text-box">
-            <div class="loading-title"><span>Procesando en Nexus OS</span> <span>${meta.icon}</span></div>
-            <div class="loading-sub">Sincronizando modelo en [${meta.name}]...</div>
+            <div class="loading-title"><span>Nexus Sub-Orchestrator Active</span> <span>${meta.icon}</span></div>
+            <div class="loading-sub">Fase 1: Sincronizando motor en [${meta.name}]...</div>
           </div>
         </div>
       `;
       stream.appendChild(loading);
       stream.scrollTop = stream.scrollHeight;
 
+      setTimeout(() => {
+        if (loading.parentNode) {
+          loading.querySelector('.loading-sub').innerText = `Fase 2: Consultando modelo neuronal gemini-3.8-flash...`;
+        }
+      }, 1500);
+
       try {
         const res = await fetch('/api/orchestrate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: promptText, profession: activeEnvironment, fileData: attachedFile })
+          body: JSON.stringify({ 
+            prompt: promptText, 
+            profession: activeEnvironment, 
+            fileData: attachedFile,
+            email: loggedUserEmail 
+          })
         });
         const data = await res.json();
 
-        // Reemplaza la animación por el resultado al terminar
         loading.innerText = data.result;
         attachedFile = null;
         document.getElementById('file-indicator').style.display = 'none';
 
         if (promptText.toLowerCase().includes('documento') || promptText.toLowerCase().includes('informe') || promptText.toLowerCase().includes('propuesta') || data.result.length > 200) {
           document.getElementById('canvas-view').innerText = data.result;
-          showToast('Entregable compilado en el Canvas.');
+          showToast('Entregable compilado y sincronizado en el Canvas.');
         }
       } catch (err) {
         loading.innerText = "[Error de Conexión] No se pudo procesar la solicitud con el servidor.";
