@@ -1,62 +1,288 @@
-<!-- Botón Interactivo con el Ampersand (&) para Adjuntar y Herramientas -->
-<div class="relative inline-block text-left">
-    <button onclick="toggleMediaMenu()" type="button" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 px-3 py-2 rounded-lg transition flex items-center space-x-2 font-mono shadow-md">
-        <span class="text-lg font-bold">&</span>
-        <span class="text-xs">Medios & Herramientas ▾</span>
-    </button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Orchestrator - Autonomous Workspace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-panel {
+            background: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans">
 
-    <!-- Menú Desplegable Flotante (Estilo Referencia) -->
-    <div id="media-dropdown" class="hidden origin-bottom-left absolute left-0 bottom-full mb-2 w-56 rounded-2xl glass-panel border border-slate-700 shadow-2xl overflow-hidden z-50 bg-slate-900/95 backdrop-blur-md">
-        <div class="p-1 space-y-1">
-            <label class="flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl cursor-pointer transition">
-                <span>📎</span>
-                <span>Subir archivos (PDF / Word)</span>
-                <input type="file" class="hidden" onchange="handleMenuFile(event)">
-            </label>
-            <button onclick="triggerAction('drive')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                <span>☁️</span>
-                <span>Agregar desde Drive</span>
-            </button>
-            <div class="border-t border-slate-800 my-1"></div>
-            <button onclick="triggerAction('image')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                <span>🎨</span>
-                <span>Crear imagen (AI)</span>
-            </button>
-            <button onclick="triggerAction('music')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
-                <span>🎵</span>
-                <span>Crear música / Audio</span>
-            </button>
+    <!-- Header / Navbar -->
+    <header class="glass border-b border-slate-800 sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_12px_#06b6d4]"></div>
+            <h1 class="text-xl font-bold tracking-wider bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">
+                NEXUS ORCHESTRATOR
+            </h1>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <span id="user-badge" class="text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">Modo Invitado</span>
+            <button onclick="toggleModal('profile-modal')" class="text-xs bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg transition">Perfil</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Panel Izquierdo: Controles y Entornos (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col space-y-6">
+            <!-- Selector de Entornos -->
+            <div class="glass-panel p-5 rounded-2xl shadow-xl">
+                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Entorno Profesional</h2>
+                <select id="profession-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none focus:border-cyan-500 transition">
+                    <option value="general">Nexus General (Core OS)</option>
+                    <option value="mining">AuraX Global (Minería & ESG)</option>
+                    <option value="teaching">Lingua Orchestrator (Pedagogía)</option>
+                    <option value="lawyer">Jurídica Nexus (Derecho & Contratos)</option>
+                    <option value="doctor">Clinic Nexus (Salud & Medicina)</option>
+                    <option value="music">Sonic Orchestrator (Música & Arte)</option>
+                    <option value="admin">Nexus Command (Sistemas & Seguridad)</option>
+                </select>
+            </div>
+
+            <!-- Panel de Entrada / Prompt -->
+            <div class="glass-panel p-5 rounded-2xl shadow-xl flex-1 flex flex-col">
+                <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Centro de Comando</h2>
+                <textarea id="prompt-input" rows="5" placeholder="Escribe tu instrucción o consulta aquí..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 focus:outline-none focus:border-cyan-500 resize-none transition text-sm"></textarea>
+                
+                <div class="mt-4 flex items-center justify-between relative">
+                    <!-- Botón Interactivo con el Ampersand (&) para Adjuntar y Herramientas -->
+                    <div class="relative inline-block text-left">
+                        <button onclick="toggleMediaMenu()" type="button" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 px-3 py-2 rounded-lg transition flex items-center space-x-2 font-mono shadow-md">
+                            <span class="text-lg font-bold">&</span>
+                            <span class="text-xs">Medios ▾</span>
+                        </button>
+
+                        <!-- Menú Desplegable Flotante -->
+                        <div id="media-dropdown" class="hidden origin-bottom-left absolute left-0 bottom-full mb-2 w-56 rounded-2xl glass-panel border border-slate-700 shadow-2xl overflow-hidden z-50 bg-slate-900/95 backdrop-blur-md">
+                            <div class="p-1 space-y-1">
+                                <label class="flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl cursor-pointer transition">
+                                    <span>📎</span>
+                                    <span>Subir archivos (PDF / Word)</span>
+                                    <input type="file" id="file-input" class="hidden" onchange="handleMenuFile(event)">
+                                </label>
+                                <button onclick="triggerAction('drive')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
+                                    <span>☁️</span>
+                                    <span>Agregar desde Drive</span>
+                                </button>
+                                <div class="border-t border-slate-800 my-1"></div>
+                                <button onclick="triggerAction('image')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
+                                    <span>🎨</span>
+                                    <span>Crear imagen (AI)</span>
+                                </button>
+                                <button onclick="triggerAction('music')" class="w-full flex items-center space-x-3 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl transition text-left">
+                                    <span>🎵</span>
+                                    <span>Crear música / Audio</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span id="file-indicator" class="text-xs text-cyan-400 truncate max-w-[150px]"></span>
+                </div>
+
+                <button onclick="sendPrompt()" id="send-btn" class="mt-4 w-full bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-medium py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                    <span>⚡ Ejecutar Orquestación</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Panel Derecho: Canvas Compilador & Resultados (8 Cols) -->
+        <section class="lg:col-span-8 flex flex-col space-y-6">
+            <div class="glass-panel p-5 rounded-2xl shadow-xl flex-1 flex flex-col min-h-[550px]">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Canvas Compilador</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="speakCanvas()" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">🔊 Escuchar</button>
+                        <button onclick="exportFile('txt')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">Exportar .txt</button>
+                        <button onclick="exportFile('html')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg transition">Exportar .html</button>
+                    </div>
+                </div>
+
+                <!-- Canvas Editable -->
+                <textarea id="canvas-output" placeholder="Los resultados de la IA y el código compilado aparecerán aquí para su edición..." class="w-full flex-1 bg-slate-900/80 border border-slate-800 rounded-xl p-4 text-slate-200 font-mono text-sm focus:outline-none focus:border-cyan-500/50 resize-none transition leading-relaxed"></textarea>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Perfil / Registro -->
+    <div id="profile-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="glass-panel p-6 rounded-2xl max-w-md w-full border border-slate-700 shadow-2xl relative">
+            <button onclick="toggleModal('profile-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+            <h3 class="text-lg font-bold text-slate-100 mb-4">Gestión de Cuenta / Perfil</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-slate-400">Correo Electrónico</label>
+                    <input type="email" id="modal-email" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 mt-1" placeholder="correo@ejemplo.com">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400">Contraseña</label>
+                    <input type="password" id="modal-password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 mt-1" placeholder="••••••••">
+                </div>
+                <div class="flex space-x-3 pt-2">
+                    <button onclick="handleAuth('login')" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white py-2 rounded-lg text-sm transition font-medium">Iniciar Sesión</button>
+                    <button onclick="handleAuth('register')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-lg text-sm transition">Registrarse</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Función para mostrar/ocultar el menú del ampersand
-    function toggleMediaMenu() {
-        const menu = document.getElementById('media-dropdown');
-        menu.classList.toggle('hidden');
-    }
+    <!-- Script del Cliente completo -->
+    <script>
+        let currentUserEmail = null;
+        let selectedFile = null;
 
-    // Cerrar el menú si se hace clic fuera
-    window.addEventListener('click', function(e) {
-        const btn = document.querySelector('button[onclick="toggleMediaMenu()"]');
-        const menu = document.getElementById('media-dropdown');
-        if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
-            menu.classList.add('hidden');
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
         }
-    });
 
-    function handleMenuFile(event) {
-        const file = event.target.files[0];
-        if (file) {
-            selectedFile = { name: file.name, size: file.size };
-            document.getElementById('file-indicator').innerText = `📎 ${file.name}`;
+        function toggleMediaMenu() {
+            const menu = document.getElementById('media-dropdown');
+            menu.classList.toggle('hidden');
+        }
+
+        // Cerrar el menú si se hace clic fuera
+        window.addEventListener('click', function(e) {
+            const btn = document.querySelector('button[onclick="toggleMediaMenu()"]');
+            const menu = document.getElementById('media-dropdown');
+            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        function handleMenuFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = { name: file.name, size: file.size };
+                document.getElementById('file-indicator').innerText = `📎 ${file.name}`;
+                toggleMediaMenu();
+            }
+        }
+
+        function triggerAction(type) {
+            alert(`Módulo seleccionado: ${type}. Próximamente integrado con el orquestador.`);
             toggleMediaMenu();
         }
-    }
 
-    function triggerAction(type) {
-        alert(`Módulo seleccionado: ${type}. Próximamente integrado con el orquestador.`);
-        toggleMediaMenu();
-    }
-</script>
+        async function sendPrompt() {
+            const prompt = document.getElementById('prompt-input').value.trim();
+            const profession = document.getElementById('profession-select').value;
+            const canvas = document.getElementById('canvas-output');
+            const btn = document.getElementById('send-btn');
+
+            if (!prompt) {
+                alert('Por favor ingresa una instrucción.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'Orquestando...';
+            canvas.value = '⏳ Procesando solicitud con Nexus Orchestrator...';
+
+            try {
+                const res = await fetch('/api/orchestrate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt,
+                        profession,
+                        fileData: selectedFile,
+                        email: currentUserEmail
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    canvas.value = data.result;
+                } else {
+                    canvas.value = `[Error] ${data.result}`;
+                }
+            } catch (err) {
+                canvas.value = `[Error de Red] No se pudo conectar con el servidor: ${err.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '⚡ Ejecutar Orquestación';
+            }
+        }
+
+        async function handleAuth(type) {
+            const email = document.getElementById('modal-email').value;
+            const password = document.getElementById('modal-password').value;
+
+            if (!email || !password) {
+                alert('Completa todos los campos.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/auth/${type}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    currentUserEmail = data.profile.email;
+                    document.getElementById('user-badge').innerText = currentUserEmail;
+                    toggleModal('profile-modal');
+                    alert(data.message);
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                alert('Error en la autenticación.');
+            }
+        }
+
+        function speakCanvas() {
+            const text = document.getElementById('canvas-output').value;
+            if (!text) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function exportFile(format) {
+            const text = document.getElementById('canvas-output').value;
+            if (!text) return;
+            
+            let mime = 'text/plain';
+            let ext = 'txt';
+            let content = text;
+
+            if (format === 'html') {
+                mime = 'text/html';
+                ext = 'html';
+                content = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Nexus Export</title></head><body style="font-family:sans-serif;padding:2rem;background:#0f172a;color:#f8fafc;"><pre>${text}</pre></body></html>`;
+            }
+
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `nexus-export-${Date.now()}.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
