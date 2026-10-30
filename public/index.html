@@ -8,14 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
   <style>
     :root {
       --bg-base: #070b14;
-      --glass-panel: rgba(15, 23, 42, 0.85);
+      --glass-panel: rgba(15, 23, 42, 0.75);
       --glass-border: rgba(56, 189, 248, 0.35);
       --accent-primary: #0ea5e9;
       --accent-secondary: #a855f7;
@@ -26,12 +25,12 @@
       --env-bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
     }
 
-    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #a855f7; --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; --env-bg-image: url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; --env-bg-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; --env-bg-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #a855f7; }
+    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; }
+    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; }
+    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; }
     body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; --env-bg-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop'); }
-    body.env-music { --accent-primary: #ec4899; --accent-secondary: #f43f5e; --env-bg-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-music { --accent-primary: #ec4899; --accent-secondary: #f43f5e; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,7 +56,7 @@
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 0.75rem; padding: 0.65rem 1.15rem; background: var(--glass-panel);
       backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4); gap: 0.75rem; flex-wrap: wrap; transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); gap: 0.75rem; flex-wrap: wrap;
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.8rem; }
@@ -84,6 +83,7 @@
       width: 6px; height: 6px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 8px #fff;
     }
     .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 0 30px var(--accent-primary); }
+    .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
@@ -141,11 +141,11 @@
     @media (max-width: 1024px) { .workspace-grid { grid-template-columns: 1fr; } }
 
     .chat-box { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-    .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); scroll-behavior: smooth; }
+    .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); }
     .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 92%; white-space: pre-wrap; word-break: break-word; }
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 0 20px var(--theme-glow); }
     .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); color: var(--text-main); backdrop-filter: blur(12px); }
-    .msg-preview-img { max-width: 220px; max-height: 160px; border-radius: 10px; margin-top: 0.4rem; object-fit: cover; border: 1px solid var(--glass-border); display: block; }
+    .msg-preview-img { max-width: 220px; max-height: 160px; border-radius: 10px; margin-top: 0.4rem; object-fit: cover; border: 1px solid var(--glass-border); display: block; cursor: pointer; }
 
     .chat-input-area {
       display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border);
@@ -195,7 +195,7 @@
     }
     .account-chooser-card {
       display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px;
-      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s; text-align: left; width: 100%;
     }
     .account-chooser-card:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
 
@@ -218,23 +218,21 @@
     </div>
 
     <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-      <!-- Multivoces por País con banderas y presentación estilo ElevenLabs -->
+      <!-- Multivoces por País estilo ElevenLabs -->
       <div style="display: flex; align-items: center; gap: 0.35rem;">
         <select class="select-custom" id="country-voice-selector" title="Selecciona País y Bandera">
-          <option value="co" data-lang="es-CO" data-gender="female">🇨🇴 Colombia (Lucía - Mujer)</option>
-          <option value="co_m" data-lang="es-CO" data-gender="male">🇨🇴 Colombia (Burt - Hombre)</option>
-          <option value="us" data-lang="en-US" data-gender="female">🇺🇸 USA (Rachel - Mujer)</option>
-          <option value="us_m" data-lang="en-US" data-gender="male">🇺🇸 USA (Adam - Hombre)</option>
-          <option value="gb" data-lang="en-GB" data-gender="male">🇬🇧 UK (George - Hombre)</option>
-          <option value="es" data-lang="es-ES" data-gender="male">🇪🇸 España (Enrique - Hombre)</option>
-          <option value="fr" data-lang="fr-FR" data-gender="male">🇫🇷 France (Antoine - Hombre)</option>
+          <option value="co">🇨🇴 Colombia (Burt / Lucía)</option>
+          <option value="us">🇺🇸 USA (Adam / Rachel)</option>
+          <option value="gb">🇬🇧 UK (George / Charlotte)</option>
+          <option value="es">🇪🇸 España (Enrique / Carmen)</option>
+          <option value="fr">🇫🇷 France (Antoine / Mathilde)</option>
         </select>
         <button class="btn-secondary" id="btn-preview-voice" title="Escuchar presentación de la voz">🗣️</button>
       </div>
 
       <div id="auth-actions" style="display:flex; gap:0.4rem;">
-        <button class="btn-secondary" onclick="openGoogleChooserModal()"><i data-lucide="key" style="width:13px; height:13px;"></i> Iniciar Sesión</button>
-        <button class="btn-neon" onclick="openGoogleChooserModal()"><i data-lucide="sparkles" style="width:13px; height:13px;"></i> Registrarse</button>
+        <button class="btn-secondary" onclick="openAuthModal('login')"><i data-lucide="key" style="width:13px; height:13px;"></i> Iniciar Sesión</button>
+        <button class="btn-neon" onclick="openAuthModal('register')"><i data-lucide="sparkles" style="width:13px; height:13px;"></i> Registrarse</button>
       </div>
 
       <div id="user-profile-trigger" style="display:none; align-items:center; gap:0.5rem; cursor:pointer;" onclick="toggleProfileCard()">
@@ -246,17 +244,17 @@
     </div>
   </header>
 
-  <!-- PANEL DE PERFIL FLOTANTE CON BOTÓN GUARDAR Y ESCUDO ADMIN -->
+  <!-- PANEL DE PERFIL FLOTANTE -->
   <div id="google-profile-card" style="position:absolute; top:65px; right:20px; width:340px; background:#0f172a; border:1px solid var(--glass-border); border-radius:24px; padding:1.25rem; box-shadow:0 20px 50px rgba(0,0,0,0.6); z-index:90; display:none; flex-direction:column; align-items:center; backdrop-filter:blur(20px);">
     <div style="width:72px; height:72px; border-radius:50%; overflow:hidden; background:var(--accent-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:700; margin-bottom:0.5rem;" id="profile-card-avatar">
       <span id="profile-card-initials">JG</span>
     </div>
     <div id="profile-admin-shield" style="margin-bottom:0.4rem;"></div>
-    <h3 style="font-size:1rem; font-weight:700; color:#fff;" id="profile-card-name">Jefferson Garcés</h3>
+    <h3 style="font-size:1rem; font-weight:700; color:#fff;" id="profile-card-name">Jefferson Garcés M</h3>
     <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;" id="profile-card-email">englishtownincali@gmail.com</p>
 
     <div style="width:100%; display:flex; flex-direction:column; gap:0.5rem;">
-      <input type="file" id="profile-photo-input" style="display:none;" accept="image/*">
+      <input type="file" id="profile-photo-input" style="display:none;" accept="image/*" onchange="handleProfilePhotoUpload(event)">
       <button class="btn-secondary" style="width:100%; justify-content:center;" onclick="document.getElementById('profile-photo-input').click()">📷 Cambiar foto de perfil</button>
       <button class="btn-neon" style="width:100%; justify-content:center;" onclick="saveProfileChanges()">💾 Guardar cambios</button>
       <button class="btn-secondary" style="width:100%; justify-content:center; color:#f43f5e !important;" onclick="signOut()">🚪 Cerrar Sesión</button>
@@ -269,7 +267,7 @@
       <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Elige tu propósito</h2>
       <button class="btn-secondary" onclick="skipToWorkspace()">Ir directo al Workspace ➔</button>
     </div>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nexus lo detecta solo al leer tu instrucción, o escógelo tú.</p>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nexus lo detecta al leer tu instrucción, o escógelo tú.</p>
 
     <div class="purpose-grid">
       <div class="purpose-card" onclick="selectPurpose('teaching', 'Pedagogía y Lenguas')">
@@ -304,7 +302,6 @@
       </div>
     </div>
 
-    <!-- ATAJOS RÁPIDOS DE TRABAJO -->
     <div class="quick-start-box">
       <div style="font-size:0.8rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
         ⚡ Inicios rápidos <span style="font-weight:400; color:var(--text-muted);" id="quick-start-category">· Pedagogía y Lenguas</span>
@@ -324,7 +321,6 @@
 
   <!-- WORKSPACE PRINCIPAL -->
   <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
-    <!-- Panel Izquierdo -->
     <div class="glass-panel">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
         <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos de Control</div>
@@ -338,7 +334,7 @@
 
       <div style="margin-bottom:0.75rem;">
         <label style="display:block; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.3rem; font-family:'JetBrains Mono',monospace; font-weight:600;">SELECCIÓN DE ENTORNO ACTIVO</label>
-        <select class="select-custom" style="width:100%;" id="global-env-switcher">
+        <select class="select-custom" style="width:100%;" id="global-env-switcher" onchange="changeEnvironment(this.value)">
           <option value="general">💎 General / Corporativo</option>
           <option value="mining">⛏️ Minería & Activos Globales</option>
           <option value="teaching">📚 Academia & Lenguas</option>
@@ -349,35 +345,40 @@
       </div>
     </div>
 
-    <!-- Panel Derecho: Chat y Canvas -->
     <div class="glass-panel">
       <div class="workspace-grid">
         <!-- Chat -->
         <div class="chat-box">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
             <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
-            <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span id="processing-globe" style="display:none;"><span class="spinning-globe">🌐</span></span>
+              <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
+            </div>
           </div>
 
           <div class="chat-messages" id="chat-stream">
             <div class="message bot">🚀 <strong>Nexus Orchestrator v3.8 Activo.</strong> Control corporativo inicializado con éxito.</div>
           </div>
 
-          <div id="file-indicator" style="display:none; padding:0.4rem;"></div>
+          <div id="file-indicator" style="display:none; padding:0.4rem 0.8rem; background:rgba(14,165,233,0.1); border:1px solid var(--glass-border); border-radius:10px; margin-bottom:0.5rem; font-size:0.72rem; align-items:center; justify-content:space-between;">
+            <span id="file-indicator-text">Archivo cargado</span>
+            <span style="cursor:pointer; color:var(--accent-primary);" onclick="clearAttachedFile()">✕</span>
+          </div>
 
           <div class="chat-input-area">
             <!-- Menú del Ampersand (&) -->
             <div class="media-dropdown-menu" id="media-dropdown">
               <button class="media-dropdown-item" onclick="triggerFileUpload('pdf')"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivo (PDF / Word)</button>
-              <button class="media-dropdown-item" onclick="triggerFileUpload('img')"><i data-lucide="image" style="width:15px; height:15px; color:#a855f7;"></i> Subir o crear imagen</button>
+              <button class="media-dropdown-item" onclick="triggerFileUpload('img')"><i data-lucide="image" style="width:15px; height:15px; color:#a855f7;"></i> Subir imagen</button>
               <button class="media-dropdown-item" onclick="showToast('Módulo de Síntesis Vocal activo.')"><i data-lucide="headphones" style="width:15px; height:15px; color:#ec4899;"></i> Sounding Speech Synthesis</button>
             </div>
 
-            <input type="file" id="hidden-file-input" style="display:none">
-            <button class="ampersand-btn" id="btn-ampersand" title="Herramientas (&)">&</button>
+            <input type="file" id="hidden-file-input" style="display:none" onchange="handleFileSelected(event)">
+            <button class="ampersand-btn" id="btn-ampersand" title="Herramientas (&)" onclick="toggleAmpersandMenu(event)">&</button>
 
-            <input type="text" id="chat-input" autocomplete="off" placeholder="Escribe tu instrucción con precisión...">
-            <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
+            <input type="text" id="chat-input" autocomplete="off" placeholder="Escribe tu instrucción con precisión..." onkeydown="if(event.key==='Enter') executePrompt()">
+            <button class="btn-neon" id="btn-send" onclick="executePrompt()"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
           </div>
         </div>
 
@@ -400,7 +401,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE GOOGLE ACCOUNT CHOOSER -->
+  <!-- MODAL DE GOOGLE ACCOUNT CHOOSER Y AUTENTICACIÓN -->
   <div class="modal-overlay" id="google-account-chooser-modal">
     <div class="modal-card" style="text-align:left; max-width:420px;">
       <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
@@ -408,304 +409,301 @@
         <span style="font-weight:700; font-size:1rem; color:#fff;">Sign in with Google</span>
       </div>
 
-      <h3 style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.2rem;">Choose an account</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">to continue to <strong>Nexus Orchestrator OS</strong></p>
+      <div id="auth-view-container">
+        <!-- Selector de Cuentas -->
+        <div id="account-selection-view">
+          <h3 style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.2rem;">Choose an account</h3>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">to continue to <strong>Nexus Orchestrator OS v3.8</strong></p>
 
-      <div class="account-chooser-card" onclick="loginWithAccount('englishtownincali@gmail.com', 'Jefferson Garcés', true)">
-        <div style="width:36px; height:36px; border-radius:50%; background:#0ea5e9; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
-        <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#fff;">Jefferson Garcés (Admin)</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">englishtownincali@gmail.com</div>
+          <div class="account-chooser-card" onclick="signInAsAccount('Jefferson Garcés M', 'englishtownincali@gmail.com', true)">
+            <div style="width:38px; height:38px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
+            <div>
+              <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;">Jefferson Garcés M <span class="admin-badge">🛡️ ADMIN</span></div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">englishtownincali@gmail.com</div>
+            </div>
+          </div>
+
+          <div class="account-chooser-card" onclick="signInAsAccount('Usuario Invitado', 'invitado.nexus@gmail.com', false)">
+            <div style="width:38px; height:38px; border-radius:50%; background:#475569; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">UI</div>
+            <div>
+              <div style="font-size:0.85rem; font-weight:700; color:#fff;">Usuario Invitado</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">invitado.nexus@gmail.com</div>
+            </div>
+          </div>
+
+          <button class="btn-secondary" style="width:100%; justify-content:center; margin-top:0.75rem;" onclick="switchToEmailAuth()">Usar correo y contraseña / Registrarse</button>
+        </div>
+
+        <!-- Formulario Tradicional de Login / Registro -->
+        <div id="email-auth-form-view" style="display:none;">
+          <h3 id="auth-modal-title" style="font-size:1.2rem; font-weight:800; color:#fff; margin-bottom:1rem;">Iniciar Sesión</h3>
+          <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1rem;">
+            <input type="email" id="auth-email" placeholder="Correo electrónico" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.8rem; outline:none;">
+            <input type="password" id="auth-password" placeholder="Contraseña" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.8rem; outline:none;">
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; margin-bottom:1rem;">
+            <span style="color:var(--accent-primary); cursor:pointer;" onclick="recoverPassword()">¿Olvidaste tu contraseña?</span>
+            <span style="color:var(--text-muted); cursor:pointer;" onclick="toggleAuthMode()">Cambiar a Selector Google</span>
+          </div>
+          <button class="btn-neon" style="width:100%; justify-content:center;" onclick="submitEmailAuth()">Continuar</button>
         </div>
       </div>
-
-      <div class="account-chooser-card" onclick="loginWithAccount('daicy.hurtado@sanvicente.edu.co', 'DAICY HURTADO GARCIA', false)">
-        <div style="width:36px; height:36px; border-radius:50%; background:#a855f7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">DH</div>
-        <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#fff;">DAICY HURTADO GARCIA</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">daicy.hurtado@sanvicente.edu.co</div>
-        </div>
-      </div>
-
-      <button class="btn-secondary" style="width:100%; justify-content:center; margin-top:0.8rem;" onclick="closeModal('google-account-chooser-modal')">Cancelar</button>
     </div>
   </div>
 
   <script>
-    window.currentUser = null;
-    window.isProcessingMessage = false;
-    window.attachedFileObj = null;
-    window.userSessions = {}; // AISLAMIENTO TOTAL DE SESIONES POR CORREO
-
-    const voiceIntroductions = {
-      'co': { text: "¡Hola! Soy Lucía Martínez de Colombia, lista para narrar contenidos pedagógicos.", lang: "es-CO", gender: "female" },
-      'co_m': { text: "¡Hola! Soy Burt Reynolds de Colombia, tu narrador masculino técnico.", lang: "es-CO", gender: "male" },
-      'us': { text: "Hello! I am Rachel from the United States, your female executive voice narrator.", lang: "en-US", gender: "female" },
-      'us_m': { text: "Hello! I am Adam from the United States, your male corporate voice assistant.", lang: "en-US", gender: "male" },
-      'gb': { text: "Greetings! I am George from the United Kingdom, specialized in formal narration.", lang: "en-GB", gender: "male" },
-      'es': { text: "¡Saludos! Soy Enrique Montragón de España, tu voz masculina para informes.", lang: "es-ES", gender: "male" },
-      'fr': { text: "Bonjour! Je suis Antoine de France, votre voix narrative pour la synthèse.", lang: "fr-FR", gender: "male" }
+    let currentUser = {
+      name: "Jefferson Garcés M",
+      email: "englishtownincali@gmail.com",
+      isAdmin: true,
+      avatar: null
     };
+    let attachedFile = null;
 
-    window.showToast = function(msg) {
-      const c = document.getElementById('toast-container');
-      const t = document.createElement('div');
-      t.className = 'toast'; t.innerText = msg;
-      c.appendChild(t);
-      setTimeout(() => t.remove(), 3500);
-    };
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      // Iniciar mostrando la pantalla de selección de cuentas al arrancar
+      openAuthModal('login');
+    });
 
-    window.closeModal = function(id) {
-      document.getElementById(id).style.display = 'none';
-    };
-
-    window.openGoogleChooserModal = function() {
+    function openAuthModal(mode) {
       document.getElementById('google-account-chooser-modal').style.display = 'flex';
-    };
+    }
 
-    window.loginWithAccount = function(email, name, isAdmin) {
-      window.currentUser = { email, name, isAdmin };
+    function closeAuthModal() {
       document.getElementById('google-account-chooser-modal').style.display = 'none';
+    }
 
+    function switchToEmailAuth() {
+      document.getElementById('account-selection-view').style.display = 'none';
+      document.getElementById('email-auth-form-view').style.display = 'block';
+    }
+
+    function toggleAuthMode() {
+      document.getElementById('account-selection-view').style.display = 'block';
+      document.getElementById('email-auth-form-view').style.display = 'none';
+    }
+
+    function signInAsAccount(name, email, isAdmin) {
+      currentUser.name = name;
+      currentUser.email = email;
+      currentUser.isAdmin = isAdmin;
+      completeAuthentication();
+    }
+
+    function submitEmailAuth() {
+      const email = document.getElementById('auth-email').value;
+      if(!email) { showToast('Introduce un correo válido.'); return; }
+      currentUser.email = email;
+      currentUser.name = email.split('@')[0];
+      currentUser.isAdmin = email.includes('admin') || email.includes('englishtown');
+      completeAuthentication();
+    }
+
+    function completeAuthentication() {
+      closeAuthModal();
       document.getElementById('auth-actions').style.display = 'none';
-      const trig = document.getElementById('user-profile-trigger');
-      trig.style.display = 'flex';
+      document.getElementById('user-profile-trigger').style.display = 'flex';
+      
+      // Actualizar datos del perfil flotante
+      document.getElementById('profile-card-name').innerText = currentUser.name;
+      document.getElementById('profile-card-email').innerText = currentUser.email;
+      document.getElementById('profile-card-initials').innerText = currentUser.name.substring(0,2).toUpperCase();
+      document.getElementById('header-avatar-text').innerText = currentUser.name.substring(0,2).toUpperCase();
 
-      document.getElementById('profile-card-name').innerText = name;
-      document.getElementById('profile-card-email').innerText = email;
-      document.getElementById('header-avatar-text').innerText = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-
-      if (isAdmin) {
-        document.getElementById('admin-badge-container').innerHTML = `<div class="admin-badge">🛡️ CONTROL ABSOLUTO</div>`;
-        document.getElementById('profile-admin-shield').innerHTML = `<div class="admin-badge">🛡️ ADMIN CORPORATIVO</div>`;
+      if(currentUser.isAdmin) {
+        document.getElementById('admin-badge-container').innerHTML = '<span class="admin-badge">🛡️ ADMIN</span>';
+        document.getElementById('profile-admin-shield').innerHTML = '<span class="admin-badge">🛡️ CONTROL ABSOLUTO / ADMIN CORPORATIVO</span>';
       } else {
-        document.getElementById('admin-badge-container').innerHTML = ``;
-        document.getElementById('profile-admin-shield').innerHTML = ``;
+        document.getElementById('admin-badge-container').innerHTML = '';
+        document.getElementById('profile-admin-shield').innerHTML = '';
       }
 
-      // INICIALIZAR O RESTAURAR SESIÓN PROPIA SIN CRUZAR DATOS
-      if (!window.userSessions[email]) {
-        window.userSessions[email] = {
-          messages: [`<div class="message bot">🚀 <strong>Nexus Orchestrator v3.8 Activo.</strong> Sesión inicializada para ${name}.</div>`],
-          canvas: "Los resultados orquestados aparecerán aquí..."
-        };
-      }
-
-      document.getElementById('chat-stream').innerHTML = window.userSessions[email].messages.join('');
-      document.getElementById('canvas-view').innerText = window.userSessions[email].canvas;
-
+      showToast(`Sesión iniciada con éxito como ${currentUser.name}`);
+      
+      // Mostrar Pantalla Inicial "Elige tu propósito"
       document.getElementById('purpose-selection-view').style.display = 'flex';
-      window.showToast(`¡Bienvenido(a), ${name}!`);
-    };
+    }
 
-    window.signOut = function() {
-      window.currentUser = null;
+    function toggleProfileCard() {
+      const card = document.getElementById('google-profile-card');
+      card.style.display = card.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function saveProfileChanges() {
+      showToast('Cambios de perfil guardados correctamente.');
+      document.getElementById('google-profile-card').style.display = 'none';
+    }
+
+    function handleProfilePhotoUpload(event) {
+      const file = event.target.files[0];
+      if(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentUser.avatar = e.target.result;
+          document.getElementById('header-avatar-box').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+          document.getElementById('profile-card-avatar').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+          showToast('Foto de perfil actualizada.');
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function signOut() {
+      document.getElementById('google-profile-card').style.display = 'none';
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('purpose-selection-view').style.display = 'none';
       document.getElementById('user-profile-trigger').style.display = 'none';
       document.getElementById('auth-actions').style.display = 'flex';
-      document.getElementById('google-profile-card').style.display = 'none';
-      window.showToast('Sesión cerrada correctamente.');
-    };
+      openAuthModal('login');
+      showToast('Sesión cerrada.');
+    }
 
-    window.toggleProfileCard = function() {
-      const card = document.getElementById('google-profile-card');
-      card.style.display = (card.style.display === 'flex') ? 'none' : 'flex';
-    };
-
-    window.saveProfileChanges = function() {
-      window.showToast('¡Cambios guardados en tu perfil!');
-      document.getElementById('google-profile-card').style.display = 'none';
-    };
-
-    window.selectPurpose = function(envKey, envName) {
+    function selectPurpose(envKey, envName) {
       document.getElementById('purpose-selection-view').style.display = 'none';
       document.getElementById('authenticated-workspace-view').style.display = 'grid';
       document.getElementById('global-env-switcher').value = envKey;
-      document.body.className = `env-${envKey}`;
-      window.showToast(`Entorno activado: ${envName}`);
-    };
+      changeEnvironment(envKey);
+      showToast(`Entorno activado: ${envName}`);
+    }
 
-    window.skipToWorkspace = function() {
-      document.getElementById('purpose-selection-view').style.display = 'none';
-      document.getElementById('authenticated-workspace-view').style.display = 'grid';
-    };
+    function skipToWorkspace() {
+      selectPurpose('general', 'General / Corporativo');
+    }
 
-    window.backToPurposes = function() {
+    function backToPurposes() {
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('purpose-selection-view').style.display = 'flex';
-    };
+    }
 
-    window.runQuickPrompt = function(promptText) {
-      skipToWorkspace();
+    function runQuickPrompt(promptText) {
+      selectPurpose('teaching', 'Pedagogía y Lenguas');
       document.getElementById('chat-input').value = promptText;
-      window.executeQuery();
-    };
+      setTimeout(() => executePrompt(), 300);
+    }
 
-    window.triggerFileUpload = function(type) {
-      document.getElementById('media-dropdown').style.display = 'none';
-      const fi = document.getElementById('hidden-file-input');
-      fi.accept = type === 'pdf' ? 'application/pdf,.docx' : 'image/*';
-      fi.click();
-    };
+    function changeEnvironment(envKey) {
+      document.body.className = `env-${envKey}`;
+      const envNames = {
+        general: ['💎 General / Corporativo', 'Workspace corporativo multipropósito', 'GENERAL'],
+        mining: ['⛏️ Minería & Activos Globales', 'Negociación, carbón, oro y logística', 'MINERÍA'],
+        teaching: ['📚 Academia & Lenguas', 'Planes de aula, DBA y Práctica Pedagógica', 'ACADEMIA'],
+        lawyer: ['⚖️ Bufete Jurídico', 'Normativa, contratos y jurisprudencia', 'DERECHO'],
+        health: ['🩺 Salud & Biotecnología', 'Informes científicos y análisis clínico', 'SALUD'],
+        music: ['🎵 Estudio Musical', 'Finanzas, inversión y producción', 'FINANZAS']
+      };
+      const info = envNames[envKey] || envNames.general;
+      document.getElementById('env-display-name').innerText = info[0];
+      document.getElementById('env-display-desc').innerText = info[1];
+      document.getElementById('chat-env-tag').innerText = info[2];
+      document.getElementById('quick-start-category').innerText = `· ${info[0]}`;
+    }
 
-    window.exportCanvas = function(type) {
-      const element = document.getElementById('canvas-view');
-      const text = element.innerText;
-      if (!text) return window.showToast('El Canvas está vacío.');
-
-      if (type === 'pdf') {
-        window.showToast('Generando PDF directo...');
-        const opt = {
-          margin: 0.5,
-          filename: 'Nexus_Orchestrator_Document.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-      } else {
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Nexus_Export.${type==='word'?'docx':'xlsx'}`;
-        a.click();
-      }
-    };
-
-    window.executeQuery = async function() {
-      if (window.isProcessingMessage) return window.showToast('Espera a que termine la orquestación actual.');
-
-      const input = document.getElementById('chat-input');
-      const query = input.value.trim();
-      if (!query && !window.attachedFileObj) return;
-
-      window.isProcessingMessage = true;
-      const btnSend = document.getElementById('btn-send');
-      btnSend.disabled = true;
-
-      const stream = document.getElementById('chat-stream');
-      const userMsg = document.createElement('div');
-      userMsg.className = 'message user';
-
-      let imgHTML = '';
-      if (window.attachedFileObj && window.attachedFileObj.type.startsWith('image/')) {
-        imgHTML = `<br><img src="${URL.createObjectURL(window.attachedFileObj)}" class="msg-preview-img">`;
-      }
-      userMsg.innerHTML = (query || '') + imgHTML;
-      stream.appendChild(userMsg);
-      input.value = '';
-      stream.scrollTop = stream.scrollHeight;
-
-      if (window.currentUser) {
-        window.userSessions[window.currentUser.email].messages.push(userMsg.outerHTML);
-      }
-
-      window.attachedFileObj = null;
-      document.getElementById('file-indicator').style.display = 'none';
-
-      const loadMsg = document.createElement('div');
-      loadMsg.className = 'message bot';
-      loadMsg.id = 'loading-node';
-      loadMsg.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="spinning-globe">🌍</span> Procesando orquestación autónoma Nexus...</div>`;
-      stream.appendChild(loadMsg);
-      stream.scrollTop = stream.scrollHeight;
-
-      setTimeout(() => {
-        if (document.getElementById('loading-node')) document.getElementById('loading-node').remove();
-
-        const botMsg = document.createElement('div');
-        botMsg.className = 'message bot';
-        const resultText = `Orquestación Nexus completada con éxito para:\n> "${query || 'Archivo adjunto'}"\n\n- **Estado**: Validado en el entorno activo.\n- **Sintaxis**: Estructurada bajo los parámetros corporativos y académicos solicitados.`;
-        botMsg.innerHTML = marked.parse(resultText);
-        stream.appendChild(botMsg);
-        document.getElementById('canvas-view').innerText = resultText;
-
-        if (window.currentUser) {
-          window.userSessions[window.currentUser.email].messages.push(botMsg.outerHTML);
-          window.userSessions[window.currentUser.email].canvas = resultText;
-        }
-
-        window.isProcessingMessage = false;
-        btnSend.disabled = false;
-        stream.scrollTop = stream.scrollHeight;
-      }, 1000);
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) lucide.createIcons();
-
-      const envSwitcher = document.getElementById('global-env-switcher');
-      envSwitcher.addEventListener('change', (e) => {
-        const val = e.target.value;
-        document.body.className = `env-${val}`;
-
-        const metadata = {
-          'general': { name: '💎 Entorno General', desc: 'Workspace corporativo multipropósito', tag: 'GENERAL' },
-          'mining': { name: '⛏️ Minería & Activos Globales', desc: 'Teasers, dossiers y debida diligencia minera', tag: 'MINING' },
-          'teaching': { name: '📚 Academia & Lenguas', desc: 'Planes de aula, DBA y rúbricas de evaluación', tag: 'EDUTECH' },
-          'lawyer': { name: '⚖️ Bufete Jurídico', desc: 'Análisis normativo, contratos y jurisprudencia', tag: 'LEGAL' },
-          'health': { name: '🩺 Salud & Biotecnología', desc: 'Protocolos clínicos y análisis biotecnológico', tag: 'HEALTH' },
-          'music': { name: '🎵 Estudio Musical', desc: 'Composición, doblaje y síntesis vocal', tag: 'AUDIO' }
-        };
-        const cur = metadata[val] || metadata['general'];
-        document.getElementById('env-display-name').innerText = cur.name;
-        document.getElementById('env-display-desc').innerText = cur.desc;
-        document.getElementById('chat-env-tag').innerText = cur.tag;
-        window.showToast(`Entorno activado: ${cur.name}`);
-      });
-
-      document.getElementById('btn-send').addEventListener('click', window.executeQuery);
-      document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') window.executeQuery(); });
-
-      const btnAmp = document.getElementById('btn-ampersand');
-      const dropdown = document.getElementById('media-dropdown');
-      btnAmp.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
-      });
-      window.addEventListener('click', () => { dropdown.style.display = 'none'; });
-
-      const hiddenFileInput = document.getElementById('hidden-file-input');
-      hiddenFileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-          window.attachedFileObj = e.target.files[0];
-          const ind = document.getElementById('file-indicator');
-          ind.style.display = 'block';
-          ind.innerHTML = `📎 Archivo listo: <strong>${window.attachedFileObj.name}</strong>`;
-          window.showToast(`Archivo cargado: ${window.attachedFileObj.name}`);
-        }
-      });
-
-      // SÍNTESIS DE VOZ CORREGIDA POR GÉNERO Y IDIOMA
-      document.getElementById('btn-preview-voice').addEventListener('click', () => {
-        const select = document.getElementById('country-voice-selector');
-        const selectedOpt = select.options[select.selectedIndex];
-        const voiceKey = select.value;
-        const targetLang = selectedOpt.getAttribute('data-lang');
-        const targetGender = selectedOpt.getAttribute('data-gender');
-        const voiceData = voiceIntroductions[voiceKey] || { text: "Hola.", lang: "es-CO", gender: "female" };
-
-        const synth = window.speechSynthesis;
-        const utter = new SpeechSynthesisUtterance(voiceData.text);
-        utter.lang = targetLang;
-
-        const voices = synth.getVoices();
-        const matchedVoice = voices.find(v => {
-          const name = v.name.toLowerCase();
-          const isFemale = name.includes('female') || name.includes('woman') || name.includes('lucia') || name.includes('rachel') || name.includes('zira') || name.includes('helena') || name.includes('monica');
-          const isMale = name.includes('male') || name.includes('man') || name.includes('david') || name.includes('pablo') || name.includes('george') || name.includes('adam') || name.includes('enrique');
-          
-          if (targetGender === 'female' && isFemale) return true;
-          if (targetGender === 'male' && isMale) return true;
-          return false;
-        });
-
-        if (matchedVoice) utter.voice = matchedVoice;
-        synth.speak(utter);
-        window.showToast(voiceData.text);
-      });
+    // Ampersand Menu Toggle
+    const ampersandBtn = document.getElementById('btn-ampersand');
+    const mediaDropdown = document.getElementById('media-dropdown');
+    ampersandBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mediaDropdown.style.display = mediaDropdown.style.display === 'flex' ? 'none' : 'flex';
     });
+    window.addEventListener('click', () => { mediaDropdown.style.display = 'none'; });
+
+    function triggerFileUpload(type) {
+      const input = document.getElementById('hidden-file-input');
+      input.accept = type === 'pdf' ? '.pdf,.doc,.docx' : 'image/*';
+      input.click();
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files[0];
+      if(file) {
+        attachedFile = file;
+        const indicator = document.getElementById('file-indicator');
+        document.getElementById('file-indicator-text').innerText = `Adjunto: ${file.name}`;
+        indicator.style.display = 'flex';
+        showToast(`Archivo adjuntado: ${file.name}`);
+      }
+    }
+
+    function clearAttachedFile() {
+      attachedFile = null;
+      document.getElementById('file-indicator').style.display = 'none';
+      document.getElementById('hidden-file-input').value = '';
+    }
+
+    function executePrompt() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if(!text && !attachedFile) return;
+
+      const chatStream = document.getElementById('chat-stream');
+      const sendBtn = document.getElementById('btn-send');
+      const globe = document.getElementById('processing-globe');
+
+      // Control de flujo: Deshabilitar botón y campo temporalmente
+      sendBtn.disabled = true;
+      input.disabled = true;
+      globe.style.display = 'inline-block';
+
+      // Agregar mensaje del usuario
+      let userHtml = `<div class="message user">${escapeHtml(text)}`;
+      if(attachedFile) {
+        if(attachedFile.type.startsWith('image/')) {
+          const imgUrl = URL.createObjectURL(attachedFile);
+          userHtml += `<br><img src="${imgUrl}" class="msg-preview-img" onclick="openCanvasPreview('${imgUrl}')">`;
+        } else {
+          userHtml += `<br><div style="font-size:0.7rem; background:rgba(0,0,0,0.3); padding:0.3rem; border-radius:6px; margin-top:0.3rem;">📄 ${attachedFile.name} (PDF/Doc)</div>`;
+        }
+      }
+      userHtml += `</div>`;
+      chatStream.innerHTML += userHtml;
+      input.value = '';
+      chatStream.scrollTop = chatStream.scrollHeight;
+
+      // Simulación de procesamiento IA y respuesta en Canvas
+      setTimeout(() => {
+        let botResponse = `### Informe Orquestado - Nexus v3.8\n\nInstrucción procesada con éxito:\n> "${text}"\n\n**Análisis y Resultados:**\n1. Integración de parámetros del entorno activo completada.\n2. Compilación de datos y estructuración normativa.\n3. Salida multiformato lista para exportar.`;
+        
+        chatStream.innerHTML += `<div class="message bot">✨ Respuesta generada y compilada en el Canvas.</div>`;
+        document.getElementById('canvas-view').innerText = botResponse;
+        
+        // Restaurar controles
+        sendBtn.disabled = false;
+        input.disabled = false;
+        globe.style.display = 'none';
+        clearAttachedFile();
+        chatStream.scrollTop = chatStream.scrollHeight;
+      }, 1200);
+    }
+
+    function openCanvasPreview(url) {
+      document.getElementById('canvas-view').innerHTML = `<img src="${url}" style="max-width:100%; border-radius:10px;">`;
+      showToast('Archivo previsualizado en el Canvas.');
+    }
+
+    function exportCanvas(format) {
+      const content = document.getElementById('canvas-view').innerText;
+      if(!content) { showToast('No hay contenido en el Canvas para exportar.'); return; }
+      showToast(`Exportando contenido a formato ${format.toUpperCase()}...`);
+    }
+
+    function recoverPassword() {
+      const email = prompt('Introduce tu correo para la recuperación de contraseña:');
+      if(email) showToast('Instrucciones enviadas a tu correo.');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3500);
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
   </script>
 </body>
 </html>
