@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v5.0</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v3.8</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -14,129 +14,127 @@
 
   <style>
     :root {
-      --bg-base: #f0f4f8;
-      --glass-panel: rgba(255, 255, 255, 0.90);
-      --glass-border: rgba(2, 132, 199, 0.35);
-      --accent-primary: #0284c7;
-      --accent-secondary: #7c3aed;
-      --border-color: rgba(2, 132, 199, 0.4);
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --theme-glow: rgba(2, 132, 199, 0.35);
-      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
+      --bg-base: #070b14;
+      --glass-panel: rgba(15, 23, 42, 0.85);
+      --glass-border: rgba(56, 189, 248, 0.35);
+      --accent-primary: #0ea5e9;
+      --accent-secondary: #a855f7;
+      --border-color: rgba(14, 165, 233, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --theme-glow: rgba(14, 165, 233, 0.4);
+      --env-bg-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
     }
 
-    body.env-general {
-      --accent-primary: #0284c7; --accent-secondary: #7c3aed;
-      --glass-border: rgba(2, 132, 199, 0.4);
-      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
-    }
-    body.env-mining {
-      --accent-primary: #d97706; --accent-secondary: #b45309;
-      --glass-border: rgba(217, 119, 6, 0.45);
-      --env-bg-image: url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop');
-    }
-    body.env-teaching {
-      --accent-primary: #059669; --accent-secondary: #0d9488;
-      --glass-border: rgba(5, 150, 105, 0.4);
-      --env-bg-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop');
-    }
-    body.env-lawyer {
-      --accent-primary: #4f46e5; --accent-secondary: #7c3aed;
-      --glass-border: rgba(79, 70, 229, 0.4);
-      --env-bg-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop');
-    }
-    body.env-health {
-      --accent-primary: #06b6d4; --accent-secondary: #3b82f6;
-      --glass-border: rgba(6, 182, 212, 0.4);
-      --env-bg-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop');
-    }
-    body.env-music {
-      --accent-primary: #db2777; --accent-secondary: #e11d48;
-      --glass-border: rgba(219, 39, 119, 0.4);
-      --env-bg-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop');
-    }
+    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #a855f7; --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; --env-bg-image: url('https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; --env-bg-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; --env-bg-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; --env-bg-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop'); }
+    body.env-music { --accent-primary: #ec4899; --accent-secondary: #f43f5e; --env-bg-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1920&auto=format&fit=crop'); }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.02); }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
     ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary)); border-radius: 9999px; }
 
     body {
       background-color: var(--bg-base);
-      background-image: linear-gradient(rgba(240, 244, 248, 0.88), rgba(240, 244, 248, 0.95)), var(--env-bg-image);
+      background-image: linear-gradient(rgba(7, 11, 20, 0.85), rgba(7, 11, 20, 0.92)), var(--env-bg-image);
       background-size: cover; background-position: center; background-attachment: fixed;
       color: var(--text-main); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
       display: flex; flex-direction: column; padding: 0.75rem; transition: background-image 0.5s ease;
     }
 
+    @keyframes radarPulse {
+      0% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(2.4); opacity: 0; }
+      100% { transform: scale(0.9); opacity: 0; }
+    }
+
     header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 0.75rem; padding: 0.65rem 1.15rem; background: var(--glass-panel);
-      backdrop-filter: blur(25px); border: 2px solid var(--glass-border); border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06); gap: 0.75rem; flex-wrap: wrap; transition: all 0.4s ease;
+      backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); gap: 0.75rem; flex-wrap: wrap; transition: all 0.4s ease;
     }
 
     .brand-container { display: flex; align-items: center; gap: 0.8rem; }
     .brand-logo {
-      width: 42px; height: 42px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,249,255,0.8));
+      width: 42px; height: 42px; background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
       border: 1px solid var(--glass-border); border-radius: 14px; display: flex; align-items: center;
-      justify-content: center; color: var(--accent-primary); box-shadow: 0 0 20px var(--theme-glow); font-size: 1.25rem;
+      justify-content: center; color: var(--accent-primary); box-shadow: 0 0 20px var(--theme-glow); font-size: 1.25rem; position: relative;
     }
-    .brand-title h1 { font-size: 1.15rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; }
-    .version-pill { font-size: 0.6rem; background: rgba(2, 132, 199, 0.12); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--glass-border); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+    .brand-logo::before {
+      content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--accent-primary); opacity: 0.8; animation: radarPulse 2s infinite;
+    }
+    .brand-title h1 { font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 0.4rem; letter-spacing: -0.3px; }
+    .version-pill { font-size: 0.6rem; background: rgba(255,255,255,0.1); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--glass-border); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff !important; border: 1px solid rgba(255,255,255,0.6); padding: 0.55rem 1.3rem; border-radius: 9999px;
+      color: #fff !important; border: 1px solid rgba(255,255,255,0.4); padding: 0.55rem 1.3rem; border-radius: 9999px;
       font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 4px 20px var(--theme-glow); transition: all 0.25s; display: inline-flex; align-items: center; gap: 0.4rem;
+      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 0.4rem; position: relative;
     }
-    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 6px 25px var(--accent-primary); }
+    .btn-neon::after {
+      content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 6px; height: 6px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 8px #fff;
+    }
+    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 0 30px var(--accent-primary); }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
       color: var(--text-main) !important; padding: 0.45rem 1rem; border-radius: 9999px;
       font-size: 0.72rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.1); transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem; backdrop-filter: blur(10px); position: relative;
     }
-    .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); box-shadow: 0 4px 15px var(--theme-glow); }
+    .btn-secondary::after {
+      content: ''; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent-primary); box-shadow: 0 0 6px var(--accent-primary);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
 
     .select-custom {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border); color: var(--text-main);
+      background: rgba(15, 23, 42, 0.8); border: 1px solid var(--glass-border); color: var(--text-main);
       padding: 0.4rem 0.75rem; border-radius: 12px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
-      cursor: pointer; outline: none; transition: all 0.3s; font-weight: 600;
-    }
-
-    .landing-hero {
-      display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; height: calc(100vh - 95px);
-      text-align: center; padding: 2rem; background: var(--glass-panel); border: 2px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
+      cursor: pointer; outline: none; backdrop-filter: blur(10px); transition: all 0.3s; font-weight: 600;
     }
 
     .purpose-dashboard {
       display: flex; flex-direction: column; flex: 1; height: calc(100vh - 95px); overflow-y: auto; padding: 1.5rem;
-      background: var(--glass-panel); border: 2px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
+      background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
     }
     .purpose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0 1.5rem 0; }
     @media (max-width: 900px) { .purpose-grid { grid-template-columns: 1fr; } }
     .purpose-card {
-      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border); border-radius: 20px;
-      padding: 1.25rem; text-align: left; cursor: pointer; transition: all 0.25s; box-shadow: 0 8px 30px rgba(0,0,0,0.03);
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--glass-border); border-radius: 20px;
+      padding: 1.25rem; text-align: left; cursor: pointer; transition: all 0.25s; backdrop-filter: blur(15px);
     }
-    .purpose-card:hover { border-color: var(--accent-primary); box-shadow: 0 10px 30px var(--theme-glow); transform: translateY(-2px); background: #ffffff; }
+    .purpose-card:hover { border-color: var(--accent-primary); box-shadow: 0 0 25px var(--theme-glow); transform: translateY(-2px); background: rgba(255,255,255,0.08); }
+
+    .quick-start-box {
+      background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.2rem; text-align: left; margin-top: 1rem;
+    }
 
     .admin-badge {
       display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg, #0284c7, #2563eb);
       color: #fff; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.5); border: 1px solid rgba(255,255,255,0.4);
     }
+
+    .spinning-globe { font-size: 1.5rem; animation: spinGlobe 2.5s linear infinite; display: inline-block; }
+    @keyframes spinGlobe { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
     @media (max-width: 900px) { body { overflow-y: auto; height: auto; } .main-layout { grid-template-columns: 1fr; height: auto; } }
 
     .glass-panel {
-      background: var(--glass-panel); border: 2px solid var(--glass-border); border-radius: 20px; padding: 1rem;
-      backdrop-filter: blur(20px); display: flex; flex-direction: column; height: 100%; overflow: hidden; transition: all 0.3s ease;
+      background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1rem;
+      backdrop-filter: blur(20px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; flex-direction: column; height: 100%; overflow: hidden;
     }
 
     .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; height: 100%; overflow: hidden; }
@@ -145,29 +143,34 @@
     .chat-box { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
     .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); scroll-behavior: smooth; }
     .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.8rem; line-height: 1.5; max-width: 92%; white-space: pre-wrap; word-break: break-word; }
-    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
-    .message.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--glass-border); color: var(--text-main); }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; box-shadow: 0 0 20px var(--theme-glow); }
+    .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); color: var(--text-main); backdrop-filter: blur(12px); }
+    .msg-preview-img { max-width: 220px; max-height: 160px; border-radius: 10px; margin-top: 0.4rem; object-fit: cover; border: 1px solid var(--glass-border); display: block; }
 
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(255, 255, 255, 0.98); border: 1px solid var(--glass-border);
-      border-radius: 20px; padding: 0.5rem 0.85rem; align-items: center; margin-top: auto; position: relative; flex-shrink: 0;
+      display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-top: auto; position: relative; flex-shrink: 0; backdrop-filter: blur(15px);
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.85rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.82rem; outline: none; }
 
     .ampersand-btn {
-      background: rgba(2, 132, 199, 0.12); border: 1px solid var(--glass-border); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
-      padding: 0.25rem 0.7rem; border-radius: 12px; font-weight: 900; font-family: 'JetBrains Mono', monospace; transition: all 0.2s;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border); font-size: 1.1rem; cursor: pointer; color: var(--accent-primary);
+      padding: 0.2rem 0.65rem; border-radius: 12px; transition: all 0.2s; font-weight: 900; font-family: 'JetBrains Mono', monospace;
     }
-    .ampersand-btn:hover { background: var(--accent-primary); color: #ffffff; }
+    .ampersand-btn:hover { background: var(--accent-primary); color: #fff; box-shadow: 0 0 15px var(--accent-primary); }
 
     .media-dropdown-menu {
-      position: absolute; bottom: 125%; left: 0; width: 240px; background: rgba(255, 255, 255, 0.98);
-      border: 1px solid var(--glass-border); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
+      position: absolute; bottom: 125%; left: 0; width: 240px;
+      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      display: none; flex-direction: column; padding: 0.4rem; z-index: 50;
     }
     .media-dropdown-item {
-      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; color: #1e293b; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 12px;
+      font-size: 0.75rem; font-weight: 600; color: #f1f5f9; cursor: pointer; background: transparent; border: none; width: 100%; text-align: left;
     }
-    .media-dropdown-item:hover { background: rgba(2, 132, 199, 0.08); color: var(--accent-primary); }
+    .media-dropdown-item:hover { background: rgba(255,255,255,0.08); color: var(--accent-primary); }
 
     .canvas-neon-bar {
       height: 4px; width: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
@@ -176,23 +179,28 @@
     @keyframes neonFlow { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
 
     .canvas-output {
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
-      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155; flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; max-height: calc(100vh - 180px);
+      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #e2e8f0;
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; user-select: text; max-height: calc(100vh - 180px); backdrop-filter: blur(15px);
     }
 
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(5, 8, 15, 0.8); backdrop-filter: blur(12px); display: none;
+      align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
     .modal-card {
-      background: #ffffff; border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); text-align: center; color: #0f172a; position: relative;
+      background: #0f172a; border: 1px solid var(--glass-border); border-radius: 24px;
+      padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative; text-align: center; color: #fff;
     }
     .account-chooser-card {
-      display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.9); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px;
+      border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.04); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
     }
-    .account-chooser-card:hover { border-color: var(--accent-primary); transform: translateY(-1px); background: #ffffff; }
+    .account-chooser-card:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--theme-glow); }
 
     #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.65rem; }
-    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.75rem 1.15rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(15px); }
   </style>
 </head>
 <body class="env-general">
@@ -204,23 +212,24 @@
     <div class="brand-container">
       <div class="brand-logo">💎</div>
       <div class="brand-title">
-        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v5.0</span></h1>
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v3.8</span></h1>
         <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
-    
+
     <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-      <div id="authenticated-voice-controls" style="display: none; align-items: center; gap: 0.35rem;">
-        <select class="select-custom" id="country-voice-selector">
-          <option value="co_burt" data-lang="es-CO" data-gender="male">🇨🇴 Colombia (Burt Reynolds - Hombre)</option>
-          <option value="co_lucia" data-lang="es-CO" data-gender="female">🇨🇴 Colombia (Lucía Martinez - Mujer)</option>
-          <option value="us_adam" data-lang="en-US" data-gender="male">🇺🇸 USA (Adam - Hombre)</option>
-          <option value="us_rachel" data-lang="en-US" data-gender="female">🇺🇸 USA (Rachel - Mujer)</option>
-          <option value="gb_george" data-lang="en-GB" data-gender="male">🇬🇧 UK (George - Hombre)</option>
-          <option value="es_enrique" data-lang="es-ES" data-gender="male">🇪🇸 España (Enrique Montragón - Hombre)</option>
-          <option value="fr_antoine" data-lang="fr-FR" data-gender="male">🇫🇷 France (Antoine - Hombre)</option>
+      <!-- Multivoces por País con banderas y presentación estilo ElevenLabs -->
+      <div style="display: flex; align-items: center; gap: 0.35rem;">
+        <select class="select-custom" id="country-voice-selector" title="Selecciona País y Bandera">
+          <option value="co" data-lang="es-CO" data-gender="female">🇨🇴 Colombia (Lucía - Mujer)</option>
+          <option value="co_m" data-lang="es-CO" data-gender="male">🇨🇴 Colombia (Burt - Hombre)</option>
+          <option value="us" data-lang="en-US" data-gender="female">🇺🇸 USA (Rachel - Mujer)</option>
+          <option value="us_m" data-lang="en-US" data-gender="male">🇺🇸 USA (Adam - Hombre)</option>
+          <option value="gb" data-lang="en-GB" data-gender="male">🇬🇧 UK (George - Hombre)</option>
+          <option value="es" data-lang="es-ES" data-gender="male">🇪🇸 España (Enrique - Hombre)</option>
+          <option value="fr" data-lang="fr-FR" data-gender="male">🇫🇷 France (Antoine - Hombre)</option>
         </select>
-        <button class="btn-secondary" id="btn-preview-voice" title="Escuchar presentación de la voz">🗣️ Probar Voz</button>
+        <button class="btn-secondary" id="btn-preview-voice" title="Escuchar presentación de la voz">🗣️</button>
       </div>
 
       <div id="auth-actions" style="display:flex; gap:0.4rem;">
@@ -237,86 +246,92 @@
     </div>
   </header>
 
-  <!-- PANEL DE PERFIL FLOTANTE -->
-  <div id="google-profile-card" style="position:absolute; top:65px; right:20px; width:340px; background:#ffffff; border:2px solid var(--glass-border); border-radius:24px; padding:1.25rem; box-shadow:0 20px 50px rgba(0,0,0,0.15); z-index:90; display:none; flex-direction:column; align-items:center;">
+  <!-- PANEL DE PERFIL FLOTANTE CON BOTÓN GUARDAR Y ESCUDO ADMIN -->
+  <div id="google-profile-card" style="position:absolute; top:65px; right:20px; width:340px; background:#0f172a; border:1px solid var(--glass-border); border-radius:24px; padding:1.25rem; box-shadow:0 20px 50px rgba(0,0,0,0.6); z-index:90; display:none; flex-direction:column; align-items:center; backdrop-filter:blur(20px);">
     <div style="width:72px; height:72px; border-radius:50%; overflow:hidden; background:var(--accent-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:700; margin-bottom:0.5rem;" id="profile-card-avatar">
       <span id="profile-card-initials">JG</span>
     </div>
     <div id="profile-admin-shield" style="margin-bottom:0.4rem;"></div>
-    <h3 style="font-size:1rem; font-weight:700; color:#0f172a;" id="profile-card-name">Jefferson Garcés</h3>
+    <h3 style="font-size:1rem; font-weight:700; color:#fff;" id="profile-card-name">Jefferson Garcés</h3>
     <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;" id="profile-card-email">englishtownincali@gmail.com</p>
 
     <div style="width:100%; display:flex; flex-direction:column; gap:0.5rem;">
+      <input type="file" id="profile-photo-input" style="display:none;" accept="image/*">
+      <button class="btn-secondary" style="width:100%; justify-content:center;" onclick="document.getElementById('profile-photo-input').click()">📷 Cambiar foto de perfil</button>
       <button class="btn-neon" style="width:100%; justify-content:center;" onclick="saveProfileChanges()">💾 Guardar cambios</button>
-      <button class="btn-secondary" style="width:100%; justify-content:center; color:#ef4444 !important;" onclick="signOut()">🚪 Cerrar Sesión</button>
+      <button class="btn-secondary" style="width:100%; justify-content:center; color:#f43f5e !important;" onclick="signOut()">🚪 Cerrar Sesión</button>
     </div>
   </div>
 
-  <!-- VISTA 1: LANDING INICIAL -->
-  <div id="unauthenticated-landing-view" class="landing-hero">
-    <div style="font-size: 0.75rem; background: rgba(2,132,199,0.1); color: var(--accent-primary); padding: 0.3rem 0.8rem; border-radius: 9999px; border: 1px solid var(--glass-border); font-weight: 700; margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace;">
-      🔒 ACCESO CORPORATIVO RESTRINGIDO
-    </div>
-    <h2 style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.6rem;">Nexus Orchestrator Platform</h2>
-    <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 620px; margin-bottom: 1.8rem; line-height: 1.6;">
-      Accede a la plataforma de orquestación autónoma, selección de propósitos y workspace dinámico.
-    </p>
-    <button class="btn-neon" style="font-size: 0.9rem; padding: 0.7rem 1.8rem;" onclick="openGoogleChooserModal()">
-      🚀 Sign in with Google
-    </button>
-  </div>
-
-  <!-- VISTA 2: SELECCIÓN DE PROPÓSITO -->
+  <!-- PANTALLA INICIAL: ELIGE TU PROPÓSITO -->
   <div id="purpose-selection-view" class="purpose-dashboard" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-      <h2 style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">Elige tu propósito</h2>
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Elige tu propósito</h2>
       <button class="btn-secondary" onclick="skipToWorkspace()">Ir directo al Workspace ➔</button>
     </div>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Selecciona un área de trabajo o ingresa tu instrucción en el chat.</p>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nexus lo detecta solo al leer tu instrucción, o escógelo tú.</p>
 
     <div class="purpose-grid">
       <div class="purpose-card" onclick="selectPurpose('teaching', 'Pedagogía y Lenguas')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">📚</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Pedagogía y Lenguas</h3>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Pedagogía y Lenguas</h3>
         <p style="font-size:0.75rem; color:var(--text-muted);">Planes de aula, DBA, EBC, prácticas pedagógicas y rúbricas.</p>
       </div>
       <div class="purpose-card" onclick="selectPurpose('mining', 'Negocios y Minería')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">⛏️</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Negocios y Minería</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted);">Teasers, dossiers, debida diligencia y oferta corporativa.</p>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Negocios y Minería</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Teasers, dossiers, debida diligencia y búsqueda de compradores.</p>
       </div>
       <div class="purpose-card" onclick="selectPurpose('lawyer', 'Derecho y Normativa')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">⚖️</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Derecho y Normativa</h3>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Derecho y Normativa</h3>
         <p style="font-size:0.75rem; color:var(--text-muted);">Análisis normativo, jurisprudencia, contratos y conceptos jurídicos.</p>
       </div>
       <div class="purpose-card" onclick="selectPurpose('health', 'Ciencia y Tecnología')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">🩺</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Ciencia y Tecnología</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted);">Informes técnicos, estado del arte y análisis metodológico.</p>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Ciencia y Tecnología</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Informes técnicos, estado del arte, metodología y análisis de datos.</p>
       </div>
       <div class="purpose-card" onclick="selectPurpose('general', 'Marketing y Comunicación')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">✨</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Marketing y Comunicación</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted);">Estrategia de marca, campañas, contenido y comunicación.</p>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Marketing y Comunicación</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Estrategia de marca, campañas, contenido y propuestas comerciales.</p>
       </div>
       <div class="purpose-card" onclick="selectPurpose('music', 'Finanzas e Inversión')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">🎵</div>
-        <h3 style="font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:0.2rem;">Finanzas e Inversión</h3>
-        <p style="font-size:0.75rem; color:var(--text-muted);">Análisis financiero, valoración de activos y proyecciones.</p>
+        <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Finanzas e Inversión</h3>
+        <p style="font-size:0.75rem; color:var(--text-muted);">Análisis financiero, valoración, flujos y memorandos de inversión.</p>
+      </div>
+    </div>
+
+    <!-- ATAJOS RÁPIDOS DE TRABAJO -->
+    <div class="quick-start-box">
+      <div style="font-size:0.8rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+        ⚡ Inicios rápidos <span style="font-weight:400; color:var(--text-muted);" id="quick-start-category">· Pedagogía y Lenguas</span>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Plan de aula (DBA/EBC): Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.')">
+          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Plan de aula (DBA/EBC)</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115...</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Informe reflexivo de práctica: Redacta el informe reflexivo de Práctica Pedagógica con marco teórico y rúbrica.')">
+          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Informe reflexivo de práctica</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">Redacta el informe reflexivo de Práctica con marco teórico y rúbrica.</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- VISTA 3: WORKSPACE DE CONTROL -->
+  <!-- WORKSPACE PRINCIPAL -->
   <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
+    <!-- Panel Izquierdo -->
     <div class="glass-panel">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
-        <div style="font-size:0.85rem; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos de Control</div>
+        <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos de Control</div>
         <button class="btn-secondary" style="font-size:0.65rem; padding:0.2rem 0.5rem;" onclick="backToPurposes()">← Propósitos</button>
       </div>
 
-      <div style="background:rgba(255,255,255,0.85); border:1px solid var(--glass-border); border-radius:16px; padding:0.9rem; margin-bottom:0.75rem; text-align:center;">
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:16px; padding:0.9rem; margin-bottom:0.75rem; text-align:center;">
         <h3 id="env-display-name" style="font-size:0.85rem; color:var(--accent-primary); font-weight:700;">💎 Entorno General</h3>
         <p id="env-display-desc" style="font-size:0.68rem; color:var(--text-muted);">Workspace corporativo multipropósito</p>
       </div>
@@ -334,41 +349,49 @@
       </div>
     </div>
 
+    <!-- Panel Derecho: Chat y Canvas -->
     <div class="glass-panel">
       <div class="workspace-grid">
+        <!-- Chat -->
         <div class="chat-box">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border);">
-            <div style="font-size:0.85rem; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:0.4rem;"><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</div>
             <span style="font-size:0.68rem; color:var(--accent-primary); font-weight:700;" id="chat-env-tag">GENERAL</span>
           </div>
 
           <div class="chat-messages" id="chat-stream">
-            <div class="message bot">🚀 <strong>Nexus Orchestrator v5.0 Activo.</strong> Espacio listo para orquestar.</div>
+            <div class="message bot">🚀 <strong>Nexus Orchestrator v3.8 Activo.</strong> Control corporativo inicializado con éxito.</div>
           </div>
 
-          <div id="file-indicator" style="display:none; padding:0.4rem; background:rgba(2,132,199,0.1); border-radius:10px; margin-bottom:0.4rem; font-size:0.75rem; color:var(--accent-primary); font-weight:600;"></div>
+          <div id="file-indicator" style="display:none; padding:0.4rem;"></div>
 
           <div class="chat-input-area">
+            <!-- Menú del Ampersand (&) -->
             <div class="media-dropdown-menu" id="media-dropdown">
-              <button class="media-dropdown-item" onclick="triggerFileUpload('pdf')"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivo (PDF / DOCX)</button>
-              <button class="media-dropdown-item" onclick="triggerFileUpload('img')"><i data-lucide="image" style="width:15px; height:15px; color:#7c3aed;"></i> Subir imagen</button>
+              <button class="media-dropdown-item" onclick="triggerFileUpload('pdf')"><i data-lucide="file-text" style="width:15px; height:15px; color:var(--accent-primary);"></i> Subir archivo (PDF / Word)</button>
+              <button class="media-dropdown-item" onclick="triggerFileUpload('img')"><i data-lucide="image" style="width:15px; height:15px; color:#a855f7;"></i> Subir o crear imagen</button>
+              <button class="media-dropdown-item" onclick="showToast('Módulo de Síntesis Vocal activo.')"><i data-lucide="headphones" style="width:15px; height:15px; color:#ec4899;"></i> Sounding Speech Synthesis</button>
             </div>
 
             <input type="file" id="hidden-file-input" style="display:none">
             <button class="ampersand-btn" id="btn-ampersand" title="Herramientas (&)">&</button>
+
             <input type="text" id="chat-input" autocomplete="off" placeholder="Escribe tu instrucción con precisión...">
             <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
           </div>
         </div>
 
+        <!-- Canvas Compilador -->
         <div style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
           <div class="canvas-neon-bar"></div>
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(255,255,255,0.9); border-bottom:1px solid var(--glass-border);">
-            <div style="font-size:0.85rem; font-weight:700; color:#0f172a;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(15,23,42,0.85); border-bottom:1px solid var(--glass-border);">
+            <div style="font-size:0.85rem; font-weight:700; color:#fff;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
+
             <div style="display:flex; gap:0.2rem; flex-wrap:wrap;">
-              <button class="btn-secondary" onclick="exportCanvas('pdf')">PDF</button>
-              <button class="btn-secondary" onclick="exportCanvas('word')">DOCX</button>
-              <button class="btn-secondary" onclick="exportCanvas('excel')">XLSX</button>
+              <button class="btn-secondary" onclick="exportCanvas('pdf')" title="PDF">PDF</button>
+              <button class="btn-secondary" onclick="exportCanvas('word')" title="Word">DOCX</button>
+              <button class="btn-secondary" onclick="exportCanvas('excel')" title="Excel">XLSX</button>
+              <button class="btn-secondary" onclick="exportCanvas('audio')" title="Audio">🎵 MP3</button>
             </div>
           </div>
           <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados orquestados aparecerán aquí..."></div>
@@ -377,24 +400,29 @@
     </div>
   </div>
 
-  <!-- MODAL GOOGLE ACCOUNTS (ENTRADA DIRECTA) -->
+  <!-- MODAL DE GOOGLE ACCOUNT CHOOSER -->
   <div class="modal-overlay" id="google-account-chooser-modal">
     <div class="modal-card" style="text-align:left; max-width:420px;">
-      <h3 style="font-size:1.3rem; font-weight:800; color:#0f172a; margin-bottom:0.2rem;">Selecciona tu cuenta</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">para ingresar a <strong>Nexus Orchestrator OS</strong></p>
+      <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        <span style="font-weight:700; font-size:1rem; color:#fff;">Sign in with Google</span>
+      </div>
 
-      <div class="account-chooser-card" onclick="loginDirectly('englishtownincali@gmail.com', 'Jefferson Garcés', true)">
-        <div style="width:36px; height:36px; border-radius:50%; background:#0284c7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
+      <h3 style="font-size:1.3rem; font-weight:800; color:#fff; margin-bottom:0.2rem;">Choose an account</h3>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">to continue to <strong>Nexus Orchestrator OS</strong></p>
+
+      <div class="account-chooser-card" onclick="loginWithAccount('englishtownincali@gmail.com', 'Jefferson Garcés', true)">
+        <div style="width:36px; height:36px; border-radius:50%; background:#0ea5e9; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
         <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#0f172a;">Jefferson Garcés (Admin)</div>
+          <div style="font-weight:700; font-size:0.85rem; color:#fff;">Jefferson Garcés (Admin)</div>
           <div style="font-size:0.72rem; color:var(--text-muted);">englishtownincali@gmail.com</div>
         </div>
       </div>
 
-      <div class="account-chooser-card" onclick="loginDirectly('daicy.hurtado@sanvicente.edu.co', 'DAICY HURTADO GARCIA', false)">
-        <div style="width:36px; height:36px; border-radius:50%; background:#7c3aed; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">DH</div>
+      <div class="account-chooser-card" onclick="loginWithAccount('daicy.hurtado@sanvicente.edu.co', 'DAICY HURTADO GARCIA', false)">
+        <div style="width:36px; height:36px; border-radius:50%; background:#a855f7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">DH</div>
         <div>
-          <div style="font-weight:700; font-size:0.85rem; color:#0f172a;">DAICY HURTADO GARCIA</div>
+          <div style="font-weight:700; font-size:0.85rem; color:#fff;">DAICY HURTADO GARCIA</div>
           <div style="font-size:0.72rem; color:var(--text-muted);">daicy.hurtado@sanvicente.edu.co</div>
         </div>
       </div>
@@ -405,16 +433,18 @@
 
   <script>
     window.currentUser = null;
+    window.isProcessingMessage = false;
+    window.attachedFileObj = null;
     window.userSessions = {}; // AISLAMIENTO TOTAL DE SESIONES POR CORREO
 
-    window.voiceIntroductions = {
-      'co_burt': { text: "¡Hola! Soy Burt Reynolds de Colombia, tu narrador masculino.", gender: "male" },
-      'co_lucia': { text: "¡Hola! Soy Lucía Martínez de Colombia, lista para narrar contenidos pedagógicos.", gender: "female" },
-      'us_adam': { text: "Hello! I am Adam from the United States, your male corporate voice assistant.", gender: "male" },
-      'us_rachel': { text: "Hello! I am Rachel from the United States, your female executive voice narrator.", gender: "female" },
-      'gb_george': { text: "Greetings! I am George from the United Kingdom, specialized in formal narration.", gender: "male" },
-      'es_enrique': { text: "¡Saludos! Soy Enrique Montragón de España, tu voz masculina para informes.", gender: "male" },
-      'fr_antoine': { text: "Bonjour! Je suis Antoine de France, votre voix narrative pour la synthèse.", gender: "male" }
+    const voiceIntroductions = {
+      'co': { text: "¡Hola! Soy Lucía Martínez de Colombia, lista para narrar contenidos pedagógicos.", lang: "es-CO", gender: "female" },
+      'co_m': { text: "¡Hola! Soy Burt Reynolds de Colombia, tu narrador masculino técnico.", lang: "es-CO", gender: "male" },
+      'us': { text: "Hello! I am Rachel from the United States, your female executive voice narrator.", lang: "en-US", gender: "female" },
+      'us_m': { text: "Hello! I am Adam from the United States, your male corporate voice assistant.", lang: "en-US", gender: "male" },
+      'gb': { text: "Greetings! I am George from the United Kingdom, specialized in formal narration.", lang: "en-GB", gender: "male" },
+      'es': { text: "¡Saludos! Soy Enrique Montragón de España, tu voz masculina para informes.", lang: "es-ES", gender: "male" },
+      'fr': { text: "Bonjour! Je suis Antoine de France, votre voix narrative pour la synthèse.", lang: "fr-FR", gender: "male" }
     };
 
     window.showToast = function(msg) {
@@ -433,20 +463,17 @@
       document.getElementById('google-account-chooser-modal').style.display = 'flex';
     };
 
-    window.loginDirectly = function(email, name, isAdmin) {
+    window.loginWithAccount = function(email, name, isAdmin) {
       window.currentUser = { email, name, isAdmin };
       document.getElementById('google-account-chooser-modal').style.display = 'none';
-      
-      document.getElementById('unauthenticated-landing-view').style.display = 'none';
+
       document.getElementById('auth-actions').style.display = 'none';
-      document.getElementById('authenticated-voice-controls').style.display = 'flex';
-      
       const trig = document.getElementById('user-profile-trigger');
       trig.style.display = 'flex';
 
       document.getElementById('profile-card-name').innerText = name;
       document.getElementById('profile-card-email').innerText = email;
-      document.getElementById('header-avatar-text').innerText = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+      document.getElementById('header-avatar-text').innerText = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
 
       if (isAdmin) {
         document.getElementById('admin-badge-container').innerHTML = `<div class="admin-badge">🛡️ CONTROL ABSOLUTO</div>`;
@@ -456,16 +483,15 @@
         document.getElementById('profile-admin-shield').innerHTML = ``;
       }
 
-      // RESTAURAR SESIÓN PROPIA SIN MEZCLAR DATOS
+      // INICIALIZAR O RESTAURAR SESIÓN PROPIA SIN CRUZAR DATOS
       if (!window.userSessions[email]) {
         window.userSessions[email] = {
-          messages: [`<div class="message bot">🚀 <strong>Nexus Orchestrator v5.0 Activo.</strong> Sesión iniciada para ${name}.</div>`],
+          messages: [`<div class="message bot">🚀 <strong>Nexus Orchestrator v3.8 Activo.</strong> Sesión inicializada para ${name}.</div>`],
           canvas: "Los resultados orquestados aparecerán aquí..."
         };
       }
 
-      const stream = document.getElementById('chat-stream');
-      stream.innerHTML = window.userSessions[email].messages.join('');
+      document.getElementById('chat-stream').innerHTML = window.userSessions[email].messages.join('');
       document.getElementById('canvas-view').innerText = window.userSessions[email].canvas;
 
       document.getElementById('purpose-selection-view').style.display = 'flex';
@@ -476,8 +502,6 @@
       window.currentUser = null;
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('purpose-selection-view').style.display = 'none';
-      document.getElementById('unauthenticated-landing-view').style.display = 'flex';
-      document.getElementById('authenticated-voice-controls').style.display = 'none';
       document.getElementById('user-profile-trigger').style.display = 'none';
       document.getElementById('auth-actions').style.display = 'flex';
       document.getElementById('google-profile-card').style.display = 'none';
@@ -490,7 +514,7 @@
     };
 
     window.saveProfileChanges = function() {
-      window.showToast('¡Cambios guardados!');
+      window.showToast('¡Cambios guardados en tu perfil!');
       document.getElementById('google-profile-card').style.display = 'none';
     };
 
@@ -512,136 +536,175 @@
       document.getElementById('purpose-selection-view').style.display = 'flex';
     };
 
-    // ENVÍO DE MENSAJES Y CHAT
-    window.sendMessage = function() {
-      const input = document.getElementById('chat-input');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const stream = document.getElementById('chat-stream');
-      const userMsgHtml = `<div class="message user">${text}</div>`;
-      stream.innerHTML += userMsgHtml;
-      
-      if (window.currentUser) {
-        window.userSessions[window.currentUser.email].messages.push(userMsgHtml);
-      }
-
-      input.value = '';
-      stream.scrollTop = stream.scrollHeight;
-
-      setTimeout(() => {
-        const botMsgHtml = `<div class="message bot">💎 <strong>Nexus Orchestrator:</strong> Instrucción procesada correctamente en el entorno activo.</div>`;
-        stream.innerHTML += botMsgHtml;
-        if (window.currentUser) {
-          window.userSessions[window.currentUser.email].messages.push(botMsgHtml);
-        }
-        stream.scrollTop = stream.scrollHeight;
-      }, 600);
+    window.runQuickPrompt = function(promptText) {
+      skipToWorkspace();
+      document.getElementById('chat-input').value = promptText;
+      window.executeQuery();
     };
 
-    // CARGA DE ARCHIVOS
     window.triggerFileUpload = function(type) {
-      const dropdown = document.getElementById('media-dropdown');
-      dropdown.style.display = 'none';
-      const fileInput = document.getElementById('hidden-file-input');
-      fileInput.accept = type === 'img' ? 'image/*' : '.pdf,.docx,.doc,.txt';
-      fileInput.click();
+      document.getElementById('media-dropdown').style.display = 'none';
+      const fi = document.getElementById('hidden-file-input');
+      fi.accept = type === 'pdf' ? 'application/pdf,.docx' : 'image/*';
+      fi.click();
     };
 
     window.exportCanvas = function(type) {
-      window.showToast(`Exportando Canvas en formato ${type.toUpperCase()}...`);
+      const element = document.getElementById('canvas-view');
+      const text = element.innerText;
+      if (!text) return window.showToast('El Canvas está vacío.');
+
+      if (type === 'pdf') {
+        window.showToast('Generando PDF directo...');
+        const opt = {
+          margin: 0.5,
+          filename: 'Nexus_Orchestrator_Document.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+      } else {
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Nexus_Export.${type==='word'?'docx':'xlsx'}`;
+        a.click();
+      }
+    };
+
+    window.executeQuery = async function() {
+      if (window.isProcessingMessage) return window.showToast('Espera a que termine la orquestación actual.');
+
+      const input = document.getElementById('chat-input');
+      const query = input.value.trim();
+      if (!query && !window.attachedFileObj) return;
+
+      window.isProcessingMessage = true;
+      const btnSend = document.getElementById('btn-send');
+      btnSend.disabled = true;
+
+      const stream = document.getElementById('chat-stream');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+
+      let imgHTML = '';
+      if (window.attachedFileObj && window.attachedFileObj.type.startsWith('image/')) {
+        imgHTML = `<br><img src="${URL.createObjectURL(window.attachedFileObj)}" class="msg-preview-img">`;
+      }
+      userMsg.innerHTML = (query || '') + imgHTML;
+      stream.appendChild(userMsg);
+      input.value = '';
+      stream.scrollTop = stream.scrollHeight;
+
+      if (window.currentUser) {
+        window.userSessions[window.currentUser.email].messages.push(userMsg.outerHTML);
+      }
+
+      window.attachedFileObj = null;
+      document.getElementById('file-indicator').style.display = 'none';
+
+      const loadMsg = document.createElement('div');
+      loadMsg.className = 'message bot';
+      loadMsg.id = 'loading-node';
+      loadMsg.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="spinning-globe">🌍</span> Procesando orquestación autónoma Nexus...</div>`;
+      stream.appendChild(loadMsg);
+      stream.scrollTop = stream.scrollHeight;
+
+      setTimeout(() => {
+        if (document.getElementById('loading-node')) document.getElementById('loading-node').remove();
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message bot';
+        const resultText = `Orquestación Nexus completada con éxito para:\n> "${query || 'Archivo adjunto'}"\n\n- **Estado**: Validado en el entorno activo.\n- **Sintaxis**: Estructurada bajo los parámetros corporativos y académicos solicitados.`;
+        botMsg.innerHTML = marked.parse(resultText);
+        stream.appendChild(botMsg);
+        document.getElementById('canvas-view').innerText = resultText;
+
+        if (window.currentUser) {
+          window.userSessions[window.currentUser.email].messages.push(botMsg.outerHTML);
+          window.userSessions[window.currentUser.email].canvas = resultText;
+        }
+
+        window.isProcessingMessage = false;
+        btnSend.disabled = false;
+        stream.scrollTop = stream.scrollHeight;
+      }, 1000);
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
 
-      // BOTÓN Y ENTER EN CHAT
-      const btnSend = document.getElementById('btn-send');
-      const chatInput = document.getElementById('chat-input');
-      if (btnSend) btnSend.addEventListener('click', window.sendMessage);
-      if (chatInput) {
-        chatInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') window.sendMessage();
-        });
-      }
-
-      // BOTÓN AMPERSAND (&) MENU
-      const btnAmpersand = document.getElementById('btn-ampersand');
-      const mediaDropdown = document.getElementById('media-dropdown');
-      if (btnAmpersand && mediaDropdown) {
-        btnAmpersand.addEventListener('click', (e) => {
-          e.stopPropagation();
-          mediaDropdown.style.display = (mediaDropdown.style.display === 'flex') ? 'none' : 'flex';
-        });
-        document.addEventListener('click', () => { mediaDropdown.style.display = 'none'; });
-      }
-
-      // INPUT FILE INDICATOR
-      const fileInput = document.getElementById('hidden-file-input');
-      const fileIndicator = document.getElementById('file-indicator');
-      if (fileInput && fileIndicator) {
-        fileInput.addEventListener('change', (e) => {
-          if (e.target.files.length > 0) {
-            fileIndicator.innerText = `📎 Archivo adjunto: ${e.target.files[0].name}`;
-            fileIndicator.style.display = 'block';
-            window.showToast(`Archivo subido: ${e.target.files[0].name}`);
-          }
-        });
-      }
-
-      // CAMBIO DE ENTORNO
       const envSwitcher = document.getElementById('global-env-switcher');
-      if (envSwitcher) {
-        envSwitcher.addEventListener('change', (e) => {
-          const val = e.target.value;
-          document.body.className = `env-${val}`;
+      envSwitcher.addEventListener('change', (e) => {
+        const val = e.target.value;
+        document.body.className = `env-${val}`;
 
-          const metadata = {
-            'general': { name: '💎 Entorno General', desc: 'Workspace corporativo multipropósito', tag: 'GENERAL' },
-            'mining': { name: '⛏️ Minería & Activos Globales', desc: 'Teasers, dossiers y debida diligencia minera', tag: 'MINING' },
-            'teaching': { name: '📚 Academia & Lenguas', desc: 'Planes de aula, DBA y rúbricas de evaluación', tag: 'EDUTECH' },
-            'lawyer': { name: '⚖️ Bufete Jurídico', desc: 'Análisis normativo, contratos y jurisprudencia', tag: 'LEGAL' },
-            'health': { name: '🩺 Salud & Biotecnología', desc: 'Protocolos clínicos y análisis biotecnológico', tag: 'HEALTH' },
-            'music': { name: '🎵 Estudio Musical', desc: 'Composición, doblaje y síntesis vocal', tag: 'AUDIO' }
-          };
-          const cur = metadata[val] || metadata['general'];
-          document.getElementById('env-display-name').innerText = cur.name;
-          document.getElementById('env-display-desc').innerText = cur.desc;
-          document.getElementById('chat-env-tag').innerText = cur.tag;
-          window.showToast(`Entorno activado: ${cur.name}`);
-        });
-      }
+        const metadata = {
+          'general': { name: '💎 Entorno General', desc: 'Workspace corporativo multipropósito', tag: 'GENERAL' },
+          'mining': { name: '⛏️ Minería & Activos Globales', desc: 'Teasers, dossiers y debida diligencia minera', tag: 'MINING' },
+          'teaching': { name: '📚 Academia & Lenguas', desc: 'Planes de aula, DBA y rúbricas de evaluación', tag: 'EDUTECH' },
+          'lawyer': { name: '⚖️ Bufete Jurídico', desc: 'Análisis normativo, contratos y jurisprudencia', tag: 'LEGAL' },
+          'health': { name: '🩺 Salud & Biotecnología', desc: 'Protocolos clínicos y análisis biotecnológico', tag: 'HEALTH' },
+          'music': { name: '🎵 Estudio Musical', desc: 'Composición, doblaje y síntesis vocal', tag: 'AUDIO' }
+        };
+        const cur = metadata[val] || metadata['general'];
+        document.getElementById('env-display-name').innerText = cur.name;
+        document.getElementById('env-display-desc').innerText = cur.desc;
+        document.getElementById('chat-env-tag').innerText = cur.tag;
+        window.showToast(`Entorno activado: ${cur.name}`);
+      });
 
-      // SÍNTESIS DE VOZ CORREGIDA
-      const btnVoice = document.getElementById('btn-preview-voice');
-      if (btnVoice) {
-        btnVoice.addEventListener('click', () => {
-          if (!window.currentUser) return window.showToast('🔒 Debes iniciar sesión para usar el sintetizador.');
-          const select = document.getElementById('country-voice-selector');
-          const selectedOpt = select.options[select.selectedIndex];
-          const voiceKey = select.value;
-          const targetGender = selectedOpt.getAttribute('data-gender');
-          const voiceData = window.voiceIntroductions[voiceKey] || { text: "Hola.", gender: "male" };
+      document.getElementById('btn-send').addEventListener('click', window.executeQuery);
+      document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') window.executeQuery(); });
 
-          const synth = window.speechSynthesis;
-          const utter = new SpeechSynthesisUtterance(voiceData.text);
+      const btnAmp = document.getElementById('btn-ampersand');
+      const dropdown = document.getElementById('media-dropdown');
+      btnAmp.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+      });
+      window.addEventListener('click', () => { dropdown.style.display = 'none'; });
+
+      const hiddenFileInput = document.getElementById('hidden-file-input');
+      hiddenFileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          window.attachedFileObj = e.target.files[0];
+          const ind = document.getElementById('file-indicator');
+          ind.style.display = 'block';
+          ind.innerHTML = `📎 Archivo listo: <strong>${window.attachedFileObj.name}</strong>`;
+          window.showToast(`Archivo cargado: ${window.attachedFileObj.name}`);
+        }
+      });
+
+      // SÍNTESIS DE VOZ CORREGIDA POR GÉNERO Y IDIOMA
+      document.getElementById('btn-preview-voice').addEventListener('click', () => {
+        const select = document.getElementById('country-voice-selector');
+        const selectedOpt = select.options[select.selectedIndex];
+        const voiceKey = select.value;
+        const targetLang = selectedOpt.getAttribute('data-lang');
+        const targetGender = selectedOpt.getAttribute('data-gender');
+        const voiceData = voiceIntroductions[voiceKey] || { text: "Hola.", lang: "es-CO", gender: "female" };
+
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(voiceData.text);
+        utter.lang = targetLang;
+
+        const voices = synth.getVoices();
+        const matchedVoice = voices.find(v => {
+          const name = v.name.toLowerCase();
+          const isFemale = name.includes('female') || name.includes('woman') || name.includes('lucia') || name.includes('rachel') || name.includes('zira') || name.includes('helena') || name.includes('monica');
+          const isMale = name.includes('male') || name.includes('man') || name.includes('david') || name.includes('pablo') || name.includes('george') || name.includes('adam') || name.includes('enrique');
           
-          const voices = synth.getVoices();
-          const matchedVoice = voices.find(v => {
-            const name = v.name.toLowerCase();
-            const isFemale = name.includes('female') || name.includes('woman') || name.includes('lucia') || name.includes('rachel') || name.includes('zira') || name.includes('helena') || name.includes('monica');
-            const isMale = name.includes('male') || name.includes('man') || name.includes('david') || name.includes('pablo') || name.includes('george') || name.includes('adam') || name.includes('enrique');
-            
-            if (targetGender === 'female' && isFemale) return true;
-            if (targetGender === 'male' && isMale) return true;
-            return false;
-          });
-
-          if (matchedVoice) utter.voice = matchedVoice;
-          synth.speak(utter);
-          window.showToast(voiceData.text);
+          if (targetGender === 'female' && isFemale) return true;
+          if (targetGender === 'male' && isMale) return true;
+          return false;
         });
-      }
+
+        if (matchedVoice) utter.voice = matchedVoice;
+        synth.speak(utter);
+        window.showToast(voiceData.text);
+      });
     });
   </script>
 </body>
