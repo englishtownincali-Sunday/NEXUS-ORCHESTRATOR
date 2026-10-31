@@ -3,84 +3,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v4.0</title>
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v5.0</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
   <style>
     :root {
-      --bg-base: #030712;
-      --glass-panel: rgba(15, 23, 42, 0.80);
-      --glass-border: rgba(56, 189, 248, 0.25);
+      --bg-base: #f8fafc;
+      --glass-panel: rgba(255, 255, 255, 0.92);
+      --glass-border: rgba(14, 165, 233, 0.25);
       --accent-primary: #0ea5e9;
       --accent-secondary: #6366f1;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --theme-glow: rgba(14, 165, 233, 0.3);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --theme-glow: rgba(14, 165, 233, 0.25);
+      --env-bg-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop');
     }
+
     body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #6366f1; }
-    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; }
-    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; }
-    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; }
+    body.env-mining { --accent-primary: #d97706; --accent-secondary: #b45309; }
+    body.env-teaching { --accent-primary: #059669; --accent-secondary: #0d9488; }
+    body.env-lawyer { --accent-primary: #4f46e5; --accent-secondary: #7c3aed; }
     body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; }
-    
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary)); border-radius: 9999px; }
+
     body {
       background-color: var(--bg-base);
-      background-image: radial-gradient(at 10% 0%, rgba(14,165,233,0.12), transparent 50%), radial-gradient(at 90% 10%, rgba(99,102,241,0.12), transparent 50%);
+      background-image: linear-gradient(rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.95)), var(--env-bg-image);
+      background-size: cover; background-position: center; background-attachment: fixed;
       color: var(--text-main); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
-      display: flex; flex-direction: column; padding: 0.75rem;
+      display: flex; flex-direction: column; padding: 0.75rem; transition: background-image 0.4s ease;
     }
+
     header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.75rem; padding: 0.75rem 1.25rem; background: var(--glass-panel);
+      margin-bottom: 0.75rem; padding: 0.65rem 1.15rem; background: var(--glass-panel);
       backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05); gap: 0.75rem; flex-wrap: wrap;
     }
+
+    .brand-container { display: flex; align-items: center; gap: 0.8rem; }
+    .brand-logo {
+      width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem;
+      box-shadow: 0 0 15px var(--theme-glow);
+    }
+    .brand-title h1 { font-size: 1.1rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 0.4rem; }
+    .version-pill { font-size: 0.6rem; background: rgba(14,165,233,0.12); color: var(--accent-primary); padding: 0.1rem 0.45rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
     .btn-neon {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 9999px;
+      color: #fff !important; border: 1px solid rgba(255,255,255,0.4); padding: 0.55rem 1.3rem; border-radius: 9999px;
       font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
-      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+      box-shadow: 0 4px 20px var(--theme-glow); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
     }
-    .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-neon:hover { opacity: 0.95; transform: translateY(-1px); }
+
     .btn-secondary {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-main);
+      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border); color: var(--text-main) !important;
       padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; cursor: pointer;
-      font-family: 'JetBrains Mono', monospace; backdrop-filter: blur(10px); transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s;
     }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); }
+    .btn-secondary:hover { background: #fff; border-color: var(--accent-primary); }
+
+    .select-custom {
+      background: rgba(255, 255, 255, 0.9); border: 1px solid var(--glass-border); color: var(--text-main);
+      padding: 0.4rem 0.75rem; border-radius: 12px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace;
+      cursor: pointer; outline: none; font-weight: 600;
+    }
+
+    /* WIZARD / ONBOARDING (Estilo Webflow / ElevenLabs) */
+    .wizard-container {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; height: calc(100vh - 90px);
+      background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
+      padding: 2rem; text-align: center; max-width: 850px; margin: 0 auto; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+    }
+    .wizard-progress-bar { width: 100%; height: 6px; background: #e2e8f0; border-radius: 99px; margin-bottom: 2rem; overflow: hidden; }
+    .wizard-progress-fill { height: 100%; background: var(--accent-primary); width: 25%; transition: width 0.3s ease; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; width: 100%; }
+    @media(max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } }
+    .wizard-card {
+      background: #ffffff; border: 2px solid #e2e8f0; border-radius: 18px; padding: 1.5rem 1rem; cursor: pointer;
+      transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; text-align: center;
+    }
+    .wizard-card:hover, .wizard-card.selected { border-color: var(--accent-primary); box-shadow: 0 10px 25px var(--theme-glow); background: #f0f9ff; }
+
+    /* WORKSPACE */
     .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
     @media (max-width: 900px) { body { overflow-y: auto; height: auto; } .main-layout { grid-template-columns: 1fr; height: auto; } }
+
     .glass-panel {
       background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1rem;
       backdrop-filter: blur(20px); display: flex; flex-direction: column; height: 100%; overflow: hidden;
     }
+
     .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; height: 100%; overflow: hidden; }
     @media (max-width: 1024px) { .workspace-grid { grid-template-columns: 1fr; } }
+
     .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); }
     .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.82rem; line-height: 1.5; max-width: 92%; word-break: break-word; }
     .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
-    .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border); color: var(--text-main); }
+    .message.bot { align-self: flex-start; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--glass-border); color: var(--text-main); }
+
     .chat-input-area {
-      display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border);
-      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; margin-top: auto;
+      display: flex; gap: 0.5rem; background: rgba(255, 255, 255, 0.98); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 0.5rem 0.85rem; align-items: center; margin-top: auto; position: relative;
     }
-    .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.85rem; outline: none; }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #0f172a; font-size: 0.85rem; outline: none; }
+
+    .ampersand-btn {
+      background: rgba(14, 165, 233, 0.1); border: 1px solid var(--glass-border); font-size: 1.1rem; cursor: pointer;
+      color: var(--accent-primary); padding: 0.25rem 0.65rem; border-radius: 12px; font-weight: 900; font-family: 'JetBrains Mono', monospace;
+    }
+    .ampersand-btn:hover { background: var(--accent-primary); color: #fff; }
+
     .canvas-output {
-      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
-      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #334155;
       flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; max-height: calc(100vh - 180px);
     }
+
+    /* MODAL GOOGLE ACCOUNT CHOOSER (Estilo ElevenLabs / Google Auth) */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.8);
-      backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 100;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 1rem;
     }
-    .modal-card { background: #0f172a; border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; width: 100%; max-width: 420px; color: #fff; }
+    .modal-card {
+      background: #ffffff; border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; width: 100%; max-width: 440px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15); text-align: left; color: #0f172a; position: relative;
+    }
+    .account-chooser-card {
+      display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; border-radius: 14px;
+      border: 1px solid #e2e8f0; background: rgba(255, 255, 255, 0.9); margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;
+    }
+    .account-chooser-card:hover { border-color: var(--accent-primary); background: #f8fafc; transform: translateY(-1px); }
+
     #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
-    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.7rem 1.1rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.7rem 1.1rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body class="env-general">
@@ -89,29 +159,83 @@
 
   <!-- HEADER -->
   <header>
-    <div style="display:flex; align-items:center; gap:0.8rem;">
-      <div style="width:40px; height:40px; background:linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">💎</div>
-      <div>
-        <h1 style="font-size:1.1rem; font-weight:800; letter-spacing:-0.3px;">NEXUS ORCHESTRATOR <span style="font-size:0.6rem; background:rgba(255,255,255,0.1); padding:0.1rem 0.4rem; border-radius:6px; color:var(--accent-primary);">v4.0 OS</span></h1>
-        <p style="font-size:0.62rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">WORKSPACE AUTÓNOMO UNIFICADO</p>
+    <div class="brand-container">
+      <div class="brand-logo">💎</div>
+      <div class="brand-title">
+        <h1>NEXUS ORCHESTRATOR <span class="version-pill">v5.0</span></h1>
+        <p style="font-size: 0.62rem; font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-weight: 700;">AUTONOMOUS WORKSPACE OS</p>
       </div>
     </div>
-    <div style="display:flex; gap:0.5rem; align-items:center;">
-      <button class="btn-secondary" onclick="openAuthModal()">🔑 Iniciar Sesión</button>
-      <button class="btn-neon" onclick="openAuthModal()">✨ Registrarse</button>
+    
+    <div style="display: flex; align-items: center; gap: 0.65rem;">
+      <div id="auth-actions" style="display:flex; gap:0.4rem;">
+        <button class="btn-secondary" onclick="openGoogleChooserModal()">🔑 Iniciar Sesión</button>
+        <button class="btn-neon" onclick="openGoogleChooserModal()">✨ Registrarse</button>
+      </div>
+      <div id="user-profile-trigger" style="display:none; align-items:center; gap:0.5rem; cursor:pointer;" onclick="toggleProfileCard()">
+        <div style="width:38px; height:38px; border-radius:50%; border:2px solid var(--accent-primary); overflow:hidden; background:var(--accent-primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;" id="header-avatar-text">JG</div>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN LAYOUT -->
-  <main class="main-layout">
-    <!-- PANEL IZQUIERDO: CONTROLES -->
+  <!-- WIZARD / ONBOARDING (Basado en Webflow) -->
+  <div id="wizard-view" class="wizard-container" style="display:none;">
+    <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wizard-progress"></div></div>
+    
+    <div id="wizard-step-1" class="wizard-step">
+      <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.4rem;">What's your name?</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Tell us how we should greet you</p>
+      <div style="text-align:left; max-width:400px; margin:0 auto; display:flex; flex-direction:column; gap:1rem;">
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">First name</label>
+          <input type="text" id="wiz-firstname" value="Jeff" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:10px; margin-top:0.3rem; outline:none;">
+        </div>
+        <div>
+          <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">Last name</label>
+          <input type="text" id="wiz-lastname" value="GM" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:10px; margin-top:0.3rem; outline:none;">
+        </div>
+      </div>
+      <div style="margin-top:2rem; display:flex; justify-content:flex-end; width:100%; max-width:400px; margin-left:auto; margin-right:auto;">
+        <button class="btn-neon" onclick="nextWizardStep(2)">Continue ➔</button>
+      </div>
+    </div>
+
+    <div id="wizard-step-2" class="wizard-step" style="display:none;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.4rem;">Who do you want to build workspaces for?</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Select all the options that apply to you</p>
+      <div class="cards-grid">
+        <div class="wizard-card selected" onclick="toggleCard(this)"><span style="font-size:1.5rem;">🛒</span><strong>My company</strong></div>
+        <div class="wizard-card" onclick="toggleCard(this)"><span style="font-size:1.5rem;">📦</span><strong>Clients</strong><span style="font-size:0.65rem; color:var(--text-muted);">(As a freelancer/agency)</span></div>
+        <div class="wizard-card" onclick="toggleCard(this)"><span style="font-size:1.5rem;">👤</span><strong>Myself</strong></div>
+      </div>
+      <div style="margin-top:2rem; display:flex; justify-content:space-between; width:100%;">
+        <button class="btn-secondary" onclick="nextWizardStep(1)">Back</button>
+        <button class="btn-neon" onclick="nextWizardStep(3)">Continue ➔</button>
+      </div>
+    </div>
+
+    <div id="wizard-step-3" class="wizard-step" style="display:none;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.4rem;">Are you a student?</h2>
+      <div class="cards-grid" style="grid-template-columns: repeat(2, 1fr); max-width:450px; margin:2rem auto;">
+        <div class="wizard-card selected" onclick="selectStudent(this)"><span style="font-size:1.5rem;">✅</span><strong>Yes</strong></div>
+        <div class="wizard-card" onclick="selectStudent(this)"><span style="font-size:1.5rem;">❌</span><strong>No</strong></div>
+      </div>
+      <div style="margin-top:2rem; display:flex; justify-content:space-between; width:100%;">
+        <button class="btn-secondary" onclick="nextWizardStep(2)">Back</button>
+        <button class="btn-neon" onclick="finishWizard()">Finish & Launch 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE PRINCIPAL -->
+  <div id="authenticated-workspace-view" class="main-layout" style="display:none;">
     <div class="glass-panel">
       <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border); display:flex; align-items:center; gap:0.4rem;">
         <i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos Inteligentes
       </div>
       <div style="margin-bottom:1rem;">
         <label style="display:block; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.3rem; font-family:'JetBrains Mono',monospace;">SELECCIÓN DE ENTORNO</label>
-        <select id="env-switcher" style="width:100%; background:rgba(15,23,42,0.9); border:1px solid var(--glass-border); color:#fff; padding:0.5rem; border-radius:12px; font-size:0.78rem; font-family:'JetBrains Mono',monospace; outline:none;">
+        <select class="select-custom" style="width:100%;" id="env-switcher">
           <option value="general">💎 General / Corporativo</option>
           <option value="mining">⛏️ Minería & Activos Globales</option>
           <option value="teaching">📚 Academia & Lenguas</option>
@@ -119,52 +243,64 @@
           <option value="health">🩺 Salud & Biotecnología</option>
         </select>
       </div>
-      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; margin-top:auto;">
-        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.3rem;">💡 Asistente Activo</div>
-        <p style="font-size:0.7rem; color:var(--text-muted); line-height:1.4;">Sistema optimizado para respuesta en tiempo real, análisis de documentos y estructuración profesional.</p>
-      </div>
     </div>
 
-    <!-- PANEL DERECHO: WORKSPACE (CHAT + CANVAS) -->
     <div class="glass-panel">
       <div class="workspace-grid">
-        <!-- CHAT -->
         <div style="display:flex; flex-direction:column; height:100%;">
           <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center;">
             <span><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</span>
             <span style="font-size:0.65rem; color:var(--accent-primary);" id="env-badge">GENERAL</span>
           </div>
           <div class="chat-messages" id="chat-stream">
-            <div class="message bot">🚀 <strong>Nexus Orchestrator v4.0</strong> inicializado correctamente. Escribe tu instrucción o selecciona un entorno de trabajo.</div>
+            <div class="message bot">🚀 <strong>Nexus Orchestrator v5.0</strong> activo y listo para procesar instrucciones.</div>
           </div>
           <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Escribe tu consulta o instrucción..." autocomplete="off">
+            <button class="ampersand-btn" title="Herramientas (&)">&</button>
+            <input type="text" id="chat-input" placeholder="Escribe tu instrucción..." autocomplete="off">
             <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
           </div>
         </div>
 
-        <!-- CANVAS COMPILADOR -->
         <div style="display:flex; flex-direction:column; height:100%;">
           <div style="height:4px; width:100%; background:linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-radius:4px 4px 0 0;"></div>
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(15,23,42,0.9); border-bottom:1px solid var(--glass-border);">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(255,255,255,0.9); border-bottom:1px solid var(--glass-border);">
             <div style="font-size:0.85rem; font-weight:700;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
-            <button class="btn-secondary" onclick="exportCanvasPDF()">Descargar PDF</button>
+            <button class="btn-secondary" onclick="exportPDF()">PDF</button>
           </div>
-          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados estructurados aparecerán aquí...">Resultados de orquestación listos para compilar...</div>
+          <div class="canvas-output" id="canvas-view" contenteditable="true">Los resultados aparecerán aquí compilados en tiempo real...</div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <!-- MODAL DE ACCESO -->
-  <div class="modal-overlay" id="auth-modal">
+  <!-- MODAL GOOGLE ACCOUNT CHOOSER (Estilo ElevenLabs con tus cuentas) -->
+  <div class="modal-overlay" id="google-account-chooser-modal">
     <div class="modal-card">
-      <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:0.3rem;">Acceso Corporativo</h3>
-      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">Ingresa a tu cuenta de Nexus OS</p>
-      <input type="email" id="auth-email" placeholder="correo@ejemplo.com" style="width:100%; background:#030712; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.85rem; margin-bottom:0.7rem; outline:none;">
-      <input type="password" id="auth-pass" placeholder="Contraseña" style="width:100%; background:#030712; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.85rem; margin-bottom:1.2rem; outline:none;">
-      <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.5rem;" onclick="simulateLogin()">Ingresar al Sistema</button>
-      <button class="btn-secondary" style="width:100%; justify-content:center;" onclick="closeAuthModal()">Cancelar</button>
+      <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        <span style="font-weight:700; font-size:1rem;">Sign in with Google</span>
+      </div>
+      <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:0.2rem;">Choose an account</h3>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">to continue to <strong>Nexus Orchestrator OS</strong></p>
+
+      <div class="account-chooser-card" onclick="loginAccount('Jeff GM', 'englishtownincali@gmail.com', true)">
+        <div style="width:34px; height:34px; border-radius:50%; background:#0ea5e9; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">JG</div>
+        <div>
+          <div style="font-weight:700; font-size:0.85rem;">Jeff GM (Admin)[cite: 18]</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">englishtownincali@gmail.com[cite: 18]</div>
+        </div>
+      </div>
+
+      <div class="account-chooser-card" onclick="loginAccount('DAICY HURTADO GARCIA', 'daicy.hurtado@sanvicente.edu.co', false)">
+        <div style="width:34px; height:34px; border-radius:50%; background:#6366f1; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">DH</div>
+        <div>
+          <div style="font-weight:700; font-size:0.85rem;">DAICY HURTADO GARCIA[cite: 18]</div>
+          <div style="font-size:0.7rem; color:var(--text-muted);">daicy.hurtado@sanvicente.edu.co[cite: 18]</div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" style="width:100%; justify-content:center; margin-top:0.8rem;" onclick="closeModal()">Cancelar</button>
     </div>
   </div>
 
@@ -177,46 +313,70 @@
       setTimeout(() => t.remove(), 3500);
     };
 
-    const openAuthModal = () => document.getElementById('auth-modal').style.display = 'flex';
-    const closeAuthModal = () => document.getElementById('auth-modal').style.display = 'none';
-    const simulateLogin = () => {
-      closeAuthModal();
-      showToast('¡Sesión iniciada con éxito en Nexus OS!');
+    const openGoogleChooserModal = () => document.getElementById('google-account-chooser-modal').style.display = 'flex';
+    const closeModal = () => document.getElementById('google-account-chooser-modal').style.display = 'none';
+
+    const loginAccount = (name, email, isAdmin) => {
+      closeModal();
+      document.getElementById('auth-actions').style.display = 'none';
+      const trig = document.getElementById('user-profile-trigger');
+      trig.style.display = 'flex';
+      document.getElementById('header-avatar-text').innerText = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+      
+      // Mostrar Wizard de Onboarding Webflow
+      document.getElementById('wizard-view').style.display = 'flex';
+      showToast(`¡Bienvenido(a) ${name}! Personaliza tu experiencia.`);
+    };
+
+    const nextWizardStep = (step) => {
+      document.querySelectorAll('.wizard-step').forEach(el => el.style.display = 'none');
+      document.getElementById(`wizard-step-${step}`).style.display = 'block';
+      document.getElementById('wizard-progress').style.width = `${step * 25}%`;
+    };
+
+    const toggleCard = (card) => { card.classList.toggle('selected'); };
+    const selectStudent = (card) => {
+      card.parentElement.querySelectorAll('.wizard-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    };
+
+    const finishWizard = () => {
+      document.getElementById('wizard-view').style.display = 'none';
+      document.getElementById('authenticated-workspace-view').style.display = 'grid';
+      showToast('¡Configuración completada con éxito!');
     };
 
     document.getElementById('env-switcher').addEventListener('change', (e) => {
       const val = e.target.value;
       document.body.className = `env-${val}`;
       document.getElementById('env-badge').innerText = val.toUpperCase();
-      showToast(`Entorno cambiado a: ${val.toUpperCase()}`);
+      showToast(`Entorno activado: ${val.toUpperCase()}`);
     });
 
     const executeQuery = () => {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
       if (!text) return;
-
       const stream = document.getElementById('chat-stream');
       stream.innerHTML += `<div class="message user">${text}</div>`;
       input.value = '';
       stream.scrollTop = stream.scrollHeight;
 
       setTimeout(() => {
-        const replyText = `Respuesta generada para: "${text}"\n\n- **Estado**: Procesado con éxito.\n- **Optimización**: Estructurado bajo los parámetros del entorno activo.`;
-        stream.innerHTML += `<div class="message bot">${marked.parse(replyText)}</div>`;
-        document.getElementById('canvas-view').innerText = replyText;
+        const reply = `Análisis completado para: "${text}"\n\n- **Estado**: Orquestado en Nexus OS.\n- **Resultado**: Datos procesados con precisión.`;
+        stream.innerHTML += `<div class="message bot">${marked.parse(reply)}</div>`;
+        document.getElementById('canvas-view').innerText = reply;
         stream.scrollTop = stream.scrollHeight;
-        showToast('Orquestación completada.');
-      }, 800);
+        showToast('Orquestación finalizada.');
+      }, 700);
     };
 
     document.getElementById('btn-send').addEventListener('click', executeQuery);
     document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
 
-    const exportCanvasPDF = () => {
+    const exportPDF = () => {
       showToast('Generando PDF...');
-      const element = document.getElementById('canvas-view');
-      html2pdf().from(element).save('Nexus_Document.pdf');
+      html2pdf().from(document.getElementById('canvas-view')).save('Nexus_Orchestrator_Report.pdf');
     };
 
     document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
