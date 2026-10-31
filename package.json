@@ -1,16 +1,16 @@
 {
   "name": "nexus-orchestrator",
-  "version": "2.0.0",
-  "description": "Autonomous OS Workspace with Gemini and PostgreSQL",
+  "version": "4.0.0",
+  "description": "Autonomous OS Workspace",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "fastify": "^4.28.1",
-    "@fastify/static": "^7.0.0",
-    "@google/genai": "*",
+    "@fastify/static": "^7.0.4",
+    "@google/genai": "^0.1.1",
+    "fastify": "^4.26.2",
     "postgres": "^3.4.4"
   }
 }
