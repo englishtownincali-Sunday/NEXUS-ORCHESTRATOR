@@ -274,7 +274,7 @@
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
       <div>
         <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Bienvenido a Nexus Orchestrator v3.8</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Plataforma Autónoma de IA Avanzada, síntesis de voz, copiladores y gestión inteligente de entornos.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Plataforma Autónoma de IA Avanzada, síntesis de voz ElevenLabs, copiladores y gestión inteligente.</p>
       </div>
       <button class="btn-secondary" onclick="skipToWorkspace()">Ir directo al Workspace ➔</button>
     </div>
@@ -478,19 +478,22 @@
       setTimeout(() => t.remove(), 3500);
     };
 
-    const ampTrigger = document.getElementById('ampersand-trigger');
-    const ampMenu = document.getElementById('ampersand-menu');
-    ampTrigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      ampMenu.style.display = ampMenu.style.display === 'flex' ? 'none' : 'flex';
-    });
-    document.addEventListener('click', () => { ampMenu.style.display = 'none'; });
+    const ampTrigger = document.getElementById('ampersand-trigger') || document.getElementById('btn-ampersand');
+    const ampMenu = document.getElementById('ampersand-menu') || document.getElementById('media-dropdown');
+    
+    if (ampTrigger && ampMenu) {
+      ampTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        ampMenu.style.display = ampMenu.style.display === 'flex' ? 'none' : 'flex';
+      });
+      document.addEventListener('click', () => { ampMenu.style.display = 'none'; });
+    }
 
     const openAuthModal = (mode) => {
       authMode = mode;
       document.getElementById('modal-title').innerText = mode === 'login' ? 'Welcome back' : 'Crear Cuenta Nueva';
       const extraFields = document.getElementById('register-extra-fields');
-      extraFields.style.display = mode === 'register' ? 'flex' : 'none';
+      if (extraFields) extraFields.style.display = mode === 'register' ? 'flex' : 'none';
       document.getElementById('auth-modal').style.display = 'flex';
     };
     const closeAuthModal = () => { document.getElementById('auth-modal').style.display = 'none'; };
@@ -515,16 +518,17 @@
       if (authMode === 'register') {
         const fullname = document.getElementById('auth-fullname-input').value.trim();
         if (fullname) name = fullname;
-        assignedEnv = document.getElementById('auth-profession-select').value;
-        const roleSel = document.getElementById('auth-role-select').value;
-        isAdmin = (roleSel === 'admin');
+        const profSel = document.getElementById('auth-profession-select');
+        if (profSel) assignedEnv = profSel.value;
+        const roleSel = document.getElementById('auth-role-select');
+        if (roleSel) isAdmin = (roleSel.value === 'admin');
         showToast('¡Cuenta registrada exitosamente!');
       }
 
       currentUser = { name, email, isAdmin, profession: assignedEnv, avatar: null };
       closeAuthModal();
       
-      // Mostrar primero la pantalla de bienvenida dinámica con los 4 atajos y presentación
+      // Mostrar la pantalla de bienvenida dinámica con los atajos y luego direccionar al entorno
       document.getElementById('purpose-selection-view').style.display = 'flex';
       initAuthenticatedSession(assignedEnv);
       showToast(`Sesión iniciada como ${email}`);
@@ -572,7 +576,11 @@
 
     const setEnvironment = (val) => {
       document.body.className = `env-${val}`;
-      document.getElementById('env-switcher').value = val;
+      const sw1 = document.getElementById('env-switcher');
+      const sw2 = document.getElementById('global-env-switcher');
+      if (sw1) sw1.value = val;
+      if (sw2) sw2.value = val;
+      
       const names = {
         general: ['💎 Entorno General', 'Workspace corporativo multipropósito'],
         mining: ['⛏️ Minería & Activos', 'Gestión de carbón, oro y logística'],
@@ -582,13 +590,17 @@
         music: ['🎵 Finanzas & Inversión', 'Modelos financieros y flujos de caja']
       };
       const info = names[val] || names.general;
-      document.getElementById('env-display-name').innerText = info[0];
-      document.getElementById('env-display-desc').innerText = info[1];
+      const dName = document.getElementById('env-display-name');
+      const dDesc = document.getElementById('env-display-desc');
+      if (dName) dName.innerText = info[0];
+      if (dDesc) dDesc.innerText = info[1];
     };
 
-    document.getElementById('env-switcher').addEventListener('change', (e) => {
-      setEnvironment(e.target.value);
-    });
+    const handleEnvChange = (e) => { setEnvironment(e.target.value); };
+    const sw1 = document.getElementById('env-switcher');
+    const sw2 = document.getElementById('global-env-switcher');
+    if (sw1) sw1.addEventListener('change', handleEnvChange);
+    if (sw2) sw2.addEventListener('change', handleEnvChange);
 
     const toggleProfileCard = () => {
       const card = document.getElementById('google-profile-card');
@@ -605,19 +617,22 @@
       showToast('Sesión cerrada correctamente.');
     };
 
-    document.getElementById('profile-photo-input').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          currentUser.avatar = evt.target.result;
-          document.getElementById('header-avatar-box').innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-          document.getElementById('profile-card-avatar').innerHTML = `<img src="${currentUser.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-          showToast('Foto de perfil actualizada con éxito.');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    const photoInput = document.getElementById('profile-photo-input');
+    if (photoInput) {
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            if (currentUser) currentUser.avatar = evt.target.result;
+            document.getElementById('header-avatar-box').innerHTML = `<img src="${evt.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+            document.getElementById('profile-card-avatar').innerHTML = `<img src="${evt.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+            showToast('Foto de perfil actualizada con éxito.');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
 
     const saveProfileChanges = () => {
       document.getElementById('google-profile-card').style.display = 'none';
@@ -633,7 +648,7 @@
           const reader = new FileReader();
           reader.onload = (ev) => {
             const stream = document.getElementById('chat-stream');
-            if (type === 'image') {
+            if (type === 'img') {
               stream.innerHTML += `<div class="message user">Adjunté esta imagen:<br><img src="${ev.target.result}" class="msg-preview-img"></div>`;
             } else {
               stream.innerHTML += `<div class="message user">📄 Documento adjunto: <strong>${f.name}</strong></div>`;
@@ -653,7 +668,7 @@
     };
 
     const triggerAudioSynthesis = () => {
-      showToast('Sounding Speech Synthesis activado. Generando audio de alta fidelidad estilo ElevenLabs...');
+      showToast('Sounding Speech Synthesis activado (Estilo ElevenLabs)...');
     };
 
     // Motor IA Gemini 3.8 con mundo girando animado y burbuja de pensando
@@ -707,8 +722,17 @@
       }
     };
 
-    document.getElementById('btn-send').addEventListener('click', executeQuery);
-    document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
+    const sendBtn = document.getElementById('btn-send');
+    const chatInput = document.getElementById('chat-input');
+    if (sendBtn) sendBtn.addEventListener('click', executeQuery);
+    if (chatInput) chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
+
+    const runQuickPrompt = (promptText) => {
+      skipToWorkspace();
+      const inp = document.getElementById('chat-input');
+      if (inp) inp.value = promptText;
+      executeQuery();
+    };
 
     const exportCanvas = (type) => {
       showToast(`Generando archivo .${type.toUpperCase()}...`);
@@ -720,17 +744,20 @@
       }
     };
 
-    document.getElementById('btn-preview-voice').addEventListener('click', () => {
-      const country = document.getElementById('country-voice-selector').value;
-      const samples = {
-        co: "Hola soy Burt de Colombia, tu asistente en Nexus con síntesis ElevenLabs.",
-        us: "Hello, I am Adam from USA, ready to orchestrate your workspace.",
-        gb: "Hello, I am George from UK, at your service.",
-        es: "Hola, soy Enrique de España, analizando tus requerimientos.",
-        fr: "Bonjour, je suis Antoine de France, prêt pour vos projets."
-      };
-      showToast(`🗣️ Reproduciendo voz (${country.toUpperCase()}): "${samples[country]}"`);
-    });
+    const previewVoiceBtn = document.getElementById('btn-preview-voice');
+    if (previewVoiceBtn) {
+      previewVoiceBtn.addEventListener('click', () => {
+        const country = document.getElementById('country-voice-selector').value;
+        const samples = {
+          co: "Hola soy Burt de Colombia, tu asistente en Nexus con síntesis ElevenLabs.",
+          us: "Hello, I am Adam from USA, ready to orchestrate your workspace.",
+          gb: "Hello, I am George from UK, at your service.",
+          es: "Hola, soy Enrique de España, analizando tus requerimientos.",
+          fr: "Bonjour, je suis Antoine de France, prêt pour vos projets."
+        };
+        showToast(`🗣️ Reproduciendo voz (${country.toUpperCase()}): "${samples[country]}"`);
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
