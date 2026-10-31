@@ -1,105 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Orchestrator - Autonomous Workspace</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<style>
-  :root { color-scheme: dark; }
-  body { background: #020617; background-image: radial-gradient(at 8% 0%, rgba(6,182,212,.16), transparent 40%), radial-gradient(at 95% 10%, rgba(99,102,241,.18), transparent 42%); background-attachment: fixed; }
-  .glass { background: rgba(17,24,39,.72); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.1); }
-  .glass-panel { background: rgba(31,41,55,.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.06); }
-  .btn { font-size: .75rem; background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: .4rem .75rem; border-radius: .6rem; transition: .15s; white-space: nowrap; cursor: pointer; }
-  .btn:hover { background: #334155; }
-  .btn.on { background: rgba(6,182,212,.22); border-color: #06b6d4; color: #a5f3fc; }
-  .chip { font-size: .72rem; background: rgba(15,23,42,.8); border: 1px solid #334155; color: #cbd5e1; padding: .3rem .6rem; border-radius: 999px; cursor: pointer; }
-  .field { width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: .6rem; padding: .55rem .7rem; color: #e2e8f0; font-size: .85rem; margin-top: .25rem; }
-  .md { color: #e2e8f0; font-size: .92rem; line-height: 1.7; word-wrap: break-word; }
-  .md h1 { font-size: 1.6rem; font-weight: 800; color: #67e8f9; margin: 0 0 .8rem; }
-  .md h2 { font-size: 1.25rem; font-weight: 700; color: #c7d2fe; margin: 1.4rem 0 .5rem; border-bottom: 1px solid rgba(148,163,184,.2); }
-  .toast { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: .6rem .9rem; border-radius: .7rem; font-size: .8rem; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NEXUS ORCHESTRATOR - Autonomous OS Workspace v4.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #030712;
+      --glass-panel: rgba(15, 23, 42, 0.80);
+      --glass-border: rgba(56, 189, 248, 0.25);
+      --accent-primary: #0ea5e9;
+      --accent-secondary: #6366f1;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --theme-glow: rgba(14, 165, 233, 0.3);
+    }
+    body.env-general { --accent-primary: #0ea5e9; --accent-secondary: #6366f1; }
+    body.env-mining { --accent-primary: #f59e0b; --accent-secondary: #d97706; }
+    body.env-teaching { --accent-primary: #10b981; --accent-secondary: #06b6d4; }
+    body.env-lawyer { --accent-primary: #6366f1; --accent-secondary: #8b5cf6; }
+    body.env-health { --accent-primary: #06b6d4; --accent-secondary: #3b82f6; }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      background-image: radial-gradient(at 10% 0%, rgba(14,165,233,0.12), transparent 50%), radial-gradient(at 90% 10%, rgba(99,102,241,0.12), transparent 50%);
+      color: var(--text-main); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column; padding: 0.75rem;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.75rem; padding: 0.75rem 1.25rem; background: var(--glass-panel);
+      backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .btn-neon {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 9999px;
+      font-size: 0.78rem; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 0 20px var(--theme-glow); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-neon:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-main);
+      padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; backdrop-filter: blur(10px); transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-primary); }
+    .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
+    @media (max-width: 900px) { body { overflow-y: auto; height: auto; } .main-layout { grid-template-columns: 1fr; height: auto; } }
+    .glass-panel {
+      background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 20px; padding: 1rem;
+      backdrop-filter: blur(20px); display: flex; flex-direction: column; height: 100%; overflow: hidden;
+    }
+    .workspace-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; height: 100%; overflow: hidden; }
+    @media (max-width: 1024px) { .workspace-grid { grid-template-columns: 1fr; } }
+    .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; padding-right: 0.3rem; margin-bottom: 0.5rem; max-height: calc(100vh - 240px); }
+    .message { padding: 0.75rem 0.95rem; border-radius: 16px; font-size: 0.82rem; line-height: 1.5; max-width: 92%; word-break: break-word; }
+    .message.user { align-self: flex-end; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: #fff; }
+    .message.bot { align-self: flex-start; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border); color: var(--text-main); }
+    .chat-input-area {
+      display: flex; gap: 0.5rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 0.4rem 0.75rem; align-items: center; margin-top: auto;
+    }
+    .chat-input-area input { flex: 1; background: transparent; border: none; color: #fff; font-size: 0.85rem; outline: none; }
+    .canvas-output {
+      background: rgba(15, 23, 42, 0.85); border: 1px solid var(--glass-border); border-radius: 0 0 16px 16px;
+      padding: 1.1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #e2e8f0;
+      flex: 1; overflow-y: auto; white-space: pre-wrap; line-height: 1.6; max-height: calc(100vh - 180px);
+    }
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 100;
+    }
+    .modal-card { background: #0f172a; border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem; width: 100%; max-width: 420px; color: #fff; }
+    #toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem; }
+    .toast { background: #0f172a; border: 1px solid var(--accent-primary); color: #fff; padding: 0.7rem 1.1rem; border-radius: 12px; font-size: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="env-general">
 
-<header class="glass border-b border-slate-800 sticky top-0 z-40 px-4 sm:px-6 py-3 flex justify-between items-center gap-3">
-  <div class="flex items-center space-x-3 min-w-0">
-    <div id="health-dot" class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse shrink-0"></div>
-    <h1 class="text-lg sm:text-xl font-bold tracking-wider bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent truncate">NEXUS ORCHESTRATOR</h1>
-  </div>
-  <div class="flex items-center space-x-2 sm:space-x-3">
-    <span id="user-badge" class="hidden sm:inline text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">Modo Invitado</span>
-    <button onclick="openHistory()" class="btn">🕘 Historial</button>
-    <button onclick="toggleModal('profile-modal')" class="text-xs bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 px-3 py-1.5 rounded-lg">Perfil</button>
-  </div>
-</header>
+  <div id="toast-container"></div>
 
-<main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-  <section class="lg:col-span-4 flex flex-col space-y-5">
-    <div class="glass-panel p-5 rounded-2xl shadow-xl">
-      <h2 class="text-sm font-semibold text-slate-400 uppercase mb-3">Entorno Profesional</h2>
-      <select id="profession-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-200">
-        <option value="general">Nexus General (Core OS)</option>
-        <option value="mining">AuraX Global (Minería &amp; ESG)</option>
-        <option value="teaching">Lingua Orchestrator (Pedagogía)</option>
-        <option value="lawyer">Jurídica Nexus (Derecho)</option>
-        <option value="doctor">Clinic Nexus (Salud)</option>
-        <option value="music">Sonic Orchestrator (Música)</option>
-        <option value="admin">Nexus Command (Sistemas)</option>
-      </select>
-      <p id="env-desc" class="text-xs text-slate-400 mt-2"></p>
-      <div id="quick-prompts" class="flex flex-wrap gap-2 mt-3"></div>
-    </div>
-
-    <div class="glass-panel p-5 rounded-2xl shadow-xl flex flex-col">
-      <h2 class="text-sm font-semibold text-slate-400 uppercase mb-3">Centro de Comando</h2>
-      <textarea id="prompt-input" rows="6" placeholder="Escribe tu instrucción aquí…" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 text-sm resize-none"></textarea>
-      <div class="mt-4 flex gap-2">
-        <button onclick="sendPrompt()" id="send-btn" class="flex-1 bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-medium py-3 rounded-xl shadow-lg transition">⚡ Ejecutar Orquestación</button>
+  <!-- HEADER -->
+  <header>
+    <div style="display:flex; align-items:center; gap:0.8rem;">
+      <div style="width:40px; height:40px; background:linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem;">💎</div>
+      <div>
+        <h1 style="font-size:1.1rem; font-weight:800; letter-spacing:-0.3px;">NEXUS ORCHESTRATOR <span style="font-size:0.6rem; background:rgba(255,255,255,0.1); padding:0.1rem 0.4rem; border-radius:6px; color:var(--accent-primary);">v4.0 OS</span></h1>
+        <p style="font-size:0.62rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace;">WORKSPACE AUTÓNOMO UNIFICADO</p>
       </div>
     </div>
-  </section>
-
-  <section class="lg:col-span-8 flex flex-col">
-    <div class="glass-panel p-5 rounded-2xl shadow-xl flex-1 flex flex-col min-h-[600px]">
-      <div class="flex justify-between items-center mb-3">
-        <h2 class="text-sm font-semibold text-slate-400 uppercase">Canvas Compilador</h2>
-      </div>
-      <div id="canvas-output" class="md w-full h-full min-h-[420px] bg-slate-900/80 border border-slate-800 rounded-xl p-4 overflow-y-auto whitespace-pre-wrap font-mono text-sm"></div>
+    <div style="display:flex; gap:0.5rem; align-items:center;">
+      <button class="btn-secondary" onclick="openAuthModal()">🔑 Iniciar Sesión</button>
+      <button class="btn-neon" onclick="openAuthModal()">✨ Registrarse</button>
     </div>
-  </section>
-</main>
+  </header>
 
-<div id="toasts" class="fixed bottom-4 right-4 z-[60] space-y-2"></div>
+  <!-- MAIN LAYOUT -->
+  <main class="main-layout">
+    <!-- PANEL IZQUIERDO: CONTROLES -->
+    <div class="glass-panel">
+      <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border); display:flex; align-items:center; gap:0.4rem;">
+        <i data-lucide="sliders" style="width:16px; height:16px; color:var(--accent-primary);"></i> Entornos Inteligentes
+      </div>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block; font-size:0.68rem; color:var(--text-muted); margin-bottom:0.3rem; font-family:'JetBrains Mono',monospace;">SELECCIÓN DE ENTORNO</label>
+        <select id="env-switcher" style="width:100%; background:rgba(15,23,42,0.9); border:1px solid var(--glass-border); color:#fff; padding:0.5rem; border-radius:12px; font-size:0.78rem; font-family:'JetBrains Mono',monospace; outline:none;">
+          <option value="general">💎 General / Corporativo</option>
+          <option value="mining">⛏️ Minería & Activos Globales</option>
+          <option value="teaching">📚 Academia & Lenguas</option>
+          <option value="lawyer">⚖️ Jurídico & Normativo</option>
+          <option value="health">🩺 Salud & Biotecnología</option>
+        </select>
+      </div>
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; margin-top:auto;">
+        <div style="font-size:0.75rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.3rem;">💡 Asistente Activo</div>
+        <p style="font-size:0.7rem; color:var(--text-muted); line-height:1.4;">Sistema optimizado para respuesta en tiempo real, análisis de documentos y estructuración profesional.</p>
+      </div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-<script>
-const $ = id => document.getElementById(id);
-function toast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  $('toasts').appendChild(t);
-  setTimeout(() => t.remove(), 3500);
-}
-async function sendPrompt() {
-  const prompt = $('prompt-input').value.trim();
-  const profession = $('profession-select').value;
-  if (!prompt) return toast('Ingresa una instrucción.');
-  $('canvas-output').textContent = 'Orquestando...';
-  try {
-    const res = await fetch('/api/orchestrate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'nexus' },
-      body: JSON.stringify({ prompt, profession })
+    <!-- PANEL DERECHO: WORKSPACE (CHAT + CANVAS) -->
+    <div class="glass-panel">
+      <div class="workspace-grid">
+        <!-- CHAT -->
+        <div style="display:flex; flex-direction:column; height:100%;">
+          <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.75rem; padding-bottom:0.45rem; border-bottom:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center;">
+            <span><i data-lucide="message-square" style="width:16px; height:16px; color:var(--accent-primary);"></i> Centro de Comando</span>
+            <span style="font-size:0.65rem; color:var(--accent-primary);" id="env-badge">GENERAL</span>
+          </div>
+          <div class="chat-messages" id="chat-stream">
+            <div class="message bot">🚀 <strong>Nexus Orchestrator v4.0</strong> inicializado correctamente. Escribe tu instrucción o selecciona un entorno de trabajo.</div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Escribe tu consulta o instrucción..." autocomplete="off">
+            <button class="btn-neon" id="btn-send"><i data-lucide="play" style="width:13px; height:13px;"></i> Ejecutar</button>
+          </div>
+        </div>
+
+        <!-- CANVAS COMPILADOR -->
+        <div style="display:flex; flex-direction:column; height:100%;">
+          <div style="height:4px; width:100%; background:linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-radius:4px 4px 0 0;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.75rem; background:rgba(15,23,42,0.9); border-bottom:1px solid var(--glass-border);">
+            <div style="font-size:0.85rem; font-weight:700;"><i data-lucide="file-code-2" style="width:16px; height:16px; color:var(--accent-primary);"></i> Canvas Compilador</div>
+            <button class="btn-secondary" onclick="exportCanvasPDF()">Descargar PDF</button>
+          </div>
+          <div class="canvas-output" id="canvas-view" contenteditable="true" placeholder="Los resultados estructurados aparecerán aquí...">Resultados de orquestación listos para compilar...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE ACCESO -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:0.3rem;">Acceso Corporativo</h3>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1.2rem;">Ingresa a tu cuenta de Nexus OS</p>
+      <input type="email" id="auth-email" placeholder="correo@ejemplo.com" style="width:100%; background:#030712; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.85rem; margin-bottom:0.7rem; outline:none;">
+      <input type="password" id="auth-pass" placeholder="Contraseña" style="width:100%; background:#030712; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.85rem; margin-bottom:1.2rem; outline:none;">
+      <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.5rem;" onclick="simulateLogin()">Ingresar al Sistema</button>
+      <button class="btn-secondary" style="width:100%; justify-content:center;" onclick="closeAuthModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    const showToast = (msg) => {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast'; t.innerText = msg;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3500);
+    };
+
+    const openAuthModal = () => document.getElementById('auth-modal').style.display = 'flex';
+    const closeAuthModal = () => document.getElementById('auth-modal').style.display = 'none';
+    const simulateLogin = () => {
+      closeAuthModal();
+      showToast('¡Sesión iniciada con éxito en Nexus OS!');
+    };
+
+    document.getElementById('env-switcher').addEventListener('change', (e) => {
+      const val = e.target.value;
+      document.body.className = `env-${val}`;
+      document.getElementById('env-badge').innerText = val.toUpperCase();
+      showToast(`Entorno cambiado a: ${val.toUpperCase()}`);
     });
-    const data = await res.json();
-    $('canvas-output').innerHTML = marked.parse(data.result || '');
-  } catch (err) {
-    toast('Error en la orquestación.');
-  }
-}
-</script>
+
+    const executeQuery = () => {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const stream = document.getElementById('chat-stream');
+      stream.innerHTML += `<div class="message user">${text}</div>`;
+      input.value = '';
+      stream.scrollTop = stream.scrollHeight;
+
+      setTimeout(() => {
+        const replyText = `Respuesta generada para: "${text}"\n\n- **Estado**: Procesado con éxito.\n- **Optimización**: Estructurado bajo los parámetros del entorno activo.`;
+        stream.innerHTML += `<div class="message bot">${marked.parse(replyText)}</div>`;
+        document.getElementById('canvas-view').innerText = replyText;
+        stream.scrollTop = stream.scrollHeight;
+        showToast('Orquestación completada.');
+      }, 800);
+    };
+
+    document.getElementById('btn-send').addEventListener('click', executeQuery);
+    document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
+
+    const exportCanvasPDF = () => {
+      showToast('Generando PDF...');
+      const element = document.getElementById('canvas-view');
+      html2pdf().from(element).save('Nexus_Document.pdf');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+  </script>
 </body>
 </html>
