@@ -104,6 +104,7 @@
       cursor: pointer; outline: none; backdrop-filter: blur(10px); transition: all 0.3s; font-weight: 600;
     }
 
+    /* PANTALLA DE BIENVENIDA / PROPÓSITOS */
     .purpose-dashboard {
       display: flex; flex-direction: column; flex: 1; height: calc(100vh - 95px); overflow-y: auto; padding: 1.5rem;
       background: var(--glass-panel); border: 1px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(25px);
@@ -116,10 +117,6 @@
     }
     .purpose-card:hover { border-color: var(--accent-primary); box-shadow: 0 0 25px var(--theme-glow); transform: translateY(-2px); background: rgba(255,255,255,0.08); }
 
-    .quick-start-box {
-      background: rgba(15, 23, 42, 0.6); border: 1px solid var(--glass-border); border-radius: 18px; padding: 1.2rem; text-align: left; margin-top: 1rem;
-    }
-
     .admin-badge {
       display: inline-flex; align-items: center; gap: 0.3rem; background: linear-gradient(135deg, #0284c7, #2563eb);
       color: #fff; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.65rem; font-weight: 700; font-family: 'JetBrains Mono', monospace;
@@ -131,8 +128,15 @@
       box-shadow: 0 0 15px rgba(13, 148, 136, 0.5); border: 1px solid rgba(255,255,255,0.4);
     }
 
+    /* MUNDO GIRANDO Y BURBUJAS DE PENSAMIENTO */
     .spinning-globe { font-size: 1.5rem; animation: spinGlobe 2.5s linear infinite; display: inline-block; }
     @keyframes spinGlobe { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .thinking-bubble {
+      display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(14, 165, 233, 0.15);
+      border: 1px solid var(--accent-primary); padding: 0.5rem 1rem; border-radius: 16px;
+      font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: #fff; box-shadow: 0 0 15px var(--theme-glow);
+    }
 
     .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0.85rem; flex: 1; height: calc(100vh - 85px); overflow: hidden; }
     @media (max-width: 900px) { body { overflow-y: auto; height: auto; } .main-layout { grid-template-columns: 1fr; height: auto; } }
@@ -265,14 +269,37 @@
     </div>
   </div>
 
-  <!-- PANTALLA INICIAL: ELIGE TU PROPÓSITO -->
+  <!-- PANTALLA INICIAL DE BIENVENIDA Y PROPÓSITOS -->
   <div id="purpose-selection-view" class="purpose-dashboard" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-      <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Elige tu propósito</h2>
+      <div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Bienvenido a Nexus Orchestrator v3.8</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Plataforma Autónoma de IA Avanzada, síntesis de voz, copiladores y gestión inteligente de entornos.</p>
+      </div>
       <button class="btn-secondary" onclick="skipToWorkspace()">Ir directo al Workspace ➔</button>
     </div>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nexus lo detecta solo al leer tu instrucción, o escógelo tú.</p>
 
+    <!-- 4 Atajos Rápidos de Entornos -->
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1rem 0;">
+      <div class="purpose-card" onclick="selectPurpose('teaching', 'Pedagogía y Lenguas')" style="padding: 0.9rem;">
+        <div style="font-size:1.2rem; margin-bottom:0.2rem;">📚</div>
+        <h4 style="font-size:0.85rem; font-weight:700; color:#fff;">Pedagogía</h4>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('mining', 'Negocios y Minería')" style="padding: 0.9rem;">
+        <div style="font-size:1.2rem; margin-bottom:0.2rem;">⛏️</div>
+        <h4 style="font-size:0.85rem; font-weight:700; color:#fff;">Minería</h4>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('lawyer', 'Derecho y Normativa')" style="padding: 0.9rem;">
+        <div style="font-size:1.2rem; margin-bottom:0.2rem;">⚖️</div>
+        <h4 style="font-size:0.85rem; font-weight:700; color:#fff;">Jurídico</h4>
+      </div>
+      <div class="purpose-card" onclick="selectPurpose('health', 'Ciencia y Tecnología')" style="padding: 0.9rem;">
+        <div style="font-size:1.2rem; margin-bottom:0.2rem;">🩺</div>
+        <h4 style="font-size:0.85rem; font-weight:700; color:#fff;">Tecnología</h4>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 0.5rem;">Elige tu propósito profesional</h3>
     <div class="purpose-grid">
       <div class="purpose-card" onclick="selectPurpose('teaching', 'Pedagogía y Lenguas')">
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">📚</div>
@@ -303,22 +330,6 @@
         <div style="font-size:1.4rem; margin-bottom:0.4rem;">🎵</div>
         <h3 style="font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Finanzas e Inversión</h3>
         <p style="font-size:0.75rem; color:var(--text-muted);">Análisis financiero, valoración, flujos y memorandos de inversión.</p>
-      </div>
-    </div>
-
-    <div class="quick-start-box">
-      <div style="font-size:0.8rem; font-weight:700; color:var(--accent-primary); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
-        ⚡ Inicios rápidos <span style="font-weight:400; color:var(--text-muted);" id="quick-start-category">· Pedagogía y Lenguas</span>
-      </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
-        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Plan de aula (DBA/EBC): Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115 de 1994, los DBA y los EBC.')">
-          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Plan de aula (DBA/EBC)</div>
-          <div style="font-size:0.7rem; color:var(--text-muted);">Elabora un plan de aula para Práctica Pedagógica I, alineado con la Ley 115...</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:14px; padding:0.8rem; cursor:pointer;" onclick="runQuickPrompt('Informe reflexivo de práctica: Redacta el informe reflexivo de Práctica Pedagógica con marco teórico y rúbrica.')">
-          <div style="font-size:0.8rem; font-weight:700; color:#fff; margin-bottom:0.2rem;">Informe reflexivo de práctica</div>
-          <div style="font-size:0.7rem; color:var(--text-muted);">Redacta el informe reflexivo de Práctica con marco teórico y rúbrica.</div>
-        </div>
       </div>
     </div>
   </div>
@@ -402,7 +413,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE AUTENTICACIÓN / REGISTRO CON SELECCIÓN DE ROL -->
+  <!-- MODAL DE AUTENTICACIÓN / REGISTRO CON DATOS BÁSICOS Y OFICIO -->
   <div class="modal-overlay" id="auth-modal">
     <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
@@ -418,20 +429,37 @@
       </div>
 
       <div style="border-top:1px solid var(--glass-border); padding-top:1rem; text-align:left;">
+        <!-- Campos específicos para Registro (Nombres, Apellidos y Oficio) -->
+        <div id="register-extra-fields" style="display:none; display:flex; flex-direction:column; gap:0.6rem; margin-bottom:0.7rem;">
+          <div>
+            <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.2rem;">Nombres y Apellidos</label>
+            <input type="text" id="auth-fullname-input" placeholder="Tu nombre completo" style="width:100%; background:#070b14; border:1px solid var(--glass-border); padding:0.5rem; border-radius:10px; color:#fff; font-size:0.8rem; outline:none;">
+          </div>
+          <div>
+            <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.2rem;">Oficio / Profesión / Entorno de Interés</label>
+            <select id="auth-profession-select" class="select-custom" style="width:100%;">
+              <option value="teaching">📚 Profesor / Licenciado en Lenguas</option>
+              <option value="mining">⛏️ Minero / Comisionista de Carbón y Oro</option>
+              <option value="lawyer">⚖️ Abogado / Jurídico</option>
+              <option value="health">🩺 Investigador / Científico / Salud</option>
+              <option value="music">🎵 Financiero / Inversionista</option>
+              <option value="general">✨ Marketing / General</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.2rem;">Tipo de Cuenta</label>
+            <select id="auth-role-select" class="select-custom" style="width:100%;">
+              <option value="user">👤 Usuario Normal</option>
+              <option value="admin">🛡️ Administrador Corporativo</option>
+            </select>
+          </div>
+        </div>
+
         <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.3rem;">Correo electrónico</label>
         <input type="email" id="auth-email-input" placeholder="correo@ejemplo.com" style="width:100%; background:#070b14; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.82rem; margin-bottom:0.7rem; outline:none;">
         
         <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.3rem;">Contraseña (••••••)</label>
-        <input type="password" id="auth-pass-input" placeholder="••••••••" style="width:100%; background:#070b14; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.82rem; margin-bottom:0.7rem; outline:none;">
-
-        <!-- Selector de Tipo de Usuario para el Registro -->
-        <div id="register-role-container" style="display:none; margin-bottom:0.8rem;">
-          <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.3rem;">Tipo de Cuenta</label>
-          <select id="auth-role-select" class="select-custom" style="width:100%;">
-            <option value="user">👤 Usuario Normal</option>
-            <option value="admin">🛡️ Administrador Corporativo</option>
-          </select>
-        </div>
+        <input type="password" id="auth-pass-input" placeholder="••••••••" style="width:100%; background:#070b14; border:1px solid var(--glass-border); padding:0.6rem; border-radius:10px; color:#fff; font-size:0.82rem; margin-bottom:0.9rem; outline:none;">
         
         <button class="btn-neon" style="width:100%; justify-content:center; margin-bottom:0.6rem;" onclick="handleManualAuth()">Continuar</button>
       </div>
@@ -461,16 +489,15 @@
     const openAuthModal = (mode) => {
       authMode = mode;
       document.getElementById('modal-title').innerText = mode === 'login' ? 'Welcome back' : 'Crear Cuenta Nueva';
-      document.getElementById('register-role-container').style.display = mode === 'register' ? 'block' : 'none';
+      document.getElementById('register-extra-fields').style.display = mode === 'register' ? 'flex' : 'none';
       document.getElementById('auth-modal').style.display = 'flex';
     };
     const closeAuthModal = () => { document.getElementById('auth-modal').style.display = 'none'; };
 
     const simulateOAuth = (provider, email, name, isAdmin) => {
-      currentUser = { name, email, isAdmin, avatar: null };
-      localStorage.setItem('nexus_user', JSON.stringify(currentUser));
+      currentUser = { name, email, isAdmin, profession: 'general', avatar: null };
       closeAuthModal();
-      initAuthenticatedSession();
+      initAuthenticatedSession('general');
       showToast(`¡Autenticado con éxito vía ${provider} (${email})!`);
     };
 
@@ -480,20 +507,25 @@
       if (!email || !pass) { showToast('Ingresa correo y contraseña válidos.'); return; }
 
       let isAdmin = email.includes('englishtownincali') || email.includes('admin');
+      let assignedEnv = 'general';
+      let name = email.split('@')[0];
+
       if (authMode === 'register') {
+        const fullname = document.getElementById('auth-fullname-input').value.trim();
+        if (fullname) name = fullname;
+        assignedEnv = document.getElementById('auth-profession-select').value;
         const roleSel = document.getElementById('auth-role-select').value;
         isAdmin = (roleSel === 'admin');
         showToast('¡Cuenta registrada exitosamente!');
       }
 
-      currentUser = { name: email.split('@')[0], email, isAdmin, avatar: null };
-      localStorage.setItem('nexus_user', JSON.stringify(currentUser));
+      currentUser = { name, email, isAdmin, profession: assignedEnv, avatar: null };
       closeAuthModal();
-      initAuthenticatedSession();
+      initAuthenticatedSession(assignedEnv);
       showToast(`Sesión iniciada como ${email}`);
     };
 
-    const initAuthenticatedSession = () => {
+    const initAuthenticatedSession = (envKey) => {
       if (!currentUser) return;
       document.getElementById('auth-actions').style.display = 'none';
       const trig = document.getElementById('user-profile-trigger');
@@ -515,7 +547,8 @@
         shieldContainer.innerHTML = `<span class="user-badge">👤 USUARIO NORMAL</span>`;
       }
 
-      document.getElementById('purpose-selection-view').style.display = 'flex';
+      // Direccionamiento automático al entorno correspondiente según el oficio o propósito elegido
+      selectPurpose(envKey, 'Entorno Asignado');
     };
 
     const selectPurpose = (envKey, title) => {
@@ -562,7 +595,6 @@
 
     const signOut = () => {
       currentUser = null;
-      localStorage.removeItem('nexus_user');
       document.getElementById('google-profile-card').style.display = 'none';
       document.getElementById('authenticated-workspace-view').style.display = 'none';
       document.getElementById('purpose-selection-view').style.display = 'none';
@@ -622,7 +654,7 @@
       showToast('Sounding Speech Synthesis activado. Generando audio de alta fidelidad...');
     };
 
-    // Motor IA Gemini 3.8 con mundo girando animado
+    // Motor IA Gemini 3.8 con mundo girando animado y burbuja de pensando
     const executeQuery = async () => {
       const input = document.getElementById('chat-input');
       const text = input.value.trim();
@@ -637,7 +669,7 @@
       sendBtn.disabled = true;
 
       const indicator = document.getElementById('ai-status-indicator');
-      indicator.innerHTML = `<span class="spinning-globe">🌍</span> <span>Gemini 3.8 pensando...</span>`;
+      indicator.innerHTML = `<div class="thinking-bubble"><span class="spinning-globe">🌍</span> <span>Gemini 3.8 pensando...</span></div>`;
 
       let success = false;
       let attempt = 0;
@@ -706,7 +738,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
-      // No loguear automáticamente para permitir registro libre de cuentas nuevas
     });
   </script>
 </body>
