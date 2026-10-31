@@ -430,7 +430,7 @@
 
       <div style="border-top:1px solid var(--glass-border); padding-top:1rem; text-align:left;">
         <!-- Campos específicos para Registro (Nombres, Apellidos y Oficio) -->
-        <div id="register-extra-fields" style="display:none; display:flex; flex-direction:column; gap:0.6rem; margin-bottom:0.7rem;">
+        <div id="register-extra-fields" style="display:none; flex-direction:column; gap:0.6rem; margin-bottom:0.7rem;">
           <div>
             <label style="font-size:0.7rem; color:var(--text-muted); display:block; margin-bottom:0.2rem;">Nombres y Apellidos</label>
             <input type="text" id="auth-fullname-input" placeholder="Tu nombre completo" style="width:100%; background:#070b14; border:1px solid var(--glass-border); padding:0.5rem; border-radius:10px; color:#fff; font-size:0.8rem; outline:none;">
@@ -547,7 +547,6 @@
         shieldContainer.innerHTML = `<span class="user-badge">👤 USUARIO NORMAL</span>`;
       }
 
-      // Direccionamiento automático al entorno correspondiente según el oficio o propósito elegido
       selectPurpose(envKey, 'Entorno Asignado');
     };
 
