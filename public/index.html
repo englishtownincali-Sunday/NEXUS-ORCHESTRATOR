@@ -489,7 +489,8 @@
     const openAuthModal = (mode) => {
       authMode = mode;
       document.getElementById('modal-title').innerText = mode === 'login' ? 'Welcome back' : 'Crear Cuenta Nueva';
-      document.getElementById('register-extra-fields').style.display = mode === 'register' ? 'flex' : 'none';
+      const extraFields = document.getElementById('register-extra-fields');
+      extraFields.style.display = mode === 'register' ? 'flex' : 'none';
       document.getElementById('auth-modal').style.display = 'flex';
     };
     const closeAuthModal = () => { document.getElementById('auth-modal').style.display = 'none'; };
@@ -497,6 +498,7 @@
     const simulateOAuth = (provider, email, name, isAdmin) => {
       currentUser = { name, email, isAdmin, profession: 'general', avatar: null };
       closeAuthModal();
+      document.getElementById('purpose-selection-view').style.display = 'flex';
       initAuthenticatedSession('general');
       showToast(`¡Autenticado con éxito vía ${provider} (${email})!`);
     };
@@ -521,6 +523,9 @@
 
       currentUser = { name, email, isAdmin, profession: assignedEnv, avatar: null };
       closeAuthModal();
+      
+      // Mostrar primero la pantalla de bienvenida dinámica con los 4 atajos y presentación
+      document.getElementById('purpose-selection-view').style.display = 'flex';
       initAuthenticatedSession(assignedEnv);
       showToast(`Sesión iniciada como ${email}`);
     };
@@ -546,8 +551,6 @@
         badgeContainer.innerHTML = `<span class="user-badge">👤 USUARIO</span>`;
         shieldContainer.innerHTML = `<span class="user-badge">👤 USUARIO NORMAL</span>`;
       }
-
-      selectPurpose(envKey, 'Entorno Asignado');
     };
 
     const selectPurpose = (envKey, title) => {
@@ -650,7 +653,7 @@
     };
 
     const triggerAudioSynthesis = () => {
-      showToast('Sounding Speech Synthesis activado. Generando audio de alta fidelidad...');
+      showToast('Sounding Speech Synthesis activado. Generando audio de alta fidelidad estilo ElevenLabs...');
     };
 
     // Motor IA Gemini 3.8 con mundo girando animado y burbuja de pensando
@@ -707,12 +710,6 @@
     document.getElementById('btn-send').addEventListener('click', executeQuery);
     document.getElementById('chat-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeQuery(); });
 
-    const runQuickPrompt = (promptText) => {
-      skipToWorkspace();
-      document.getElementById('chat-input').value = promptText;
-      executeQuery();
-    };
-
     const exportCanvas = (type) => {
       showToast(`Generando archivo .${type.toUpperCase()}...`);
       if (type === 'pdf') {
@@ -726,7 +723,7 @@
     document.getElementById('btn-preview-voice').addEventListener('click', () => {
       const country = document.getElementById('country-voice-selector').value;
       const samples = {
-        co: "Hola soy Burt de Colombia, tu asistente en Nexus.",
+        co: "Hola soy Burt de Colombia, tu asistente en Nexus con síntesis ElevenLabs.",
         us: "Hello, I am Adam from USA, ready to orchestrate your workspace.",
         gb: "Hello, I am George from UK, at your service.",
         es: "Hola, soy Enrique de España, analizando tus requerimientos.",
