@@ -1,7 +1,6 @@
 /* =====================================================================
-   NEXUS ORCHESTRATOR · server.js (v4.0)
+   NEXUS ORCHESTRATOR · server.js (v4.1 - Production Ready)
    Backend principal: Fastify + PostgreSQL (Neon) + Google GenAI.
-   Servidor completo con manejo de rutas, streaming NDJSON, autenticación y persistencia.
    ===================================================================== */
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
@@ -13,7 +12,7 @@ import { GoogleGenAI } from '@google/genai';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const env = process.env;
-const VERSION = '4.0.0';
+const VERSION = '4.1.0';
 
 /* ----------------------------- Configuración ----------------------------- */
 const DATABASE_URL = env.DATABASE_URL;
@@ -47,45 +46,49 @@ const fastify = Fastify({
 
 /* ------------------------------ Inicialización BD ------------------------------ */
 async function initDB() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) UNIQUE NOT NULL,
-      password VARCHAR(255) NOT NULL,
-      first_name VARCHAR(100),
-      last_name VARCHAR(100),
-      user_role VARCHAR(100),
-      profession VARCHAR(100),
-      phone VARCHAR(50),
-      address VARCHAR(255),
-      bio TEXT,
-      avatar_url TEXT,
-      is_admin BOOLEAN DEFAULT false,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )`;
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        first_name VARCHAR(100),
+        last_name VARCHAR(100),
+        user_role VARCHAR(100),
+        profession VARCHAR(100),
+        phone VARCHAR(50),
+        address VARCHAR(255),
+        bio TEXT,
+        avatar_url TEXT,
+        is_admin BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )`;
 
-  await sql`
-    CREATE TABLE IF NOT EXISTS chat_history (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL,
-      environment VARCHAR(50),
-      prompt TEXT,
-      response TEXT,
-      files TEXT,
-      mode VARCHAR(10),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )`;
+    await sql`
+      CREATE TABLE IF NOT EXISTS chat_history (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        environment VARCHAR(50),
+        prompt TEXT,
+        response TEXT,
+        files TEXT,
+        mode VARCHAR(10),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )`;
 
-  await sql`
-    CREATE TABLE IF NOT EXISTS sessions (
-      token_hash CHAR(64) PRIMARY KEY,
-      email VARCHAR(255) NOT NULL,
-      created_at TIMESTAMPTZ DEFAULT now(),
-      expires_at TIMESTAMPTZ NOT NULL
-    )`;
+    await sql`
+      CREATE TABLE IF NOT EXISTS sessions (
+        token_hash CHAR(64) PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT now(),
+        expires_at TIMESTAMPTZ NOT NULL
+      )`;
 
-  await sql`CREATE INDEX IF NOT EXISTS idx_chat_history_user ON chat_history (email, environment, created_at DESC)`;
-  console.log('[Nexus OS] Base de datos sincronizada y lista para producción.');
+    await sql`CREATE INDEX IF NOT EXISTS idx_chat_history_user ON chat_history (email, environment, created_at DESC)`;
+    console.log('[Nexus OS] Base de datos sincronizada correctamente.');
+  } catch (err) {
+    console.error('[Nexus OS] Error al inicializar la base de datos:', err);
+  }
 }
 
 /* ------------------------------ Utilidades de Seguridad ------------------------------ */
@@ -197,10 +200,10 @@ fastify.post('/api/orchestrate/stream', async (request, reply) => {
     send({ type: 'phase', id: 'recepcion', status: 'done', detail: 'Solicitud recibida' });
     send({ type: 'phase', id: 'redaccion', status: 'running' });
 
-    let fullText = `### 💎 Nexus Orchestrator v4.0\n**Entorno activo:** ${(environment || 'general').toUpperCase()}\n\n`;
+    let fullText = `### 💎 Nexus Orchestrator v4.1\n**Entorno activo:** ${(environment || 'general').toUpperCase()}\n\n`;
 
     if (ai) {
-      const systemInstruction = `Eres Nexus Orchestrator v4.0, un sistema operativo de Inteligencia Artificial para tareas ejecutivas y analíticas. Tono impecable, riguroso y en Markdown. Entorno: ${environment || 'general'}.`;
+      const systemInstruction = `Eres Nexus Orchestrator v4.1, un sistema operativo de Inteligencia Artificial para tareas ejecutivas y analíticas. Tono impecable, riguroso y en Markdown. Entorno: ${environment || 'general'}.`;
       const streamResult = await ai.models.generateContentStream({
         model: GEMINI_MODEL,
         contents: `${systemInstruction}\n\nInstrucción: ${prompt}`
@@ -213,7 +216,7 @@ fastify.post('/api/orchestrate/stream', async (request, reply) => {
         }
       }
     } else {
-      const fallbackText = `Orquestación completada en el entorno **${(environment || 'general').toUpperCase()}** para la instrucción:\n\n> "${prompt}"\n\n*(Nota: Configura GEMINI_API_KEY en Render para activar el modelo en tiempo real)*`;
+      const fallbackText = `Orquestación completada en el entorno **${(environment || 'general').toUpperCase()}** para la instrucción:\n\n> "${prompt}"\n\n*(Nota: Configura GEMINI_API_KEY en Render)*`;
       fullText += fallbackText;
       send({ type: 'delta', text: fallbackText });
     }
@@ -249,4 +252,3 @@ const start = async () => {
 };
 
 start();
-```[cite: 6]
